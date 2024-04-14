@@ -6,29 +6,34 @@ use CodeIgniter\Controller;
 
 class Usuario extends BaseController
 {
-    public function index(): string {
-        return view('admin/vlogin');
+    public function index() {
+        $data = ['miUrlBase' => 'resources/adle'];
+        return view('admin/vlogin', $data);
     }
 
     public function c_login_in() {
         $data['status'] = false;
-        $data['msg'] = 'fail';
+        $data['msg']    = 'fail';
 
         if($this->request->isAJAX()){
 
-            $usuNombre   = $this->request->getPost('txtnombre');
-            $usuPassword = $this->request->getPost('txtpassword');
+            $usuNombre   = $this->request->getPost('txtLogSendUsu');
+            $usuPassword = $this->request->getPost('txtLogSendPas');
 
             if( (isset($usuNombre) && !empty($usuNombre)) && (isset($usuPassword) && !empty($usuPassword))){
 
-                $resDataUser = $this->musuario->m_login_in([$usuNombre, $usuPassword]);
+                $usuBBDD = 'alex';
+                $pasBBDD = 'alex';
 
-                if(!empty($resDataUser)){
-
+                if(($usuNombre === $usuBBDD) && ($usuPassword === $pasBBDD)){
+                    $data['status'] = true;
+                    $data['msg']    = 'Correcto';
+                    $data['urlDestino'] = base_url('/home');
+                }else{
+                    // return $this->response->redirect('login');
                 }
             }
         }
-
         return $this->response->setJSON($data);
     }
 }

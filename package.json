@@ -1,0 +1,22 @@
+{
+  "name": "ci4-sivec-app",
+  "version": "1.0.0",
+  "description": "## What is CodeIgniter?",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexandercor/sivec.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alexandercor/sivec/issues"
+  },
+  "homepage": "https://github.com/alexandercor/sivec#readme"
+}

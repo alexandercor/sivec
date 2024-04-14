@@ -6,6 +6,7 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        return view('admin/vlogin');
+        $data = ['titulo' => 'nuevo'];
+        return view('admin/vprueba', $data);
     }
 }

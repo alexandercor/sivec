@@ -1,23 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-  <head>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title><?= $this->renderSection('page_title') ?></title>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+        <?= link_tag("$miUrlBase/plugins/fontawesome-free/css/all.min.css")?>
+        <?= link_tag("$miUrlBase/dist/css/adminlte.min.css")?>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    </head>
+    <body class="hold-transition sidebar-mini">
 
-    <title><?= $this->renderSection('page_title') ?></title>
+        <div class="wrapper">
+            
+            <?= $this->include('layout/vnavbar') ?>
 
-  </head>
-  <body>
-    <h1>Hello, world!</h1>
+            <?= $this->include('layout/vsidebar') ?>
 
-    <?= $this->renderSection('contenido') ?>
+            <div class="content-wrapper">
+                <?= $this->renderSection('contenido') ?>
+            </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+            <?= $this->include('layout/vfooter') ?>
 
-    <?= $this->renderSection('javascript') ?>
+        </div>
 
-  </body>
+        <?= script_tag("$miUrlBase/plugins/jquery/jquery.min.js") ?>
+        <?= script_tag("$miUrlBase/plugins/bootstrap/js/bootstrap.bundle.min.js") ?>
+        <?= script_tag("$miUrlBase/dist/js/adminlte.min.js") ?>
+
+        <?= $this->renderSection('javascript') ?>
+
+    </body>
 </html>
