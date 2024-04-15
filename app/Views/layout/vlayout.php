@@ -1,3 +1,7 @@
+<?php
+    $miUrlBase = 'resources/adle';
+?>
+
 <!DOCTYPE html>
 <html lang="es">
     <head>
