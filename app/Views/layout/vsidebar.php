@@ -3,9 +3,7 @@
       <img src="resources/img/logo.png" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Logo</span>
     </div>
-
     <div class="sidebar">
-
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item">
@@ -44,9 +42,22 @@
                         <p>Actividades</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="<?= base_url('/essalud');?>" class="nav-link">
+                        <i class="fas fa-list nav-icon"></i>
+                        <p>Essalud</p>
+                        </a>
+                    </li>
                 </ul>
             </li>
-          
+            <li class="nav-item">
+                <a href="<?= base_url('control'); ?>" class="nav-link">
+                <i class="fas fa-cubes"></i>
+                <p>
+                    Control
+                </p>
+                </a>
+            </li>
             <!-- <li class="nav-item">
                 <a href="#" class="nav-link">
                 <i class="nav-icon fas fa-copy"></i>
