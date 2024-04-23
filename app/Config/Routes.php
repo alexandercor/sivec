@@ -19,8 +19,12 @@ $routes->post('/sector', 'Infocore::c_sector_list');
 
 $routes->get('/persona', 'Persona::index');
 $routes->get('/recipientes', 'Recipientes::index');
+$routes->post('/recipiente/list', 'Recipientes::c_recipiente_list');
+$routes->post('/recipiente/add', 'Recipientes::c_recipiente_crud');
+$routes->post('/recipiente/del', 'Recipientes::c_recipiente_del');
 $routes->get('/actividades', 'Actividades::index');
 $routes->post('/actividadeslist', 'Actividades::c_actividades_list');
 $routes->post('/actividades/add', 'Actividades::c_actividades_crud');
 $routes->get('/control', 'Control::index');
 $routes->get('/essalud', 'Essalud::index');
+$routes->post('/esssalud/list', 'Essalud::c_essalud_list');

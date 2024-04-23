@@ -87,18 +87,19 @@
                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                             <div class="form-group">
                                 <label for="" class="color_white">.</label>
-                                <button type="button" id="btn_buscar" class="btn btn-success btn-block rounded-pill">Agregar</button>
+                                <button type="button" class="btn btn-success btn-block rounded-pill" data-toggle="modal" data-target="#mdl_essalud">Agregar</button>
                             </div> 
                         </div>
                     </div>
                     <hr class="mt-0">
                     <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <table id="tbl_actividades" class="table table-striped table-bordered table-sm table-hover">
+                            <table id="tbl_essalud" class="table table-striped table-bordered table-sm table-hover">
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Actividad</th>
+                                        <th>Centro de salud</th>
+                                        <th>Sector</th>
                                         <th>Acc.</th>
                                     </tr>
                                 </thead>
@@ -112,7 +113,7 @@
         </div>
     </section>
     
-    <section class="modal fade" id="mdl_actividad" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <section class="modal fade" id="mdl_essalud" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <form id="frm_actidividad" action="<?= base_url(); ?>actividades/add" method="POST">
@@ -149,7 +150,7 @@
 
   <script type='text/javascript'>
     $(() => {
-        fn_getDataActividad();
+        fn_getDataEssalud();
     })
 
     const div_overlay_act = 'div_overlay_act';
@@ -317,20 +318,23 @@
         }
     });
 
-    function fn_getDataActividad(){
-        const acti = $('#txt_viewact_actividad').val();
+    $('#sle_essview_sector').change(function (e){
+        codSec = $(this).val();
+    });
 
-        const objData = { actividad : acti };
+    function fn_getDataEssalud(){
+
+        const objData = { codSec : codSec };
         $.ajax({
-            url: `${base_url}actividadeslist`,
+            url: `${base_url}esssalud/list`,
             type: "POST",
             data: objData,
             dataType: "JSON",
         })
         .done(function(data){
-            const { status, dataActividad } = data;
+            const { status, dataEssalud } = data;
             if(status){
-                $('#tbl_actividades tbody').html(`${dataActividad}`);
+                $('#tbl_essalud tbody').html(`${dataEssalud}`);
             }
         })
         .fail(function(jqXHR, statusText){
@@ -339,7 +343,7 @@
     }
 
     $('#btn_buscar_ess').click(function(){
-        fn_getDataActividad();
+        fn_getDataEssalud();
     })
 
     $('#frm_actidividad').submit(function (e) {

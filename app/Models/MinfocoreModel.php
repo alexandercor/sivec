@@ -90,6 +90,19 @@ class MinfocoreModel extends Model{
         return $response->getResult();
     }
 
-
+    public function m_recipientemedidas(): array{
+        $sql = '
+            SELECT 
+                `tb_capacidad`.`id_capacidad` key_medi,
+                `tb_capacidad`.`nombre_capacidad` medida
+            FROM
+                `tb_capacidad`
+            ORDER BY
+                `tb_capacidad`.`nombre_capacidad`
+        ';
+        $response = $this->db->query($sql);
+        return $response->getResult();
+    }
+    
 // ***
 }

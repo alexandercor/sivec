@@ -7,13 +7,13 @@ use CodeIgniter\Controller;
 class Actividades extends BaseController
 {   
     protected $mactividad;
-    protected $validation;
+    // protected $validation;
 
     public function __construct()
     {
         $this->mactividad = new MactividadModel();
-        $this->validation = \Config\Services::validation();
-        helper('form');
+        // $this->validation = \Config\Services::validation();
+        // helper('form');
     }
 
     public function index() {
