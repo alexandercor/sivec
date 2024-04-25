@@ -36,6 +36,20 @@ class MrecipienteModel extends Model{
         return ($this->db->affectedRows() >= 1)? 1 : 2;
     }
 
+    public function m_rec_update(array $data): int {
+        $sql = '
+            UPDATE 
+                `tb_depositostipos`  
+            SET 
+                `nombre_deposito` = ?,
+                `id_capacidad` = ?
+            WHERE 
+                `id_deposito_tipo` = ?;
+        ';
+        $this->db->query($sql, $data);
+        return ($this->db->affectedRows() >= 1)? 1 : 2;
+    }
+    
     public function c_recipiente_del($keyRec): int {
         $sql = '
             UPDATE 

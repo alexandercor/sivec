@@ -69,6 +69,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
+                            <input type="text" name="txt_mdlcrudrec_est" id="txt_mdlcrudrec_est" value="MQ--">
                             <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
                                 <div class="form-group">
                                     <label for="txt_mdlcrudrec_rec">Recipiente</label>
@@ -110,7 +111,7 @@
     $(() => {
       fn_getDataRecipiente();
     })
-
+    
     const div_overlay_act = 'div_overlay_act';
 
     let rec;
@@ -182,9 +183,15 @@
             .done((data) => {
                 const {status, msg} = data;
                 if(status){
-                    alert(msg)
+                    Toast.fire({
+                        icon: 'success',
+                        title: `${msg}`
+                    })
                 }else{
-                    alert(msg)
+                    Toast.fire({
+                        icon: 'danger',
+                        title: `${msg}`
+                    })
                 }
                 setTimeout(()=> {
                     window.location.reload();
@@ -195,6 +202,15 @@
             });
         }
     });
+
+    $('#mdl_recip')
+    .on('show.bs.modal', function(e){
+        const target = (e.relatedTarget);
+        console.log('primera carga')
+        // const keyRec = target.data('');
+
+        $('#txt_mdlcrudrec_est').val('Mg--')
+    })
   </script>
 
 <?= $this->endSection() ?>

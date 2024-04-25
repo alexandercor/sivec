@@ -73,19 +73,32 @@ class Recipientes extends BaseController
         $data['msg']    = $this->msg;
 
         if($this->request->isAJAX()){
-            
+            $est    = intval(bs64url_dec($this->request->getPost('txt_mdlcrudrec_est')));
+            $keyRec = bs64url_dec($this->request->getPost('txt_mdlcrudrec_est'));
             $rec    = $this->request->getPost('txt_mdlcrudrec_rec');
             $codMed = bs64url_dec($this->request->getPost('sle_mdlcrudviewmed_medida'));
 
             if( (isset($rec) && !empty($rec)) && (isset($codMed) && !empty($codMed)) ){
-                $resInsetRec = $this->mrecipiente->m_rec_insert([$rec, $codMed]);
-                if((int) $resInsetRec === 1){
-                    $data['status'] = true;
-                    $data['msg']    = 'Datos Guardados correctamente!!';
-                }else{
-                    $data['status'] = true;
-                    $data['msg']    = 'Ocurrio un problema al insertar!!';
+                if($est === 1){
+                    $resInsetRec = $this->mrecipiente->m_rec_insert([$rec, $codMed]);
+                    if($resInsetRec === 1){
+                        $data['status'] = true;
+                        $data['msg']    = 'Datos Guardados correctamente!!';
+                    }else{
+                        $data['status'] = true;
+                        $data['msg']    = 'Ocurrio un problema al insertar!!';
+                    }
+                }else if($est === 2){
+                    $resInsetRec = $this->mrecipiente->m_rec_insert([$keyRec, $rec, $codMed]);
+                    if((int) $resInsetRec === 1){
+                        $data['status'] = true;
+                        $data['msg']    = 'Datos Guardados correctamente!!';
+                    }else{
+                        $data['status'] = true;
+                        $data['msg']    = 'Ocurrio un problema al actualizar!!';
+                    }
                 }
+                
             }
         }
         return $this->response->setJSON($data);
