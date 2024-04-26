@@ -20,99 +20,78 @@
       </div>
     </section>
 
-    <!-- <section class="content">
+    <section class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-navy">
-                        <div class="card-header">
-                            <h3 class="card-title"><i class="fas fa-user-circle"></i> Datos</h3>
+                <div class="col-12">
+                    <div class="card card-navy card-outline">
+                        <div class="card-header p-0">
+                            <ul id="tab_act" class="nav nav-pills ml-auto p-2">
+                                <li class="nav-item"><a class="nav-link active" href="#tabac" data-toggle="tab">Lista</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#tabadd" data-toggle="tab">Agregar</a></li>
+                            </ul>
                         </div>
-                        <form>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Denominación</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1" placeholder="Denominación">
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tabac">
+                                    <div class="row justify-content-center">
+                                        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                                            <input type="search" id="txt_viewact_actividad" name="txt_viewact_actividad" class="form-control" placeholder="Ingresar una actividad">
+                                        </div>
+                                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12">  
+                                            <button type="button" id="btn_buscar_actividad" class="btn btn-primary btn-block"> Buscar</button> 
                                         </div>
                                     </div>
-
+                                    <hr class="my-4">
+                                    <div class="row">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <table id="tbl_actividades" class="table table-striped table-bordered table-sm table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Actividad</th>
+                                                        <th>Acc.</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="card-footer d-flex justify-content-end">
-                                <button type="submit" class="btn btn-primary">Guardar</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
+                                <div class="tab-pane" id="tabadd">
+                                    <div class="card card-primary">
+                                        <form id="frm_actidividad" action="<?= base_url(); ?>actividades/add" method="POST">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <input type="hidden" name="txt_crudact_esta" id="txt_crudact_esta" value="MQ--">
+                                                    <input type="hidden" name="txt_crudact_keyact" id="txt_crudact_keyact">
 
-    <section class="content">
-        <div class="container-fluid" id="div_overlay_act">
-            <div class="card card-navy card-outline">
-                <div class="card-body">
-                    <div class="row justify-content-center">
-                        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-xs-12">
-                            <input type="search" id="txt_viewact_actividad" name="txt_viewact_actividad" class="form-control" placeholder="Ingresar una actividad">
-                        </div>
-                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12">  
-                            <button type="button" id="btn_buscar_actividad" class="btn btn-primary btn-block rounded-pill"><i class="fas fa-search"></i> Buscar</button> 
-                        </div>
-                        <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12">  
-                            <button type="button" class="btn btn-success btn-block rounded-pill" data-toggle="modal" data-target="#mdl_actividad"><i class="fas fa-plus"></i> Agregar</button> 
-                        </div>
-                    </div>
-                    <hr class="my-4">
-                    <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <table id="tbl_actividades" class="table table-striped table-bordered table-sm table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Actividad</th>
-                                        <th>Acc.</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <section class="modal fade" id="mdl_actividad" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <form id="frm_actidividad" action="<?= base_url(); ?>actividades/add" method="POST">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Actividad</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">Denominación</label>
-                                    <input type="text" class="form-control" id="txt_mdlviewact_activ" name="txt_mdlviewact_activ" placeholder="Denominación">
+                                                    <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="txt_mdlviewact_activ">Denominación</label>
+                                                            <input type="text" class="form-control" id="txt_crudact_activ" name="txt_crudact_activ" placeholder="Denominación">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <div class="row justify-content-between">
+                                                    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                                                        <div id="div_response"></div>
+                                                    </div>
+                                                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                                        <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                        <div id="div_response"></div>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </section>
@@ -161,7 +140,7 @@
     $('#frm_actidividad').submit(function (e) {
         e.preventDefault();
         $.ajax({
-            url: `${base_url}actividades/add`,
+            url: $(this).attr('action'),
             type: $(this).attr('method'),
             data: $(this).serialize(),
             dataType: "JSON",
@@ -174,6 +153,8 @@
                     $('#mdl_actividad').modal('hide');   
                     window.location.reload();
                 }, 4000);
+            }else{
+                $('#div_response').html(`<h4 class="text-danger"><i class="fas fa-check-circle"></i> ${msg} </h4>`);
             }
         })
         .fail(function(jqXHR, statusText){
@@ -182,7 +163,68 @@
         return false;
     });
 
-    
+    $('#tab_act a[href="#tabadd"]').click(function() {
+        $('#txt_crudact_activ').val('');
+        $('#txt_crudact_esta').val('MQ--');
+    })
+
+    $('#tab_rec a[href="#tabac"]').click(function(){
+        $('#tab_rec a[href="#tabadd"]').text('Agregar');
+    })
+
+    $(document).on('click', '.btn_act_edit', function() {
+
+        $('#tab_act a[href="#tabadd"]').text('Editar')
+
+        const keyEst = $(this).data('keyest'),
+        keyAct = $(this).data('keyact'),
+        activ = $(this).data('act');
+        if(keyEst === 'Mg--' && keyAct && activ){
+            $('#txt_crudact_esta').val(keyEst);
+            $('#txt_crudact_keyact').val(keyAct);
+            $('#txt_crudact_activ').val(activ);
+            $('#tab_act a[href="#tabadd"]').tab('show');
+        }
+    })
+
+    $(document).on('click', '.btn_act_del', function () {
+        const keyAct = $(this).data('keyact');
+        
+        if(keyAct){
+            $.ajax({
+                url: `${base_url}actividades/del`,
+                type: "POST",
+                data: {keyAct: keyAct},
+                dataType: "JSON",
+            })
+            .done((data) => {
+                const {status, msg} = data;
+                if(status){
+                    Toast.fire({
+                        icon: 'success',
+                        title: `${msg}`
+                    })
+                }else{
+                    Toast.fire({
+                        icon: 'danger',
+                        title: `${msg}`
+                    })
+                }
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2500)
+            })
+            .fail(function(jqXHR, statusText){
+                fn_errorJqXHR(jqXHR, statusText);
+            });
+        }else{
+            Toast.fire({
+                icon: 'warning',
+                title: 'Ocurrio un problema, recarga la página'
+            })
+        }
+    });
+
   </script>
 
 <?= $this->endSection() ?>

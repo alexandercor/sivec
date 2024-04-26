@@ -36,21 +36,24 @@ class Recipientes extends BaseController
                 if(is_array($dataRec) && !empty($dataRec)){
                     foreach($dataRec as $key => $rec){
                         $count = ++$key;
-                        $keyRec = bs64url_enc($rec->key_dep_tip);
+
+                        $keyRec    = $rec->key_dep_tip;
+                        $keyRecEnc = bs64url_enc($rec->key_dep_tip);
+                        $recNomb   = $rec->depo;
+                        $keyCapEnc = bs64url_enc($rec->key_capacidad);
 
                         $tabla .= "
                             <tr>
                                 <td class='font-weight-bolder'>$count</td>
                                 <td>
-                                    <input type='text' value='$keyRec'>
                                     $rec->depo
                                 </td>
                                 <td>
                                     $rec->capacidad
                                 </td>
                                 <td>
-                                    <button type='button' class='btn btn-warning btn-sm'><i class='far fa-edit'></i> Editar</button>
-                                    <button type='button' class='btn btn-danger btn-sm btn_rec_dele' data-key='$keyRec'><i class='far fa-edit'></i> Eliminar</button>
+                                    <button type='button' class='btn btn-warning btn-sm btn_rec_edit' data-codestado='Mg--' data-keyrec='$keyRecEnc' data-reci='$recNomb' data-keycapa='$keyCapEnc'><i class='far fa-edit'></i> Editar</button>
+                                    <button type='button' class='btn btn-danger btn-sm btn_rec_dele' data-key='$keyRecEnc'><i class='far fa-edit'></i> Eliminar</button>
                                 </td>
                             </tr>
                         ";
@@ -74,31 +77,28 @@ class Recipientes extends BaseController
 
         if($this->request->isAJAX()){
             $est    = intval(bs64url_dec($this->request->getPost('txt_mdlcrudrec_est')));
-            $keyRec = bs64url_dec($this->request->getPost('txt_mdlcrudrec_est'));
+            $keyRec = bs64url_dec($this->request->getPost('txt_mdlcrudrec_keyrec'));
             $rec    = $this->request->getPost('txt_mdlcrudrec_rec');
             $codMed = bs64url_dec($this->request->getPost('sle_mdlcrudviewmed_medida'));
 
             if( (isset($rec) && !empty($rec)) && (isset($codMed) && !empty($codMed)) ){
                 if($est === 1){
                     $resInsetRec = $this->mrecipiente->m_rec_insert([$rec, $codMed]);
-                    if($resInsetRec === 1){
-                        $data['status'] = true;
-                        $data['msg']    = 'Datos Guardados correctamente!!';
-                    }else{
-                        $data['status'] = true;
-                        $data['msg']    = 'Ocurrio un problema al insertar!!';
-                    }
-                }else if($est === 2){
-                    $resInsetRec = $this->mrecipiente->m_rec_insert([$keyRec, $rec, $codMed]);
-                    if((int) $resInsetRec === 1){
-                        $data['status'] = true;
-                        $data['msg']    = 'Datos Guardados correctamente!!';
-                    }else{
-                        $data['status'] = true;
-                        $data['msg']    = 'Ocurrio un problema al actualizar!!';
-                    }
+                    $messaSucess = $this->msgsuccess;
+                    $messaError  = $this->msgerror;
+                }else if($est === 2 && (isset($keyRec) && !empty($keyRec))){
+                    $resInsetRec = $this->mrecipiente->m_rec_update([$rec, $codMed, $keyRec]);
+                    $messaSucess = $this->msgsuccess;
+                    $messaError  = $this->msgerror;
                 }
-                
+
+                if((int) $resInsetRec === 1){
+                    $data['status'] = true;
+                    $data['msg']    = $messaSucess;
+                }else{
+                    $data['status'] = false;
+                    $data['msg']    = $messaError;
+                }
             }
         }
         return $this->response->setJSON($data);
@@ -114,10 +114,10 @@ class Recipientes extends BaseController
                 $resDel = $this->mrecipiente->c_recipiente_del($keyRec);
                 if((int) $resDel === 1){
                     $data['status'] = true;
-                    $data['msg']    = 'Se elimino correctamente!!';
+                    $data['msg']    = $this->msgdelete;
                 }else{
                     $data['status'] = false;
-                    $data['msg']    = 'Ocurrio un problema';
+                    $data['msg']    = $this->msgdelerror;   
                 }
             }
         }

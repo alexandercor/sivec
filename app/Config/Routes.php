@@ -25,6 +25,7 @@ $routes->post('/recipiente/del', 'Recipientes::c_recipiente_del');
 $routes->get('/actividades', 'Actividades::index');
 $routes->post('/actividadeslist', 'Actividades::c_actividades_list');
 $routes->post('/actividades/add', 'Actividades::c_actividades_crud');
+$routes->post('/actividades/del', 'Actividades::c_actividad_del');
 $routes->get('/control', 'Control::index');
 $routes->get('/essalud', 'Essalud::index');
 $routes->post('/esssalud/list', 'Essalud::c_essalud_list');

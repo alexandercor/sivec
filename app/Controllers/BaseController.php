@@ -51,6 +51,15 @@ abstract class BaseController extends Controller
     protected $status;
 
     protected $msg;
+
+    protected $msgsuccess;
+
+    protected $msgerror;
+
+    protected $msgdelete;
+
+    protected $msgdelerror;
+
     // ***
     
     public function initController(RequestInterface $request, ResponseInterface $response, LoggerInterface $logger)
@@ -63,5 +72,10 @@ abstract class BaseController extends Controller
         $this->session = \Config\Services::session();
         $this->status  = false;
         $this->msg     = 'fail';
+        $this->msgsuccess = 'Datos Guardados correctamente!!';
+        $this->msgerror   = 'Ocurrio un problema al guardar!!';
+        $this->msgdelete  = 'Se elimino correctamente!!';
+        $this->msgdelerror = 'Ocurrio un problema al eliminar!!';
+
     }
 }
