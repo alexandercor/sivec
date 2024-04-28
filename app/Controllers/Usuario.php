@@ -8,12 +8,11 @@ use CodeIgniter\Controller;
 class Usuario extends BaseController
 {   
     protected $musuario;
-    // protected $session;
 
     public function __construct()
     {
         $this->musuario = new MusuarioModel();
-        // $this->session = \Config\Services::session();;
+        helper('fn_helper');
     }
 
     public function index() {
@@ -57,7 +56,6 @@ class Usuario extends BaseController
                                 redirect()->to('/acceso');
                             }
                         }
-                        
                     }
                 }else{
                     return redirect()->to(base_url('acceso'));
@@ -75,6 +73,105 @@ class Usuario extends BaseController
         $this->session->destroy();
         return redirect()->to(base_url('acceso'));
     }
-}
 
+    public function c_usuarios_index() {
+        return view('admin/vusuario');
+    }
+
+    public function c_usuario_list() {
+        $data['status'] = $this->status;
+        $data['msg']    = $this->msg;
+
+        if($this->request->isAJAX()){
+            $pers = $this->request->getPost('perso');
+            $pers = (!empty($pers))? "$pers%": '%';
+            
+            if(isset($pers) && !empty($pers)){
+                $dataUsuarios = $this->musuario->m_usuario_list($pers);
+                
+                $tabla = "";
+                if(is_array($dataUsuarios) && !empty($dataUsuarios)){
+                    
+                    foreach($dataUsuarios as $key => $usu){
+                        $count = ++$key;
+                        $keyUsu = bs64url_enc($usu->key_usu);
+                        $usuario = $usu->usuario;
+                        $keyNiv = (int) $usu->key_nivel;
+                        $keyNivEnc = bs64url_enc($keyNiv);
+                        $perso  = $usu->persona;
+
+                        $arrNivel = [
+                            1 => 'Administrador',
+                            2 => 'Supervisor',
+                            3 => 'Brigada',
+                        ];
+
+                        if(array_key_exists($keyNiv, $arrNivel)){
+                            $nivel = $arrNivel[$keyNiv];
+                        }
+
+                        $tabla .= "
+                            <tr>
+                                <td class='font-weight-bolder'>$count</td>
+                                <td>$perso</td>
+                                <td><i class='fas fa-user'></i> $usuario</td>
+                                <td>$nivel</td>
+                                
+                                <td>
+                                    <button type='button' class='btn bg-teal btn-sm btn_usu_update' data-keyusu='$keyUsu' data-usu='$usuario' data-keynivel='$keyNivEnc' ><i class='far fa-edit'></i> Actualizar</button>
+                                </td>
+                            </tr>
+                        ";
+                    }
+                }else{
+                    $tabla .= "<tr><td colspan='7' class='text-center'><i class='fas fa-ban text-danger'></i> No se encontraron resultados!!!</td></tr>";
+				}
+				$tabla .= "</tbody></table>";
+
+                $data['status'] = true;
+                $data['msg'] = 'ok';
+                $data['dataUsuarios'] = $tabla;
+            }
+        }
+        return $this->response->setJSON($data);
+    }
+
+    public function c_usuario_update() {
+        $data['status'] = $this->status;
+        $data['msg']    = $this->msg;
+
+        if($this->request->isAJAX()){
+
+            $keyUsu = bs64url_dec($this->request->getPost('txt_crudusu_keyusu'));
+            $pass   = $this->request->getPost('txt_crudusu_constraseña');
+            $keyNiv = bs64url_dec($this->request->getPost('sle_usucrud_nivel')); 
+
+            if( (isset($keyUsu) && !empty($keyUsu)) && (isset($keyNiv) && !empty($keyNiv)) ){
+                if(empty($pass)){
+                    $resInsetAct = $this->musuario->m_usuario_update_nivel([$keyNiv, $keyUsu]);
+                    $messaSucess = $this->msgsuccess;
+                    $messaError  = $this->msgerror;
+                }else if(!empty($pass)){
+
+                    $pass = password_hash($pass, PASSWORD_DEFAULT);
+
+                    $resInsetAct = $this->musuario->m_usuario_update([$pass, $keyNiv, $keyUsu]);
+                    $messaSucess = $this->msgsuccess;
+                    $messaError  = $this->msgerror;
+                }
+
+                if((int) $resInsetAct === 1){
+                    $data['status'] = true;
+                    $data['msg']    = $messaSucess;
+                }else{
+                    $data['status'] = false;
+                    $data['msg']    = $messaError;
+                }
+            }
+        }
+        return $this->response->setJSON($data);
+    }
+
+    // ***
+}
 ?>

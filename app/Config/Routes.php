@@ -17,6 +17,9 @@ $routes->post('/distritos', 'Infocore::c_distritos_list');
 $routes->post('/localidad', 'Infocore::c_localidad_list');
 $routes->post('/sector', 'Infocore::c_sector_list');
 
+$routes->get('/usuarios', 'Usuario::c_usuarios_index');
+$routes->post('/usuarios/list', 'Usuario::c_usuario_list');
+$routes->post('usuario/update', 'Usuario::c_usuario_update');
 $routes->get('/persona', 'Persona::index');
 $routes->post('/persona/list', 'Persona::c_persona_list');
 $routes->post('/persona/add', 'Persona::c_persona_crud');

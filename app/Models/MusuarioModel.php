@@ -27,14 +27,62 @@ class MusuarioModel extends Model{
             SELECT 
                 `tb_persona`.`dni` dni,
                 `tb_persona`.`apellidos_nombres` persona,
-                `tb_persona`.`email` email
+                `tb_persona`.`email` email,
+                `tb_usuario`.`usu_nivel` key_nive
             FROM
-                `tb_persona`
+                `tb_usuario`
+                INNER JOIN `tb_persona` ON (`tb_usuario`.`id_persona` = `tb_persona`.`id_persona`)
             WHERE
                 `tb_persona`.`id_persona` = ?
         ";
         $response = $this->db->query($sql, $keyPer);
         return $response->getRow();
+    }
+
+    public function m_usuario_list($per): array {
+        $sql = "
+            SELECT 
+                `tb_usuario`.`id_usuario` key_usu,
+                `tb_usuario`.`usu_usuario` usuario,
+                `tb_usuario`.`usu_nivel` key_nivel,
+                `tb_persona`.`apellidos_nombres` persona
+            FROM
+                `tb_usuario`
+                INNER JOIN `tb_persona` ON (`tb_usuario`.`id_persona` = `tb_persona`.`id_persona`)
+            WHERE
+                `tb_persona`.`apellidos_nombres` LIKE ?
+            ORDER BY
+                `tb_persona`.`apellidos_nombres`
+        ";
+        $response = $this->db->query($sql, $per);
+        return $response->getResult();
+    }
+
+    public function m_usuario_update($keyAct): int{
+        $sql = "
+            UPDATE 
+                `tb_usuario`  
+            SET 
+                `usu_contrasena_encrypt` = ?,
+                `usu_nivel` = ?
+            WHERE 
+                `id_usuario` = ?
+        ";
+        $this->db->query($sql, $keyAct);
+        return ($this->db->affectedRows() >= 1)? 1: 2;
+    }
+
+    public function m_usuario_update_nivel($keyAct): int{
+        $sql = "
+            UPDATE 
+                `tb_usuario`  
+            SET 
+                `usu_nivel` = ?
+            WHERE 
+                `id_usuario` = ?
+        ";
+        $this->db->query($sql, $keyAct);
+        return ($this->db->affectedRows() >= 1)? 1: 2;
     }
 }
 ?>

@@ -14,6 +14,14 @@
                     <span class="right badge badge-danger">New</span>
                 </p>
                 </a>
+            </li>   
+            <li class="nav-item">
+                <a href="<?= base_url('usuarios'); ?>" class="nav-link">
+                <i class="fas fa-users"></i>
+                <p>
+                    Usuarios
+                </p>
+                </a>
             </li>
             <li class="nav-item menu-is-opening menu-open">
                 <a href="#" class="nav-link">
