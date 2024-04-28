@@ -18,6 +18,9 @@ $routes->post('/localidad', 'Infocore::c_localidad_list');
 $routes->post('/sector', 'Infocore::c_sector_list');
 
 $routes->get('/persona', 'Persona::index');
+$routes->post('/persona/list', 'Persona::c_persona_list');
+$routes->post('/persona/add', 'Persona::c_persona_crud');
+$routes->post('/persona/del', 'Persona::c_persona_del');
 $routes->get('/recipientes', 'Recipientes::index');
 $routes->post('/recipiente/list', 'Recipientes::c_recipiente_list');
 $routes->post('/recipiente/add', 'Recipientes::c_recipiente_crud');
