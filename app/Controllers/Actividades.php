@@ -45,7 +45,7 @@ class Actividades extends BaseController
                                 </td>
                                 <td>
                                     <button type='button' class='btn btn-warning btn-sm btn_act_edit' data-keyest='Mg--' data-keyact='$keyActiv' data-act='$activi'><i class='far fa-edit'></i> Editar</button>
-                                    <button type='button' class='btn btn-danger btn-sm btn_act_del' data-keyact='$keyActiv'><i class='far fa-edit'></i> Eliminar</button>
+                                    <button type='button' class='btn btn-danger btn-sm btn_act_del' data-keyact='$keyActiv'><i class='far fa-trash-alt'></i> Eliminar</button>
                                 </td>
                             </tr>
                         ";

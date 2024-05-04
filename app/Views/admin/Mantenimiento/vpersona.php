@@ -1,6 +1,6 @@
 <?= $this->extend('layout/vlayout') ?>
 <!--  -->
-<?= $this->section('page_title') ?> Persona | <?= SYS_TITLE; ?> <?= $this->endSection() ?>
+<?= $this->section('page_title') ?> Colaborador | <?= SYS_TITLE; ?> <?= $this->endSection() ?>
 
 <?= $this->section('contenido') ?>
 
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1><i class="fas fa-sliders-h"></i> Persona</h1>
+            <h1><i class="fas fa-sliders-h"></i> Colaborador</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?= base_url('home')?>">Inicio</a></li>
-              <li class="breadcrumb-item active">Persona</li>
+              <li class="breadcrumb-item active">Colaborador</li>
             </ol>
           </div>
         </div>
@@ -140,8 +140,8 @@
 
                                                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                         <div class="form-group">
-                                                            <label for=id="txt_crudper_per" >Apellidos y Nombres</label>
-                                                            <input type="text" class="form-control" id="txt_crudper_per" name="txt_crudper_per"   placeholder="Apellidos y Nombres">
+                                                            <label for="txt_crudper_per" >Apellidos y Nombres</label>
+                                                            <input type="text" class="form-control text-uppercase" id="txt_crudper_per" name="txt_crudper_per"   placeholder="Apellidos y Nombres">
                                                         </div>
                                                     </div>
 
@@ -171,6 +171,42 @@
                                                         <div class="form-group">
                                                             <label for="txt_crudper_celular2">Celular 2</label>
                                                             <input type="text" class="form-control" id="txt_crudper_celular2" name="txt_crudper_celular2" placeholder="Celular 2">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="txt_crudper_usuario">Usuario</label>
+                                                            <input type="text" class="form-control" id="txt_crudper_usuario" name="txt_crudper_usuario" placeholder="Usuario">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="txt_crudper_contraseña">Constraseña</label>
+                                                            <input type="text" class="form-control" id="txt_crudper_contraseña" name="txt_crudper_contraseña" placeholder="Contraseña">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="sle_percrud_nivel">Nivel</label>
+                                                            <select id="sle_percrud_nivel" name="sle_percrud_nivel" class="form-control">
+                                                                <option value="#">Selecciona un nivel</option>
+                                                                <option value="MQ--">Administrador</option>
+                                                                <option value="Mg--">Supervisor</option>
+                                                                <option value="Mw--">Brigada</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="sle_percrud_tip_col">Colaborador</label>
+                                                            <select id="sle_percrud_tip_col" name="sle_percrud_tip_col" class="form-control">
+                                                                <option value="#">Selecciona un tipo</option>
+                                                                <option value="MQ--">Inspector</option>
+                                                                <option value="Mg--">Jefe</option>
+                                                            </select>
                                                         </div>
                                                     </div>
                                                 </div>

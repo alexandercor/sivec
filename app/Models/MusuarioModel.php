@@ -84,5 +84,17 @@ class MusuarioModel extends Model{
         $this->db->query($sql, $keyAct);
         return ($this->db->affectedRows() >= 1)? 1: 2;
     }
+
+    public function m_usuario_insert(array $data): int{
+        $sql = "
+        INSERT INTO `tb_usuario`
+            (`usu_usuario`, `usu_contrasena_encrypt`, `usu_nivel`, `id_persona`) 
+        VALUES (?,?,?,?)
+        ";
+        $this->db->query($sql, $data);
+        return ($this->db->affectedRows() >= 1)? 1: 2;
+    }
+
+    // ***
 }
 ?>

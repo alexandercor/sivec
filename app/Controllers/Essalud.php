@@ -3,16 +3,19 @@
 namespace App\Controllers;
 use App\Models\MessaludModel;
 
+use Config\Services;
 use CodeIgniter\Controller;
 
 class Essalud extends BaseController
 {   
     protected $messalud;
     protected $helpers = ['form', 'fn_helper'];
+    protected $validacion;
 
     public function __construct()
     {
         $this->messalud = new MessaludModel();
+        $this->validacion = Services::validation();
     }
 
     public function index(){
@@ -35,18 +38,30 @@ class Essalud extends BaseController
                     foreach($dataEssalud as $key => $ess){
                         $count = ++$key;
                         $keyEss = bs64url_enc($ess->key_ess);
+                        $eess   = esc($ess->ess);
+                        $keySec = bs64url_enc($ess->key_sec);
+                        $sec    = esc($ess->sec);
+
                         $tabla .= "
                             <tr>
                                 <td class='font-weight-bolder'>$count</td>
                                 <td>
-                                    <input type='text' value='$keyEss'>
-                                    $ess->ess
+                                    $eess
                                 </td>
                                 <td>
-                                    $ess->sec
+                                    <i class='fas fa-map-signs text-primary fa-sm'></i> 
+                                    $sec
                                 </td>
                                 <td>
-                                    <button type='button' class='btn btn-warning btn-sm'><i class='far fa-edit'></i> Editar</button>
+                                    <button type='button' class='btn btn-warning btn-sm btn_eess_edit' data-keyest='Mg--' data-keyeess='$keyEss' data-eess='$eess' data-keysec='$keySec'>
+                                        <i class='far fa-edit'></i> 
+                                        Editar
+                                    </button>
+
+                                    <button type='button' class='btn btn-danger btn-sm btn_eess_del' data-keyeess='$keyEss'>
+                                        <i class='far fa-trash-alt'></i> 
+                                        Eliminar
+                                    </button>
                                 </td>
                             </tr>
                         ";
@@ -63,6 +78,80 @@ class Essalud extends BaseController
         }
         return $this->response->setJSON($data);
     }
+
+    public function c_essalud_crud() {
+        $data['status'] = $this->status;
+        $data['msg']    = $this->msg;
+
+        if($this->request->isAJAX()){
+
+            $rules = [
+                'sle_esscrud_sector' => [
+                    'label' => 'Sector',
+                    'rules' => 'required'
+                ],
+                'txt_esscrud_eess' => [
+                    'label' => 'Centro de Salud',
+                    'rules' => 'required|min_length[3]'
+                ],
+            ];
+
+            $this->validacion->setRules($rules);
+
+            if($this->validacion->withRequest($this->request)->run()){
+
+                $est = (int) bs64url_dec($this->request->getPost('txt_esscrud_esta'));
+                $keyEess = (int) bs64url_dec($this->request->getPost('txt_esscrud_keyeess'));
+                $eess    = mb_strtoupper($this->request->getPost('txt_esscrud_eess'));
+                $keySec  = bs64url_dec($this->request->getPost('sle_esscrud_sector'));
+                
+                if( (isset($est) && !empty($est)) && (isset($keySec) && !empty        ($keySec)) && (isset($eess) && !empty($eess)) ){
+
+                    if($est === 1){
+                        $resInsetAct = $this->messalud->m_essalud_insert([$eess, $keySec]);
+                        $messaSucess = $this->msgsuccess;
+                        $messaError  = $this->msgerror;
+                    }else if($est === 2 && (isset($keyEess) && !empty($keyEess))){
+                        $resInsetAct = $this->messalud->m_essalud_update([$eess, $keySec, $keyEess]);
+                        $messaSucess = $this->msgsuccess;
+                        $messaError  = $this->msgerror;
+                    }
+    
+                    if((int) $resInsetAct === 1){
+                        $data['status'] = true;
+                        $data['msg']    = $messaSucess;
+                    }else{
+                        $data['status'] = false;
+                        $data['msg']    = $messaError;
+                    }
+                }
+            }else{
+                $data['errors'] = $this->validacion->getErrors();
+            }
+        }
+        return $this->response->setJSON($data);
+    }
+
+    public function c_essalud_del(){
+        $data['status'] = $this->status;
+        $data['msg']    = $this->msg;
+
+        if($this->request->isAJAX()){
+            $keyEess = bs64url_dec($this->request->getPost('keyEess'));
+            if(isset($keyEess) && !empty($keyEess)){
+                $resDel = $this->messalud->m_essalud_del($keyEess);
+                if((int) $resDel === 1){
+                    $data['status'] = true;
+                    $data['msg']    = $this->msgdelete;
+                }else{
+                    $data['status'] = false;
+                    $data['msg']    = $this->msgdelerror;
+                }
+            }
+        }
+        return $this->response->setJSON($data);
+    }
+
 
 // ****
 }

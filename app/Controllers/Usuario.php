@@ -3,15 +3,18 @@
 namespace App\Controllers;
 use App\Models\MusuarioModel;
 
+use Config\Services;
 use CodeIgniter\Controller;
 
 class Usuario extends BaseController
 {   
     protected $musuario;
+    protected $validation;
 
     public function __construct()
     {
         $this->musuario = new MusuarioModel();
+        $this->validation = Services::validation();
         helper('fn_helper');
     }
 
@@ -26,44 +29,61 @@ class Usuario extends BaseController
 
         if($this->request->isAJAX()){
 
-            $usuNombre   = $this->request->getPost('txtLogSendUsu');
-            $usuPassword = $this->request->getPost('txtLogSendPas');
+            $rules = [
+                'txtLogSendUsu' => [
+                    'label' => 'Usuario',
+                    'rules' => 'required'
+                ],
+                'txtLogSendPas' => [
+                    'label' => 'Contraseña',
+                    'rules' => 'required'
+                ],
+            ];
 
-            if( (isset($usuNombre) && !empty($usuNombre)) && (isset($usuPassword) && !empty($usuPassword))){
+            $this->validation->setRules($rules);
 
-                $resDataUser = $this->musuario->m_usuario_buscar($usuNombre);
-
-                if($resDataUser){
-                    $usuBBDD     = $resDataUser->usuario;
-                    $pasHashBBDD = $resDataUser->pass_hash;
-                    
-                    $keyPer = $resDataUser->key_per;
-
-                    if(($usuNombre === $usuBBDD) && (password_verify($usuPassword, $pasHashBBDD))){
-
-                        $resDatPer = $this->musuario->m_usuario_persona($keyPer);
-                        if($resDatPer){
-                            $data['status'] = true;
-                            $data['msg']    = 'Correcto';
-                            $data['urlDestino'] = base_url('/home');
-
-                            $this->session->set('dataPer', $resDatPer);
-                            $datase = $this->session->get('dataPer');
-                            
-                            if(!empty($datase)){
-                                redirect()->to('/home');
-                            }else{
-                                redirect()->to('/acceso');
+            if($this->validation->withRequest($this->request)->run()){
+                $usuNombre   = $this->request->getPost('txtLogSendUsu');
+                $usuPassword = $this->request->getPost('txtLogSendPas');
+    
+                if( (isset($usuNombre) && !empty($usuNombre)) && (isset($usuPassword) && !empty($usuPassword))){
+    
+                    $resDataUser = $this->musuario->m_usuario_buscar($usuNombre);
+    
+                    if($resDataUser){
+                        $usuBBDD     = $resDataUser->usuario;
+                        $pasHashBBDD = $resDataUser->pass_hash;
+                        
+                        $keyPer = $resDataUser->key_per;
+    
+                        if(($usuNombre === $usuBBDD) && (password_verify($usuPassword, $pasHashBBDD))){
+    
+                            $resDatPer = $this->musuario->m_usuario_persona($keyPer);
+                            if($resDatPer){
+                                $data['status'] = true;
+                                $data['msg']    = 'Correcto';
+                                $data['urlDestino'] = base_url('/home');
+    
+                                $this->session->set('dataPer', $resDatPer);
+                                $datase = $this->session->get('dataPer');
+                                
+                                if(!empty($datase)){
+                                    redirect()->to('/home');
+                                }else{
+                                    redirect()->to('/acceso');
+                                }
                             }
                         }
+                    }else{
+                        return redirect()->to(base_url('acceso'));
                     }
-                }else{
+                }
+    
+                if(empty($datase)){
                     return redirect()->to(base_url('acceso'));
                 }
-            }
-
-            if(empty($datase)){
-                return redirect()->to(base_url('acceso'));
+            }else{
+                $data['errors'] = $this->validation->getErrors();
             }
         }
         return $this->response->setJSON($data);

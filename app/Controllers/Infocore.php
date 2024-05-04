@@ -28,7 +28,7 @@ class Infocore extends BaseController
             if(isset($codReg) && !empty($codReg)){
                 $dataDepartementos = $this->minfocore->m_departamentos($codReg);
                 if(is_array($dataDepartementos) && !empty($dataDepartementos)){
-                    $options .= "<option value='#'>Seleccionar*</option>";
+                    $options .= "<option value=''>Seleccionar*</option>";
                     foreach($dataDepartementos as $dep){
                         $val = bs64url_enc($dep->key_dep);
                         $options .= "<option value='$val'>".esc($dep->depar)."</option>";
@@ -57,7 +57,7 @@ class Infocore extends BaseController
             if(isset($codDep) && !empty($codDep)){
                 $dataProvincias = $this->minfocore->m_provincias($codDep);
                 if(is_array($dataProvincias) && !empty($dataProvincias)){
-                    $options .= "<option value='#'>Seleccionar*</option>";
+                    $options .= "<option value=''>Seleccionar*</option>";
                     foreach($dataProvincias as $pro){
                         $keyPro = bs64url_enc($pro->key_prov);
                         $options .= "<option value='$keyPro'>".esc($pro->provincia)."</option>";
@@ -86,7 +86,7 @@ class Infocore extends BaseController
             if(isset($codProv) && !empty($codProv)){
                 $dataDistritos = $this->minfocore->m_distritos($codProv);
                 if(is_array($dataDistritos) && !empty($dataDistritos)){
-                    $options .= "<option value='#'>Seleccionar*</option>";
+                    $options .= "<option value=''>Seleccionar*</option>";
                     foreach($dataDistritos as $dis){
                         $keyDis = bs64url_enc($dis->key_distrito);
                         $options .= "<option value='$keyDis'>".esc($dis->distrito)."</option>";
@@ -115,7 +115,7 @@ class Infocore extends BaseController
             if(isset($codDis) && !empty($codDis)){
                 $dataLocalidad = $this->minfocore->m_localidad($codDis);
                 if(is_array($dataLocalidad) && !empty($dataLocalidad)){
-                    $options .= "<option value='#'>Seleccionar*</option>";
+                    $options .= "<option value=''>Seleccionar*</option>";
                     foreach($dataLocalidad as $loc){
                         $keyLoc = bs64url_enc($loc->key_localidad);
                         $options .= "<option value='$keyLoc'>".esc($loc->localidad)."</option>";
@@ -144,7 +144,7 @@ class Infocore extends BaseController
             if(isset($codLoc) && !empty($codLoc)){
                 $dataSector = $this->minfocore->m_sector($codLoc);
                 if(is_array($dataSector) && !empty($dataSector)){
-                    $options .= "<option value='#'>Seleccionar*</option>";
+                    $options .= "<option value=''>Seleccionar*</option>";
                     foreach($dataSector as $sec){
                         $keySec = bs64url_enc($sec->key_sector);
                         $options .= "<option value='$keySec'>".esc($sec->sector)."</option>";

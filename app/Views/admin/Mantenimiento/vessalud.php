@@ -20,8 +20,8 @@
       </div>
     </section>
 
-    <section class="content">
-        <div class="container-fluid" id="div_overlay_act">
+    <!-- <section class="content">
+        <div class="container-fluid" id="div_overlay_es">
             <div class="card card-navy card-outline">
                 <div class="card-body">
                     <div class="row">
@@ -81,13 +81,7 @@
                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                             <div class="form-group">
                                 <label for="" class="color_white">.</label>
-                                <button type="button" id="btn_buscar_ess" class="btn btn-primary btn-block rounded-pill">Buscar</button>
-                            </div> 
-                        </div>
-                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                            <div class="form-group">
-                                <label for="" class="color_white">.</label>
-                                <button type="button" class="btn btn-success btn-block rounded-pill" data-toggle="modal" data-target="#mdl_essalud">Agregar</button>
+                                <button type="button" id="btn_buscar_ess" class="btn btn-primary btn-block">Buscar</button>
                             </div> 
                         </div>
                     </div>
@@ -100,7 +94,6 @@
                                         <th>#</th>
                                         <th>Centro de salud</th>
                                         <th>Sector</th>
-                                        <th>Acc.</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -111,9 +104,200 @@
                 </div>
             </div>
         </div>
+    </section> -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-navy card-outline">
+                        <div class="card-header p-0">
+                            <ul id="tab_es" class="nav nav-pills ml-auto p-2">
+                                <li class="nav-item"><a class="nav-link active" href="#tabes" data-toggle="tab">Lista</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#tabadd" data-toggle="tab">Agregar</a></li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tabes">
+                                    <div class="row">
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="sle_essview_region">Region</label>
+                                                <select id="sle_essview_region" class="form-control" data-send="view">
+                                                    <option value="">Selecciona una región</option>
+                                                    <option value="MQ--">Costa</option>
+                                                    <option value="Mg--">Sierra</option>
+                                                    <option value="Mw--">Selva</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="sle_essview_depa">Departamento</label>
+                                                <select id="sle_essview_depa" class="form-control" data-send="view">
+                                                    <option value="">Selecciona un departamento</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="sle_essview_prov">Provincia</label>
+                                                <select id="sle_essview_prov" class="form-control" data-send="view">
+                                                    <option value="">Selecciona una provincia</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="sle_essview_distr">Distrito</label>
+                                                <select id="sle_essview_distr" class="form-control" data-send="view">
+                                                    <option value="">Selecciona una distrito</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="sle_essview_locali">Localidad</label>
+                                                <select id="sle_essview_locali" class="form-control" data-send="view">
+                                                    <option value="">Selecciona una localidad</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="sle_essview_sector">Sector</label>
+                                                <select id="sle_essview_sector" class="form-control" data-send="view">
+                                                    <option value="">Selecciona una sector</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="" class="color_white">.</label>
+                                                <button type="button" id="btn_buscar_ess" class="btn btn-primary btn-block">Buscar</button>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <hr class="mt-0">
+                                    <div class="row">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 table-responsive">
+                                            <table id="tbl_essalud" class="table table-striped table-bordered table-sm table-hover projects">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Centro de salud</th>
+                                                        <th>Sector</th>
+                                                        <th>Acc.</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="tabadd">
+                                    <div class="card card-primary">
+                                        <form id="frm_es" action="<?= base_url(); ?>esssalud/add" method="POST">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <div id="div_errors" class="error_danger"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <input type="text" name="txt_esscrud_esta" id="txt_esscrud_esta" value="MQ--">
+
+                                                    <input type="text" name="txt_esscrud_keyeess" id="txt_esscrud_keyeess">
+
+                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="sle_esscrud_region">Region</label>
+                                                            <select id="sle_esscrud_region" class="form-control" data-send="crud">
+                                                                <option value="">Selecciona una región</option>
+                                                                <option value="MQ--">Costa</option>
+                                                                <option value="Mg--">Sierra</option>
+                                                                <option value="Mw--">Selva</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="sle_esscrud_depa">Departamento</label>
+                                                            <select id="sle_esscrud_depa" class="form-control" data-send="crud">
+                                                                <option value="">Selecciona un departamento</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="sle_esscrud_prov">Provincia</label>
+                                                            <select id="sle_esscrud_prov" class="form-control" data-send="crud">
+                                                                <option value="">Selecciona una provincia</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="sle_esscrud_distr">Distrito</label>
+                                                            <select id="sle_esscrud_distr" class="form-control" data-send="crud">
+                                                                <option value="">Selecciona una distrito</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="sle_esscrud_locali">Localidad</label>
+                                                            <select id="sle_esscrud_locali" class="form-control" data-send="crud">
+                                                                <option value="">Selecciona una localidad</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="sle_esscrud_sector">Sector</label>
+                                                            <select id="sle_esscrud_sector" name="sle_esscrud_sector" class="form-control" data-send="crud">
+                                                                <option value="">Selecciona una sector</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="txt_esscrud_eess" >Centro de salud</label>
+                                                            <input type="text" class="form-control text-uppercase" id="txt_esscrud_eess" name="txt_esscrud_eess"   placeholder="Centro de salud">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-footer">
+                                                <div class="row justify-content-between">
+                                                    <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                                                        <div id="div_response"></div>
+                                                        
+                                                    </div>
+                                                    <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                                                        <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
-    
-    <section class="modal fade" id="mdl_essalud" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+    <!-- <section class="modal fade" id="mdl_essalud" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <form id="frm_actidividad" action="<?= base_url(); ?>actividades/add" method="POST">
@@ -142,7 +326,7 @@
                 </form>
             </div>
         </div>
-    </section>
+    </section> -->
 
 <?= $this->endSection() ?>
 
@@ -153,30 +337,66 @@
         fn_getDataEssalud();
     })
 
-    const div_overlay_act = 'div_overlay_act';
+    const div_overlay_es = 'div_overlay_es';
     let codReg, codDep, codProv, codDis, codLoc, codSec;
 
-    const objSelect = {
-        'sleSec' : '#sle_essview_sector',
-        'sleLoc' : '#sle_essview_locali',
-        'sleDis' : '#sle_essview_distr',
-        'slePro' : '#sle_essview_prov',
-        'sleDep' : '#sle_essview_depa',
-        'sleReg' : '#sle_essview_region'
-    }
-    const keys = Object.keys(objSelect);
-    const countKeys = keys.length;
+    // const objSelect = {
+    //     'sleSec' : '#sle_essview_sector',
+    //     'sleLoc' : '#sle_essview_locali',
+    //     'sleDis' : '#sle_essview_distr',
+    //     'slePro' : '#sle_essview_prov',
+    //     'sleDep' : '#sle_essview_depa',
+    //     'sleReg' : '#sle_essview_region'
+    // }
+    // const keys = Object.keys(objSelect);
+    // const countKeys = keys.length;
     
-    const fn_limpiar_select = (counIte) =>{
+    // const fn_limpiar_select1 = (counIte) =>{
+    //     for (let i = 0; i < counIte; i++) {
+    //         let propiedad = keys[i];
+    //         $(`${objSelect[propiedad]}`).empty();
+    //     }
+    // }
+
+    const objSelectsData = {
+        view : {
+            sleSec : '#sle_essview_sector',
+            sleLoc : '#sle_essview_locali',
+            sleDis : '#sle_essview_distr',
+            slePro : '#sle_essview_prov',
+            sleDep : '#sle_essview_depa',
+            sleReg : '#sle_essview_region'
+        },
+        crud : {
+            sleSec : '#sle_esscrud_sector',
+            sleLoc : '#sle_esscrud_locali',
+            sleDis : '#sle_esscrud_distr',
+            slePro : '#sle_esscrud_prov',
+            sleDep : '#sle_esscrud_depa',
+            sleReg : '#sle_esscrud_region'
+        },
+    };
+
+    const selecView = objSelectsData.view,
+    selecCrud = objSelectsData.crud;
+
+
+    const fn_limpiar_select = (counIte, keySend) =>{
+        const keySendObject = objSelectsData[keySend],
+        keySendCildremObject = Object.keys(keySendObject);
+
         for (let i = 0; i < counIte; i++) {
-            let propiedad = keys[i];
-            $(`${objSelect[propiedad]}`).empty();
+            let propiedad = keySendCildremObject[i];
+            $(`${keySendObject[propiedad]}`).empty();
         }
     }
 
-    $('#sle_essview_region').change(function (e) {
+    $(`${selecView.sleReg}, ${selecCrud.sleReg}`).change(function (e) {
         e.preventDefault();
-        fn_limpiar_select(5);
+        
+        const typeSend = $(this).data('send'),
+            idSelect = objSelectsData[typeSend].sleDep;
+            fn_limpiar_select(5, typeSend);
 
         codReg = $(this).val();
         if(codReg){
@@ -193,7 +413,7 @@
                 // $('.loading').remove();
                 const { status, dataDepartamentos } = data;
                 if(status){
-                    $('#sle_essview_depa').html(`${dataDepartamentos}`);
+                    $(`${idSelect}`).html(`${dataDepartamentos}`);
                 }
             })
             .fail((jqXHR, statusText) => {
@@ -202,10 +422,13 @@
         }
     });
 
-    $('#sle_essview_depa').change(function (e) {
+    $(`${selecView.sleDep}, ${selecCrud.sleDep}`).change(function (e) {
         e.preventDefault();
-        fn_limpiar_select(4);
-        // $('#sle_conview_prov').empty();
+        
+        const typeSend = $(this).data('send'),
+        idSelect = objSelectsData[typeSend].slePro;
+        fn_limpiar_select(4, typeSend);
+
         codDep = $(this).val();
 
         if(codDep){
@@ -222,7 +445,7 @@
                 // $('.loading').remove();
                 const { status, dataProvincias } = data;
                 if(status){
-                    $('#sle_essview_prov').html(`${dataProvincias}`);
+                    $(`${idSelect}`).html(`${dataProvincias}`);
                 }
             })
             .fail((jqXHR, statusText) => {
@@ -231,10 +454,13 @@
         }
     });
 
-    $('#sle_essview_prov').change(function (e) {
+    $(`${selecView.slePro}, ${selecCrud.slePro}`).change(function (e) {
         e.preventDefault();
-        fn_limpiar_select(3);
-        // $('#sle_conview_distr').empty();
+        
+        const typeSend = $(this).data('send'),
+            idSelect = objSelectsData[typeSend].sleDis;
+            fn_limpiar_select(3, typeSend);
+
         codProv = $(this).val();
 
         if(codDep){
@@ -251,7 +477,7 @@
                 // $('.loading').remove();
                 const { status, dataDistritos } = data;
                 if(status){
-                    $('#sle_essview_distr').html(`${dataDistritos}`);
+                    $(`${idSelect}`).html(`${dataDistritos}`);
                 }
             })
             .fail((jqXHR, statusText) => {
@@ -260,10 +486,13 @@
         }
     });
 
-    $('#sle_essview_distr').change(function (e) {
+    $(`${selecView.sleDis}, ${selecCrud.sleDis}`).change(function (e) {
         e.preventDefault();
-        fn_limpiar_select(2);
-        // $('#sle_conview_locali').empty();
+        
+        const typeSend = $(this).data('send'),
+            idSelect = objSelectsData[typeSend].sleLoc;
+            fn_limpiar_select(2, typeSend);
+
         codDis = $(this).val();
 
         if(codDep){
@@ -280,7 +509,7 @@
                 // $('.loading').remove();
                 const { status, dataLocalidad } = data;
                 if(status){
-                    $('#sle_essview_locali').html(`${dataLocalidad}`);
+                    $(`${idSelect}`).html(`${dataLocalidad}`);
                 }
             })
             .fail((jqXHR, statusText) => {
@@ -289,10 +518,13 @@
         }
     });
 
-    $('#sle_essview_locali').change(function (e) {
+    $(`${selecView.sleLoc}, ${selecCrud.sleLoc}`).change(function (e) {
         e.preventDefault();
-        fn_limpiar_select(1);
-        // $('#sle_conview_sector').empty();
+        
+        const typeSend = $(this).data('send'),
+            idSelect = objSelectsData[typeSend].sleSec;
+            fn_limpiar_select(1, typeSend);
+
         codLoc = $(this).val();
 
         if(codDep){
@@ -309,7 +541,7 @@
                 // $('.loading').remove();
                 const { status, dataSector } = data;
                 if(status){
-                    $('#sle_essview_sector').html(`${dataSector}`);
+                    $(`${idSelect}`).html(`${dataSector}`);
                 }
             })
             .fail((jqXHR, statusText) => {
@@ -318,7 +550,7 @@
         }
     });
 
-    $('#sle_essview_sector').change(function (e){
+    $(`${selecView.sleSec}, ${selecCrud.sleSec}`).change(function (e){
         codSec = $(this).val();
     });
 
@@ -346,22 +578,30 @@
         fn_getDataEssalud();
     })
 
-    $('#frm_actidividad').submit(function (e) {
+    $('#frm_es').submit(function (e) {
+        $('#div_errors').html('');
+
         e.preventDefault();
         $.ajax({
-            url: `${base_url}actividades/add`,
+            url: $(this).attr('action'),
             type: $(this).attr('method'),
             data: $(this).serialize(),
             dataType: "JSON",
         })
         .done(function(data){
+            $('#div_errors').empty();
             const { status, msg, errors } = data;
             if(status){
                 $('#div_response').html(`<h4><i class="fas fa-check-circle"></i> ${msg} </h4>`);
                 setTimeout(() => {
-                    $('#mdl_actividad').modal('hide');   
                     window.location.reload();
                 }, 4000);
+            }else{
+                let items = '';
+                for(const key in errors){
+                    items += `<p>${errors[key]}</p>`; 
+                }
+                $('#div_errors').html(`<div class="alert">${items}</div>`);
             }
         })
         .fail(function(jqXHR, statusText){
@@ -370,7 +610,67 @@
         return false;
     });
 
-    
+    $('#tab_es a[href="#tabes"]').click(function(){
+        $('#tab_es a[href="#tabadd"]').text('Agregar');
+    })
+
+    $(document).on('click', '.btn_eess_edit', function() {
+
+        $('#tab_es a[href="#tabadd"]').text('Editar')
+
+        const keyEst = $(this).data('keyest'),
+            keyEess = $(this).data('keyeess'),
+            eess    = $(this).data('eess'),
+            keySec  = $(this).data('keysec');
+
+        if(keyEst === 'Mg--' && keyEess && eess && keySec){
+            $('#txt_esscrud_esta').val(keyEst);
+            $('#txt_esscrud_keyeess').val(keyEess);
+            $('#txt_esscrud_eess').val(eess);
+            $('#sle_esscrud_sector').val(keySec);
+            $('#tab_es a[href="#tabadd"]').tab('show');
+        }
+    })
+
+    $(document).on('click', '.btn_eess_del', function () {
+        const keyEess = $(this).data('keyeess');
+        
+        if(keyEess){
+            $.ajax({
+                url: `${base_url}esssalud/del`,
+                type: "POST",
+                data: {keyEess: keyEess},
+                dataType: "JSON",
+            })
+            .done((data) => {
+                const {status, msg} = data;
+                if(status){
+                    Toast.fire({
+                        icon: 'success',
+                        title: `${msg}`
+                    })
+                }else{
+                    Toast.fire({
+                        icon: 'danger',
+                        title: `${msg}`
+                    })
+                }
+                setTimeout(()=> {
+                    window.location.reload();
+                }, 2500)
+            })
+            .fail(function(jqXHR, statusText){
+                fn_errorJqXHR(jqXHR, statusText);
+            });
+        }else{
+            Toast.fire({
+                icon: 'warning',
+                title: 'Ocurrio un problema, recarga la página'
+            })
+        }
+    });
+
+
   </script>
 
 <?= $this->endSection() ?>

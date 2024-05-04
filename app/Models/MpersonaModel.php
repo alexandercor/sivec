@@ -29,7 +29,7 @@ class MpersonaModel extends Model{
         return $response->getResult();
     }
 
-    public function m_persona_insert(array $data): int{
+    public function m_persona_insert(array $data){
         $sql = "
         INSERT INTO `tb_persona`
             (`dni`,`apellidos_nombres`,`fecha_nacimiento`,`celular1`,`celular2`,
@@ -37,7 +37,14 @@ class MpersonaModel extends Model{
         VALUE (?,?,?,?,?,?)
         ";
         $this->db->query($sql, $data);
-        return ($this->db->affectedRows() >= 1)? 1: 2;
+
+        if($this->db->affectedRows() >= 1){
+            $ultimoId = $this->db->insertID();
+            return [1, $ultimoId];
+        }else{
+            return 2;
+        }
+        
     }
 
     public function m_persona_update(array $data): int{
@@ -70,6 +77,15 @@ class MpersonaModel extends Model{
         $this->db->query($sql, $keyPer);
         return ($this->db->affectedRows() >= 1)? 1: 2;
     }
+
+    public function m_col_tipo($data): int{
+        $sql = "
+            INSERT INTO `tb_colaborador` (`tipo_col`,`id_persona`) VALUE (?, ?)
+        ";
+        $this->db->query($sql, $data);
+        return ($this->db->affectedRows() >= 1)? 1: 2;
+    }
+
 
     // ***
 }

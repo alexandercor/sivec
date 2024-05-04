@@ -35,7 +35,7 @@
                     <li class="nav-item">
                         <a href="<?= base_url('/persona');?>" class="nav-link">
                         <i class="fas fa-list nav-icon"></i>
-                        <p>Persona</p>
+                        <p>Colaborador</p>
                         </a>
                     </li>
                     <li class="nav-item">

@@ -6,7 +6,8 @@
     width: auto;
     height: 185px;
     background-color: rgba(14, 14, 14, 0.178);
-
+    display: block;
+    position: relative;
     z-index: 999999999;
     display: flex;
     justify-content: center;
@@ -19,7 +20,7 @@
     height: 50px;
     border-radius: 50%;
     border: 4px solid #fff;
-    position: relative;
+    position: absolute;
     top: 0;
     left: 0;
     z-index: 999991;
@@ -31,4 +32,13 @@
     to{
         transform: rotate(360deg);
     }
+}
+
+.error_danger{
+    background-color: rgb(249, 235, 231);
+    color: crimson;
+}
+
+.error_danger p{
+    margin: 0;
 }

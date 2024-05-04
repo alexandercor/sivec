@@ -10,14 +10,14 @@
     <?= link_tag("$miUrlBase/plugins/fontawesome-free/css/all.min.css")?>
     <?= link_tag("$miUrlBase/plugins/icheck-bootstrap/icheck-bootstrap.min.css")?>
     <?= link_tag("$miUrlBase/dist/css/adminlte.min.css")?>
-
+    <?= link_tag("resources/bandel/web/css/assets.css")?>
     </head>
     <body class="hold-transition login-page">
         <div class="login-box">
             <div class="card">
                 <div class="card-header">
                     <div class="login-logo">
-                        <a href="../../index2.html"><b>Admin</b>Sys</a>
+                        <a href="<?= base_url();?>home"><b>Admin</b>Sys</a>
                     </div>
                 </div>
                 <div class="card-body login-card-body">
@@ -46,6 +46,11 @@
                             </div>
                         </div>
                     </form>
+                    <div class="row mt-2">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div id="div_errors" class="error_danger"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -72,7 +77,11 @@
                     if(status){
                         $(location).attr('href', urlDestino);
                     }else{
-                        console.log('error')
+                        let items = '';
+                        for(const key in errors){
+                            items += `<p>${errors[key]}</p>`;
+                        }
+                        $('#div_errors').html(`<div class="alert">${items}</div>`);
                     }
                 })
                 .fail( function(jqXHR){

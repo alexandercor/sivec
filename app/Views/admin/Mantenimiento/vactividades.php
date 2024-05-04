@@ -44,7 +44,7 @@
                                     </div>
                                     <hr class="my-4">
                                     <div class="row">
-                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 table-responsive">
                                             <table id="tbl_actividades" class="table table-striped table-bordered table-sm table-hover">
                                                 <thead>
                                                     <tr>

@@ -2,16 +2,19 @@
 
 namespace App\Controllers;
 use App\Models\MpersonaModel;
+use App\Models\MusuarioModel;
 
 use CodeIgniter\Controller;
 
 class Persona extends BaseController
 {   
     public $mpersona;
+    public $musuario;
 
     public function __construct()
     {
         $this->mpersona = new MpersonaModel();
+        $this->musuario = new MusuarioModel();
         helper('fn_helper');
     }
 
@@ -82,33 +85,53 @@ class Persona extends BaseController
             $keyEst  = (int) bs64url_dec($this->request->getPost('txt_crudper_esta'));
             $keyPer  = bs64url_dec($this->request->getPost('txt_crudper_keyper'));
             $dni     = $this->request->getPost('txt_crudper_dni');
-            $per     = $this->request->getPost('txt_crudper_per');
+            $per     = esc(mb_strtoupper($this->request->getPost('txt_crudper_per')));
             $fechNac = $this->request->getPost('txt_crudper_fechnac');
-            $email   = $this->request->getPost('txt_crudper_email');
+            $email   = esc($this->request->getPost('txt_crudper_email'));
             $cel     = $this->request->getPost('txt_crudper_celular');
             $cel2    = $this->request->getPost('txt_crudper_celular2');
             
+            $user   = $this->request->getPost('txt_crudper_usuario');
+            $pass   = $this->request->getPost('txt_crudper_contraseña');
+            $nive   = bs64url_dec($this->request->getPost('sle_percrud_nivel'));
+            $codTipoCol = bs64url_dec($this->request->getPost('sle_percrud_tip_col'));
+
             $dataPer = [$dni, $per, $fechNac, $cel, $cel2, $email];
 
             
             if( (isset($per) && !empty($per)) && (isset($fechNac) && !empty($fechNac)) && (isset($email) && !empty($email)) && (isset($cel) && !empty($cel)) && isset($cel2) ){
                 if($keyEst === 1){
                     $resInsetAct = $this->mpersona->m_persona_insert($dataPer);
-                    $messaSucess = $this->msgsuccess;
-                    $messaError  = $this->msgerror;
-                }else if($keyEst === 2 && (isset($keyPer) && !empty($keyPer))){
-                     $resInsetAct = $this->mpersona->m_persona_update([$dni, $per, $fechNac, $cel, $cel2, $email, $keyPer]);
-                     $messaSucess = $this->msgsuccess;
-                     $messaError  = $this->msgerror;
-                }
+                    [$estadoInsert, $lastId] = $resInsetAct;
 
-                if((int) $resInsetAct === 1){
-                    $data['status'] = true;
-                    $data['msg']    = $messaSucess;
-                }else{
-                    $data['status'] = false;
-                    $data['msg']    = $messaError;
-                }
+                    $estadoInsert = (int) $estadoInsert;
+                    if( ($estadoInsert === 1) && (isset($user) && !empty($user)) && (isset($pass) && !empty($pass)) && (isset($nive) && !empty($nive))){
+
+                        $passwordHash = password_hash($pass, PASSWORD_DEFAULT);  
+                           
+                        $resUserInsert = $this->musuario->m_usuario_insert([$user, $passwordHash, $nive, $lastId]);
+
+                        if((int) $resUserInsert === 1){
+                            $resInsertCol = $this->mpersona->m_col_tipo([$codTipoCol, $lastId]);
+                            if((int) $resInsertCol === 1){
+                                $data['status'] = true;
+                                $data['msg']    = $this->msgsuccess;
+                            }
+                        }else{
+                            $data['status'] = false;
+                            $data['msg']    = $this->msgerror;
+                        }
+                    }
+                }else if($keyEst === 2 && (isset($keyPer) && !empty($keyPer))){
+                    $resInsetAct = $this->mpersona->m_persona_update([$dni, $per, $fechNac, $cel, $cel2, $email, $keyPer]);
+                     if((int) $resInsetAct === 1){
+                        $data['status'] = true;
+                        $data['msg']    = $this->msgsuccess;
+                    }else{
+                        $data['status'] = false;
+                        $data['msg']    = $this->msgerror;
+                    }
+                }   
             }
         }
         return $this->response->setJSON($data);
