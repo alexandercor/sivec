@@ -190,9 +190,9 @@
                                                     </div>
                                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                         <div class="form-group">
-                                                            <label for="sle_percrud_nivel">Nivel</label>
+                                                            <label for="sle_percrud_nivel">Nivel de Usuario</label>
                                                             <select id="sle_percrud_nivel" name="sle_percrud_nivel" class="form-control">
-                                                                <option value="#">Selecciona un nivel</option>
+                                                                <option value="#">Selecciona un nivel de usuario</option>
                                                                 <option value="MQ--">Administrador</option>
                                                                 <option value="Mg--">Supervisor</option>
                                                                 <option value="Mw--">Brigada</option>
@@ -203,7 +203,7 @@
                                                         <div class="form-group">
                                                             <label for="sle_percrud_tip_col">Colaborador</label>
                                                             <select id="sle_percrud_tip_col" name="sle_percrud_tip_col" class="form-control">
-                                                                <option value="#">Selecciona un tipo</option>
+                                                                <option value="#">Selecciona un tipo de colaborador</option>
                                                                 <option value="MQ--">Inspector</option>
                                                                 <option value="Mg--">Jefe</option>
                                                             </select>

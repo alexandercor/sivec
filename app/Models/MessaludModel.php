@@ -42,7 +42,7 @@ class MessaludModel extends Model{
                 `nombre_eess` = ?,
                 `id_sector` = ?
             WHERE 
-                `id_eess` = ?;
+                `id_eess` = ?
         ";
         $this->db->query($sql, $data);
         return ($this->db->affectedRows() >= 1)? 1: 2;
@@ -55,7 +55,7 @@ class MessaludModel extends Model{
             SET 
                 `tb_eess`.`fdelete` = 2
             WHERE 
-                `tb_eess`.`id_eess` = ?;
+                `tb_eess`.`id_eess` = ?
         ";
         $this->db->query($sql, $keyeess);
         return ($this->db->affectedRows() >= 1)? 1: 2;

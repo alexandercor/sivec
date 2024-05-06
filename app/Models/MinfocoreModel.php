@@ -6,6 +6,21 @@ use CodeIgniter\Model;
 
 class MinfocoreModel extends Model{
 
+    public function m_regiones(): array{
+        helper('fn_helper');
+        $sql = '
+            SELECT 
+                `tb_region`.`id_region` key_reg,
+                `tb_region`.`nombre_region` reg
+            FROM 
+                `tb_region`
+            ORDER BY
+                `tb_region`.`nombre_region`
+        ';
+        $response = $this->db->query($sql);
+        return $response->getResult();
+    }
+
     public function m_departamentos($codReg): array{
         $sql = '
             SELECT 

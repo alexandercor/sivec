@@ -17,6 +17,32 @@ class Infocore extends BaseController
         // $this->validation = Services::validation();
     }
 
+    public function c_regiones_list() {
+        
+        $data['status'] = $this->status;
+        $data['msg']    = $this->msg;
+
+        if($this->request->isAJAX()){
+
+            $options = "";
+            $dataRegiones = $this->minfocore->m_regiones();
+            if(is_array($dataRegiones) && !empty($dataRegiones)){
+                $options .= "<option value=''>Seleccionar*</option>";
+                foreach($dataRegiones as $reg){
+                    $val = bs64url_enc($reg->key_reg);
+                    $options .= "<option value='$val'>".esc($reg->reg)."</option>";
+                }
+            }else{
+                $options .= "<option value='#'>No hay resultados</option>";
+            }
+            
+            $data['status'] = true;
+            $data['msg'] = 'ok';
+            $data['dataRegiones'] = $options;
+        }
+        return $this->response->setJSON($data);
+    }
+
     public function c_departamentos_list() {
         
         $data['status'] = $this->status;

@@ -53,7 +53,19 @@
                     <li class="nav-item">
                         <a href="<?= base_url('/essalud');?>" class="nav-link">
                         <i class="fas fa-list nav-icon"></i>
-                        <p>Essalud</p>
+                        <p>Establecimiento de salud</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="<?= base_url('/localidad');?>" class="nav-link">
+                        <i class="fas fa-list nav-icon"></i>
+                        <p>Localidad</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="<?= base_url('/sector');?>" class="nav-link">
+                        <i class="fas fa-list nav-icon"></i>
+                        <p>Sector</p>
                         </a>
                     </li>
                 </ul>

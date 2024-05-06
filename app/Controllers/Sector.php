@@ -1,68 +1,72 @@
 <?php
 
 namespace App\Controllers;
-use App\Models\MessaludModel;
+use App\Models\MsectorModel;
 use App\Models\MinfocoreModel;
 
-use Config\Services;
 use CodeIgniter\Controller;
+use Config\Services;
 
-class Essalud extends BaseController
+class Sector extends BaseController
 {   
-    protected $messalud;
-    protected $minfocore;
-    protected $helpers = ['form', 'fn_helper'];
+    protected $msector;
     protected $validacion;
+    protected $minfocore;
 
     public function __construct()
     {
-        $this->messalud = new MessaludModel();
+        $this->msector = new MsectorModel();
         $this->minfocore = new MinfocoreModel();
         $this->validacion = Services::validation();
+        helper('fn_helper');
     }
 
     public function index(){
         $data['dataRegiones'] = $this->minfocore->m_regiones();
-        return view('admin/mantenimiento/vessalud', $data);
+        return view('admin/mantenimiento/vsector', $data);
     }
 
-    public function c_essalud_list() {
+    public function c_sector_list() {
         $data['status'] = $this->status;
         $data['msg']    = $this->msg;
 
         if($this->request->isAJAX()){
-            $codSec = $this->request->getPost('codSec');
-            $codSec = (!empty($codSec))? bs64url_dec($codSec): '%';
+            $sector = $this->request->getPost('sector');
+            $codLoc = $this->request->getPost('codLoc');
 
-            if(isset($codSec) && !empty($codSec)){
-                $dataEssalud = $this->messalud->m_essalud_list($codSec);
+            $sector = (!empty($sector))? $sector."%": '%';
+            $codLoc = (!empty($codLoc))? bs64url_dec($codLoc): '%';
+
+            if( (isset($sector) && !empty($sector)) && (isset($codLoc) && !empty($codLoc)) ){
+                $dataSectores = $this->msector->m_sector_list([$sector, $codLoc]);
 
                 $tabla = "";
-                if(is_array($dataEssalud) && !empty($dataEssalud)){
-                    foreach($dataEssalud as $key => $ess){
+                if(is_array($dataSectores) && !empty($dataSectores)){
+                    foreach($dataSectores as $key => $sec){
                         $count = ++$key;
-                        $keyEss = bs64url_enc($ess->key_ess);
-                        $eess   = esc($ess->ess);
-                        $keySec = bs64url_enc($ess->key_sec);
-                        $sec    = esc($ess->sec);
+                        $keyLoc = bs64url_enc($sec->key_loc);
+                        $loc    = esc($sec->loc);
+                        $keySec = bs64url_enc($sec->key_sec);
+                        $secRef = esc($sec->sec_ref);
+                        $sec    = esc($sec->sec);
 
                         $tabla .= "
                             <tr>
                                 <td class='font-weight-bolder'>$count</td>
                                 <td>
-                                    $eess
-                                </td>
-                                <td>
-                                    <i class='fas fa-map-signs text-primary fa-sm'></i> 
                                     $sec
                                 </td>
                                 <td>
-                                    <button type='button' class='btn btn-warning btn-sm btn_eess_edit' data-keyest='Mg--' data-keyeess='$keyEss' data-eess='$eess' data-keysec='$keySec'>
+                                    <i class='fas fa-map-signs text-success fa-sm'></i> 
+                                    $loc
+                                </td>
+                                <td>
+                                    <button type='button' class='btn btn-warning btn-sm btn_sec_edit' data-keyest='Mg--' data-keysec='$keySec' data-sec='$sec' data-secref='$secRef' data-keyloc='$keyLoc'>
                                         <i class='far fa-edit'></i> 
                                         Editar
                                     </button>
 
-                                    <button type='button' class='btn btn-danger btn-sm btn_eess_del' data-keyeess='$keyEss'>
+                                    <button type='button' class='btn btn-danger btn-sm btn_sec_del' data-keysec='$keySec'>
                                         <i class='far fa-trash-alt'></i> 
                                         Eliminar
                                     </button>
@@ -77,26 +81,30 @@ class Essalud extends BaseController
 
                 $data['status'] = true;
                 $data['msg'] = 'ok';
-                $data['dataEssalud'] = $tabla;
+                $data['dataSector'] = $tabla;
             }
         }
         return $this->response->setJSON($data);
     }
 
-    public function c_essalud_crud() {
+    public function c_sector_crud() {
         $data['status'] = $this->status;
         $data['msg']    = $this->msg;
 
         if($this->request->isAJAX()){
 
             $rules = [
-                'sle_esscrud_sector' => [
-                    'label' => 'Sector',
+                'txt_seccrud_esta' => [
+                    'label' => 'CodEst',
                     'rules' => 'required'
                 ],
-                'txt_esscrud_eess' => [
+                'txt_seccrud_sec' => [
                     'label' => 'Centro de Salud',
                     'rules' => 'required|min_length[3]'
+                ],
+                'sle_seccrud_locali' => [
+                    'label' => 'CodEst',
+                    'rules' => 'required'
                 ],
             ];
 
@@ -104,19 +112,20 @@ class Essalud extends BaseController
 
             if($this->validacion->withRequest($this->request)->run()){
 
-                $est = (int) bs64url_dec($this->request->getPost('txt_esscrud_esta'));
-                $keyEess = (int) bs64url_dec($this->request->getPost('txt_esscrud_keyeess'));
-                $eess    = mb_strtoupper($this->request->getPost('txt_esscrud_eess'));
-                $keySec  = bs64url_dec($this->request->getPost('sle_esscrud_sector'));
+                $est = (int) bs64url_dec($this->request->getPost('txt_seccrud_esta'));
+                $keySec = (int) bs64url_dec($this->request->getPost('txt_seccrud_keysec'));
+                $sector  = mb_strtoupper($this->request->getPost('txt_seccrud_sec'));
+                $secRef  = mb_strtoupper($this->request->getPost('txt_seccrud_sec_ref'));
+                $keyLoc  = bs64url_dec($this->request->getPost('sle_seccrud_locali'));
                 
-                if( (isset($est) && !empty($est)) && (isset($keySec) && !empty        ($keySec)) && (isset($eess) && !empty($eess)) ){
+                if( (isset($est) && !empty($est)) && (isset($sector) && !empty        ($sector)) && (isset($keyLoc) && !empty($keyLoc)) ){
 
                     if($est === 1){
-                        $resInsetAct = $this->messalud->m_essalud_insert([$eess, $keySec]);
+                        $resInsetAct = $this->msector->m_sector_insert([$sector, $secRef, $keyLoc]);
                         $messaSucess = $this->msgsuccess;
                         $messaError  = $this->msgerror;
-                    }else if($est === 2 && (isset($keyEess) && !empty($keyEess))){
-                        $resInsetAct = $this->messalud->m_essalud_update([$eess, $keySec, $keyEess]);
+                    }else if($est === 2 && (isset($keySec) && !empty($keySec))){
+                        $resInsetAct = $this->msector->m_sector_update([$sector, $secRef, $keyLoc, $keySec]);
                         $messaSucess = $this->msgsuccess;
                         $messaError  = $this->msgerror;
                     }
@@ -136,14 +145,14 @@ class Essalud extends BaseController
         return $this->response->setJSON($data);
     }
 
-    public function c_essalud_del(){
+    public function c_sector_del(){
         $data['status'] = $this->status;
         $data['msg']    = $this->msg;
 
         if($this->request->isAJAX()){
-            $keyEess = bs64url_dec($this->request->getPost('keyEess'));
-            if(isset($keyEess) && !empty($keyEess)){
-                $resDel = $this->messalud->m_essalud_del($keyEess);
+            $keySec = bs64url_dec($this->request->getPost('keySec'));
+            if(isset($keySec) && !empty($keySec)){
+                $resDel = $this->msector->m_sector_del($keySec);
                 if((int) $resDel === 1){
                     $data['status'] = true;
                     $data['msg']    = $this->msgdelete;
@@ -156,7 +165,6 @@ class Essalud extends BaseController
         return $this->response->setJSON($data);
     }
 
-
-// ****
+// ***
 }
 ?>

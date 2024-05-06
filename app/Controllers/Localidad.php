@@ -1,68 +1,70 @@
 <?php
 
 namespace App\Controllers;
-use App\Models\MessaludModel;
+use App\Models\MlocalidadModel;
 use App\Models\MinfocoreModel;
-
-use Config\Services;
 use CodeIgniter\Controller;
+use Config\Services;
 
-class Essalud extends BaseController
+class Localidad extends BaseController
 {   
-    protected $messalud;
+    protected $mlocalidad;
     protected $minfocore;
-    protected $helpers = ['form', 'fn_helper'];
     protected $validacion;
 
     public function __construct()
     {
-        $this->messalud = new MessaludModel();
+        $this->mlocalidad = new MlocalidadModel();
         $this->minfocore = new MinfocoreModel();
         $this->validacion = Services::validation();
+        helper('fn_helper');
     }
 
-    public function index(){
+    public function index() {
         $data['dataRegiones'] = $this->minfocore->m_regiones();
-        return view('admin/mantenimiento/vessalud', $data);
+        return view('admin/mantenimiento/vlocalidad', $data);
     }
 
-    public function c_essalud_list() {
+    public function c_localidad_list() {
         $data['status'] = $this->status;
         $data['msg']    = $this->msg;
 
         if($this->request->isAJAX()){
-            $codSec = $this->request->getPost('codSec');
-            $codSec = (!empty($codSec))? bs64url_dec($codSec): '%';
+            $codDis = $this->request->getPost('codDis');
+            $localidad = $this->request->getPost('localidad');
 
-            if(isset($codSec) && !empty($codSec)){
-                $dataEssalud = $this->messalud->m_essalud_list($codSec);
+            $codDis = (!empty($codDis))? bs64url_dec($codDis): '%';
+            $localidad = (!empty($localidad))? $localidad."%": '%';
+
+            if(isset($codDis) && !empty($codDis)){
+                $dataLocalidad = $this->mlocalidad->m_localidad_list([$localidad, $codDis]);
 
                 $tabla = "";
-                if(is_array($dataEssalud) && !empty($dataEssalud)){
-                    foreach($dataEssalud as $key => $ess){
+                if(is_array($dataLocalidad) && !empty($dataLocalidad)){
+                    foreach($dataLocalidad as $key => $loc){
                         $count = ++$key;
-                        $keyEss = bs64url_enc($ess->key_ess);
-                        $eess   = esc($ess->ess);
-                        $keySec = bs64url_enc($ess->key_sec);
-                        $sec    = esc($ess->sec);
+                        $keyLoc = bs64url_enc($loc->key_loca);
+                        $local  = esc($loc->loca);
+                        $keyDis = bs64url_enc($loc->key_dis);
+                        $dis    = esc($loc->dis);
 
                         $tabla .= "
                             <tr>
                                 <td class='font-weight-bolder'>$count</td>
                                 <td>
-                                    $eess
+                                    $local
                                 </td>
                                 <td>
                                     <i class='fas fa-map-signs text-primary fa-sm'></i> 
-                                    $sec
+                                    $dis
                                 </td>
                                 <td>
-                                    <button type='button' class='btn btn-warning btn-sm btn_eess_edit' data-keyest='Mg--' data-keyeess='$keyEss' data-eess='$eess' data-keysec='$keySec'>
+                                    <button type='button' class='btn btn-warning btn-sm btn_loca_edit' data-keyest='Mg--' data-keyloc='$keyLoc' data-loc='$local' data-keydis='$keyDis'>
                                         <i class='far fa-edit'></i> 
                                         Editar
                                     </button>
 
-                                    <button type='button' class='btn btn-danger btn-sm btn_eess_del' data-keyeess='$keyEss'>
+                                    <button type='button' class='btn btn-danger btn-sm btn_loca_del' data-keyloc='$keyLoc'>
                                         <i class='far fa-trash-alt'></i> 
                                         Eliminar
                                     </button>
@@ -77,25 +79,25 @@ class Essalud extends BaseController
 
                 $data['status'] = true;
                 $data['msg'] = 'ok';
-                $data['dataEssalud'] = $tabla;
+                $data['dataLocalidad'] = $tabla;
             }
         }
         return $this->response->setJSON($data);
     }
 
-    public function c_essalud_crud() {
+    public function c_localidad_crud() {
         $data['status'] = $this->status;
         $data['msg']    = $this->msg;
 
         if($this->request->isAJAX()){
 
             $rules = [
-                'sle_esscrud_sector' => [
-                    'label' => 'Sector',
+                'sle_loccrud_distr' => [
+                    'label' => 'Distrito',
                     'rules' => 'required'
                 ],
-                'txt_esscrud_eess' => [
-                    'label' => 'Centro de Salud',
+                'txt_loccrud_loc' => [
+                    'label' => 'Localidad',
                     'rules' => 'required|min_length[3]'
                 ],
             ];
@@ -104,19 +106,19 @@ class Essalud extends BaseController
 
             if($this->validacion->withRequest($this->request)->run()){
 
-                $est = (int) bs64url_dec($this->request->getPost('txt_esscrud_esta'));
-                $keyEess = (int) bs64url_dec($this->request->getPost('txt_esscrud_keyeess'));
-                $eess    = mb_strtoupper($this->request->getPost('txt_esscrud_eess'));
-                $keySec  = bs64url_dec($this->request->getPost('sle_esscrud_sector'));
+                $est     = (int) bs64url_dec($this->request->getPost('txt_loccrud_esta'));
+                $keyLoc  = (int) bs64url_dec($this->request->getPost('txt_loccrud_keyloca'));
+                $loca    = mb_strtoupper($this->request->getPost('txt_loccrud_loc'));
+                $keyDis  = bs64url_dec($this->request->getPost('sle_loccrud_distr'));
                 
-                if( (isset($est) && !empty($est)) && (isset($keySec) && !empty        ($keySec)) && (isset($eess) && !empty($eess)) ){
+                if( (isset($est) && !empty($est)) && (isset($loca) && !empty        ($loca)) && (isset($keyDis) && !empty($keyDis)) ){
 
                     if($est === 1){
-                        $resInsetAct = $this->messalud->m_essalud_insert([$eess, $keySec]);
+                        $resInsetAct = $this->mlocalidad->m_localidad_insert([$loca, $keyDis]);
                         $messaSucess = $this->msgsuccess;
                         $messaError  = $this->msgerror;
-                    }else if($est === 2 && (isset($keyEess) && !empty($keyEess))){
-                        $resInsetAct = $this->messalud->m_essalud_update([$eess, $keySec, $keyEess]);
+                    }else if($est === 2 && (isset($keyLoc) && !empty($keyLoc))){
+                        $resInsetAct = $this->mlocalidad->m_localidad_update([$loca, $keyDis, $keyLoc]);
                         $messaSucess = $this->msgsuccess;
                         $messaError  = $this->msgerror;
                     }
@@ -136,14 +138,14 @@ class Essalud extends BaseController
         return $this->response->setJSON($data);
     }
 
-    public function c_essalud_del(){
+    public function c_localidad_del(){
         $data['status'] = $this->status;
         $data['msg']    = $this->msg;
 
         if($this->request->isAJAX()){
-            $keyEess = bs64url_dec($this->request->getPost('keyEess'));
-            if(isset($keyEess) && !empty($keyEess)){
-                $resDel = $this->messalud->m_essalud_del($keyEess);
+            $keyLoc = bs64url_dec($this->request->getPost('keyLoc'));
+            if(isset($keyLoc) && !empty($keyLoc)){
+                $resDel = $this->mlocalidad->m_localidad_del($keyLoc);
                 if((int) $resDel === 1){
                     $data['status'] = true;
                     $data['msg']    = $this->msgdelete;
@@ -156,7 +158,6 @@ class Essalud extends BaseController
         return $this->response->setJSON($data);
     }
 
-
-// ****
+// ***
 }
 ?>

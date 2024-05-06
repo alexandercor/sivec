@@ -1,6 +1,6 @@
 <?= $this->extend('layout/vlayout') ?>
 <!--  -->
-<?= $this->section('page_title') ?> Establecimiento de salud | <?= SYS_TITLE; ?> <?= $this->endSection() ?>
+<?= $this->section('page_title') ?> Sector | <?= SYS_TITLE; ?> <?= $this->endSection() ?>
 
 <?= $this->section('contenido') ?>
 
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1><i class="fas fa-sliders-h"></i> Establecimiento de salud</h1>
+            <h1><i class="fas fa-sliders-h"></i> Sector</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?= base_url('home')?>">Inicio</a></li>
-              <li class="breadcrumb-item active">Establecimiento de salud</li>
+              <li class="breadcrumb-item active">Sector</li>
             </ol>
           </div>
         </div>
@@ -26,22 +26,21 @@
                 <div class="col-12">
                     <div class="card card-navy card-outline">
                         <div class="card-header p-0">
-                            <ul id="tab_es" class="nav nav-pills ml-auto p-2">
-                                <li class="nav-item"><a class="nav-link active" href="#tabes" data-toggle="tab">Lista</a></li>
+                            <ul id="tab_sec" class="nav nav-pills ml-auto p-2">
+                                <li class="nav-item"><a class="nav-link active" href="#tabsec" data-toggle="tab">Lista</a></li>
                                 <li class="nav-item"><a class="nav-link" href="#tabadd" data-toggle="tab">Agregar</a></li>
                             </ul>
                         </div>
                         <div class="card-body">
                             <div class="tab-content">
-                                <div class="tab-pane active" id="tabes">
+                                <div class="tab-pane active" id="tabsec">
                                     <div class="row">
                                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                             <div class="form-group">
-                                                <label for="sle_essview_region">Region</label>
-                                                <select id="sle_essview_region" class="form-control" data-send="view">
+                                                <label for="sle_secview_region">Region</label>
+                                                <select id="sle_secview_region" class="form-control" data-send="view">
                                                     <option value="">Selecciona una región</option>
                                                     <?php
-                                                    
                                                         foreach($dataRegiones as $reg){
                                                             $keyReg = bs64url_enc($reg->key_reg);
                                                             echo "<option value='$keyReg'>$reg->reg</option>";
@@ -52,24 +51,24 @@
                                         </div>
                                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                             <div class="form-group">
-                                                <label for="sle_essview_depa">Departamento</label>
-                                                <select id="sle_essview_depa" class="form-control" data-send="view">
+                                                <label for="sle_secview_depa">Departamento</label>
+                                                <select id="sle_secview_depa" class="form-control" data-send="view">
                                                     <option value="">Selecciona un departamento</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                             <div class="form-group">
-                                                <label for="sle_essview_prov">Provincia</label>
-                                                <select id="sle_essview_prov" class="form-control" data-send="view">
+                                                <label for="sle_secview_prov">Provincia</label>
+                                                <select id="sle_secview_prov" class="form-control" data-send="view">
                                                     <option value="">Selecciona una provincia</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                             <div class="form-group">
-                                                <label for="sle_essview_distr">Distrito</label>
-                                                <select id="sle_essview_distr" class="form-control" data-send="view">
+                                                <label for="sle_secview_distr">Distrito</label>
+                                                <select id="sle_secview_distr" class="form-control" data-send="view">
                                                     <option value="">Selecciona una distrito</option>
                                                 </select>
                                             </div>
@@ -78,36 +77,34 @@
                                     <div class="row">
                                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                             <div class="form-group">
-                                                <label for="sle_essview_locali">Localidad</label>
-                                                <select id="sle_essview_locali" class="form-control" data-send="view">
+                                                <label for="sle_secview_locali">Localidad</label>
+                                                <select id="sle_secview_locali" class="form-control" data-send="view">
                                                     <option value="">Selecciona una localidad</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                        <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                             <div class="form-group">
-                                                <label for="sle_essview_sector">Sector</label>
-                                                <select id="sle_essview_sector" class="form-control" data-send="view">
-                                                    <option value="">Selecciona una sector</option>
-                                                </select>
+                                                <label for="txt_secview_sec">Sector</label>
+                                                <input type="text" class="form-control text-uppercase" id="txt_secview_sec" placeholder="Sector">
                                             </div>
                                         </div>
                                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                             <div class="form-group">
                                                 <label for="" class="color_white">.</label>
-                                                <button type="button" id="btn_buscar_ess" class="btn btn-primary btn-block">Buscar</button>
+                                                <button type="button" id="btn_buscar_sec" class="btn btn-primary btn-block">Buscar</button>
                                             </div> 
                                         </div>
                                     </div>
                                     <hr class="mt-0">
                                     <div class="row">
                                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 table-responsive">
-                                            <table id="tbl_essalud" class="table table-striped table-bordered table-sm table-hover projects">
+                                            <table id="tbl_sector" class="table table-striped table-bordered table-sm table-hover projects">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>Centro de salud</th>
                                                         <th>Sector</th>
+                                                        <th>Localidad</th>
                                                         <th>Acc.</th>
                                                     </tr>
                                                 </thead>
@@ -119,7 +116,7 @@
                                 </div>
                                 <div class="tab-pane" id="tabadd">
                                     <div class="card card-primary">
-                                        <form id="frm_es" action="<?= base_url(); ?>esssalud/add" method="POST">
+                                        <form id="frm_sec" action="<?= base_url(); ?>sector/add" method="POST">
                                             <div class="card-body">
                                                 <div class="row">
                                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -127,14 +124,14 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <input type="hidden" name="txt_esscrud_esta" id="txt_esscrud_esta" value="MQ--">
+                                                    <input type="hidden" name="txt_seccrud_esta" id="txt_seccrud_esta" value="MQ--">
 
-                                                    <input type="hidden" name="txt_esscrud_keyeess" id="txt_esscrud_keyeess">
+                                                    <input type="hidden" name="txt_seccrud_keysec" id="txt_seccrud_keysec">
 
                                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                         <div class="form-group">
-                                                            <label for="sle_esscrud_region">Region</label>
-                                                            <select id="sle_esscrud_region" class="form-control" data-send="crud">
+                                                            <label for="sle_seccrud_region">Region</label>
+                                                            <select id="sle_seccrud_region" class="form-control" data-send="crud">
                                                                 <option value="">Selecciona una región</option>
                                                                 <?php
                                                                     foreach($dataRegiones as $reg){
@@ -147,24 +144,24 @@
                                                     </div>
                                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                         <div class="form-group">
-                                                            <label for="sle_esscrud_depa">Departamento</label>
-                                                            <select id="sle_esscrud_depa" class="form-control" data-send="crud">
+                                                            <label for="sle_seccrud_depa">Departamento</label>
+                                                            <select id="sle_seccrud_depa" class="form-control" data-send="crud">
                                                                 <option value="">Selecciona un departamento</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                         <div class="form-group">
-                                                            <label for="sle_esscrud_prov">Provincia</label>
-                                                            <select id="sle_esscrud_prov" class="form-control" data-send="crud">
+                                                            <label for="sle_seccrud_prov">Provincia</label>
+                                                            <select id="sle_seccrud_prov" class="form-control" data-send="crud">
                                                                 <option value="">Selecciona una provincia</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                         <div class="form-group">
-                                                            <label for="sle_esscrud_distr">Distrito</label>
-                                                            <select id="sle_esscrud_distr" class="form-control" data-send="crud">
+                                                            <label for="sle_seccrud_distr">Distrito</label>
+                                                            <select id="sle_seccrud_distr" class="form-control" data-send="crud">
                                                                 <option value="">Selecciona una distrito</option>
                                                             </select>
                                                         </div>
@@ -173,26 +170,22 @@
                                                 <div class="row">
                                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                         <div class="form-group">
-                                                            <label for="sle_esscrud_locali">Localidad</label>
-                                                            <select id="sle_esscrud_locali" class="form-control" data-send="crud">
+                                                            <label for="sle_seccrud_locali">Localidad</label>
+                                                            <select id="sle_seccrud_locali" name="sle_seccrud_locali"  class="form-control" data-send="crud">
                                                                 <option value="">Selecciona una localidad</option>
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                                         <div class="form-group">
-                                                            <label for="sle_esscrud_sector">Sector</label>
-                                                            <select id="sle_esscrud_sector" name="sle_esscrud_sector" class="form-control" data-send="crud">
-                                                                <option value="">Selecciona una sector</option>
-                                                            </select>
+                                                            <label for="txt_seccrud_sec" >Sector</label>
+                                                            <input type="text" class="form-control text-uppercase" id="txt_seccrud_sec" name="txt_seccrud_sec"   placeholder="Sector">
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                                         <div class="form-group">
-                                                            <label for="txt_esscrud_eess" >Centro de salud</label>
-                                                            <input type="text" class="form-control text-uppercase" id="txt_esscrud_eess" name="txt_esscrud_eess"   placeholder="Centro de salud">
+                                                            <label for="txt_seccrud_sec_ref" >Referencia Sector</label>
+                                                            <input type="text" class="form-control text-uppercase" id="txt_seccrud_sec_ref" name="txt_seccrud_sec_ref"   placeholder="Referencia Sector">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -225,52 +218,31 @@
 
   <script type='text/javascript'>
     $(() => {
-        fn_getDataEssalud();
+        fn_getDataSector();
     })
 
     const div_overlay_es = 'div_overlay_es';
     let codReg, codDep, codProv, codDis, codLoc, codSec;
 
-    // const objSelect = {
-    //     'sleSec' : '#sle_essview_sector',
-    //     'sleLoc' : '#sle_essview_locali',
-    //     'sleDis' : '#sle_essview_distr',
-    //     'slePro' : '#sle_essview_prov',
-    //     'sleDep' : '#sle_essview_depa',
-    //     'sleReg' : '#sle_essview_region'
-    // }
-    // const keys = Object.keys(objSelect);
-    // const countKeys = keys.length;
-    
-    // const fn_limpiar_select1 = (counIte) =>{
-    //     for (let i = 0; i < counIte; i++) {
-    //         let propiedad = keys[i];
-    //         $(`${objSelect[propiedad]}`).empty();
-    //     }
-    // }
-
     const objSelectsData = {
         view : {
-            sleSec : '#sle_essview_sector',
-            sleLoc : '#sle_essview_locali',
-            sleDis : '#sle_essview_distr',
-            slePro : '#sle_essview_prov',
-            sleDep : '#sle_essview_depa',
-            sleReg : '#sle_essview_region'
+            sleLoc : '#sle_secview_locali',
+            sleDis : '#sle_secview_distr',
+            slePro : '#sle_secview_prov',
+            sleDep : '#sle_secview_depa',
+            sleReg : '#sle_secview_region'
         },
         crud : {
-            sleSec : '#sle_esscrud_sector',
-            sleLoc : '#sle_esscrud_locali',
-            sleDis : '#sle_esscrud_distr',
-            slePro : '#sle_esscrud_prov',
-            sleDep : '#sle_esscrud_depa',
-            sleReg : '#sle_esscrud_region'
+            sleLoc : '#sle_seccrud_locali',
+            sleDis : '#sle_seccrud_distr',
+            slePro : '#sle_seccrud_prov',
+            sleDep : '#sle_seccrud_depa',
+            sleReg : '#sle_seccrud_region'
         },
     };
 
     const selecView = objSelectsData.view,
     selecCrud = objSelectsData.crud;
-
 
     const fn_limpiar_select = (counIte, keySend) =>{
         const keySendObject = objSelectsData[keySend],
@@ -287,7 +259,7 @@
         
         const typeSend = $(this).data('send'),
             idSelect = objSelectsData[typeSend].sleDep;
-            fn_limpiar_select(5, typeSend);
+            fn_limpiar_select(4, typeSend);
 
         codReg = $(this).val();
         if(codReg){
@@ -318,7 +290,7 @@
         
         const typeSend = $(this).data('send'),
         idSelect = objSelectsData[typeSend].slePro;
-        fn_limpiar_select(4, typeSend);
+        fn_limpiar_select(3, typeSend);
 
         codDep = $(this).val();
 
@@ -350,7 +322,7 @@
         
         const typeSend = $(this).data('send'),
             idSelect = objSelectsData[typeSend].sleDis;
-            fn_limpiar_select(3, typeSend);
+            fn_limpiar_select(2, typeSend);
 
         codProv = $(this).val();
 
@@ -382,7 +354,7 @@
         
         const typeSend = $(this).data('send'),
             idSelect = objSelectsData[typeSend].sleLoc;
-            fn_limpiar_select(2, typeSend);
+            fn_limpiar_select(1, typeSend);
 
         codDis = $(this).val();
 
@@ -411,53 +383,24 @@
 
     $(`${selecView.sleLoc}, ${selecCrud.sleLoc}`).change(function (e) {
         e.preventDefault();
-        
-        const typeSend = $(this).data('send'),
-            idSelect = objSelectsData[typeSend].sleSec;
-            fn_limpiar_select(1, typeSend);
-
         codLoc = $(this).val();
-
-        if(codDep){
-            $.ajax({
-                url: `${base_url}sector`,
-                type: "POST",
-                data: {codLoc: codLoc},
-                dataType: "JSON",
-                beforeSend: (()=> {
-                    // $('#div_overlay_con').html("<div class='loading'></div>");
-                }),
-            })
-            .done((data) => {
-                // $('.loading').remove();
-                const { status, dataSector } = data;
-                if(status){
-                    $(`${idSelect}`).html(`${dataSector}`);
-                }
-            })
-            .fail((jqXHR, statusText) => {
-                fn_errorJqXHR(jqXHR, statusText);
-            });
-        }
     });
 
-    $(`${selecView.sleSec}, ${selecCrud.sleSec}`).change(function (e){
-        codSec = $(this).val();
-    });
 
-    function fn_getDataEssalud(){
+    function fn_getDataSector(){
 
-        const objData = { codSec : codSec };
+        const sector = $('#txt_secview_sec').val();
+        const objData = { sector: sector, codLoc : codLoc };
         $.ajax({
-            url: `${base_url}esssalud/list`,
+            url: `${base_url}sector/list`,
             type: "POST",
             data: objData,
             dataType: "JSON",
         })
         .done(function(data){
-            const { status, dataEssalud } = data;
+            const { status, dataSector } = data;
             if(status){
-                $('#tbl_essalud tbody').html(`${dataEssalud}`);
+                $('#tbl_sector tbody').html(`${dataSector}`);
             }
         })
         .fail(function(jqXHR, statusText){
@@ -465,11 +408,11 @@
         });
     }
 
-    $('#btn_buscar_ess').click(function(){
-        fn_getDataEssalud();
+    $('#btn_buscar_sec').click(function(){
+        fn_getDataSector();
     })
 
-    $('#frm_es').submit(function (e) {
+    $('#frm_sec').submit(function (e) {
         $('#div_errors').html('');
 
         e.preventDefault();
@@ -501,53 +444,40 @@
         return false;
     });
 
-    $('#tab_es a[href="#tabes"]').click(function(){
-        $('#tab_es a[href="#tabadd"]').text('Agregar');
-        $('#frm_es')[0].reset();
+    $('#tab_sec a[href="#tabsec"]').click(function(){
+        $('#tab_sec a[href="#tabadd"]').text('Agregar');
+        $('#frm_sec')[0].reset();
+        $('#div_errors').html('');
     })
 
-    $(document).on('click', '.btn_eess_edit', function() {
+    $(document).on('click', '.btn_sec_edit', function() {
 
-        $('#tab_es a[href="#tabadd"]').text('Editar')
+        $('#tab_sec a[href="#tabadd"]').text('Editar')
 
         const keyEst = $(this).data('keyest'),
-            keyEess = $(this).data('keyeess'),
-            eess    = $(this).data('eess'),
-            keySec  = $(this).data('keysec');
+            keySec = $(this).data('keysec'),
+            sec    = $(this).data('sec'),
+            secRef = $(this).data('secref'),
+            keyLoc = $(this).data('keyloc');
 
-        if(keyEst === 'Mg--' && keyEess && eess && keySec){
+        if(keyEst === 'Mg--' && keySec && sec && keyLoc){
             
-            $.ajax({
-                url: `${base_url}ubigeo/sector`,
-                type: "POST",
-                data: {keySector: keySec},
-                dataType: "JSON",
-                success: function (data) {
-                    const { status, dataSectores } = data;
-                    if(status){
-                        // $('#sle_esscrud_region').val(dataSectores.key_reg);
-                        // $('#sle_esscrud_depa').val(dataSectores.key_dep);
-                        // $('#sle_esscrud_prov').val(dataSectores.key_pro);
-                    }
-                }
-            });
-
-            $('#txt_esscrud_esta').val(keyEst);
-            $('#txt_esscrud_keyeess').val(keyEess);
-            $('#txt_esscrud_eess').val(eess);
-            // $('#sle_esscrud_sector').val(keySec);
-            $('#tab_es a[href="#tabadd"]').tab('show');
+            $('#txt_seccrud_esta').val(keyEst);
+            $('#txt_seccrud_keysec').val(keySec);
+            $('#txt_seccrud_sec').val(sec);
+            $('#txt_seccrud_sec_ref').val(secRef);
+            $('#tab_sec a[href="#tabadd"]').tab('show');
         }
     })
 
-    $(document).on('click', '.btn_eess_del', function () {
-        const keyEess = $(this).data('keyeess');
+    $(document).on('click', '.btn_sec_del', function () {
+        const keySec = $(this).data('keysec');
         
-        if(keyEess){
+        if(keySec){
             $.ajax({
-                url: `${base_url}esssalud/del`,
+                url: `${base_url}sector/del`,
                 type: "POST",
-                data: {keyEess: keyEess},
+                data: {keySec: keySec},
                 dataType: "JSON",
             })
             .done((data) => {
