@@ -13,6 +13,7 @@
         <?= link_tag("$miUrlBase/plugins/fontawesome-free/css/all.min.css")?>
         <?= link_tag("$miUrlBase/dist/css/adminlte.min.css")?>
         <?= link_tag("$miUrlBase/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css")?>
+        <?= link_tag("$miUrlBase/plugins/leaflet/css/leaflet.css")?>
         <?= link_tag("resources/bandel/web/css/assets.css")?>
 
     </head>
@@ -38,6 +39,7 @@
         <?= script_tag("$miUrlBase/plugins/bootstrap/js/bootstrap.bundle.min.js") ?>
         <?= script_tag("$miUrlBase/dist/js/adminlte.min.js") ?>
         <?= script_tag("$miUrlBase/plugins/sweetalert2/sweetalert2.min.js") ?>
+        <?= script_tag("$miUrlBase/plugins/leaflet/js/leaflet.js") ?>
         <?= script_tag("resources/bandel/web/js/fn.js") ?>
 
         <script type="text/javascript">

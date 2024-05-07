@@ -46,3 +46,5 @@ $routes->get('/sector', 'Sector::index');
 $routes->post('/sector/list', 'Sector::c_sector_list');
 $routes->post('/sector/add', 'Sector::c_sector_crud');
 $routes->post('/sector/del', 'Sector::c_sector_del');
+$routes->get('/seguimiento', 'Seguimiento::index');
+$routes->post('/seguimiento/coordenadaslist', 'Seguimiento::c_seguimiento_listar_coordenadas');

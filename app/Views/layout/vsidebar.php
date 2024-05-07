@@ -71,6 +71,14 @@
                 </ul>
             </li>
             <li class="nav-item">
+                <a href="<?= base_url('/seguimiento'); ?>" class="nav-link">
+                <i class="fas fa-cubes"></i>
+                <p>
+                    Seguimiento
+                </p>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a href="<?= base_url('control'); ?>" class="nav-link">
                 <i class="fas fa-cubes"></i>
                 <p>
