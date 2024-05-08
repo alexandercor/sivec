@@ -122,8 +122,8 @@ class Usuario extends BaseController
 
                         $arrNivel = [
                             1 => 'Administrador',
-                            2 => 'Supervisor',
-                            3 => 'Brigada',
+                            2 => 'Inspector',
+                            3 => 'Jefe de Brigada',
                         ];
 
                         if(array_key_exists($keyNiv, $arrNivel)){

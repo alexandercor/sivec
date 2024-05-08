@@ -48,6 +48,10 @@ class Sector extends BaseController
                         $loc    = esc($sec->loc);
                         $keySec = bs64url_enc($sec->key_sec);
                         $secRef = esc($sec->sec_ref);
+                        $dis    = esc($sec->dis);
+                        $pro    = esc($sec->pro);
+                        $dep    = esc($sec->dep);
+                        $reg    = esc($sec->reg);
                         $sec    = esc($sec->sec);
 
                         $tabla .= "
@@ -60,6 +64,10 @@ class Sector extends BaseController
                                     <i class='fas fa-map-signs text-success fa-sm'></i> 
                                     $loc
                                 </td>
+                                <td>$dis</td>
+                                <td>$pro</td>
+                                <td>$dep</td>
+                                <td>$reg</td>
                                 <td>
                                     <button type='button' class='btn btn-warning btn-sm btn_sec_edit' data-keyest='Mg--' data-keysec='$keySec' data-sec='$sec' data-secref='$secRef' data-keyloc='$keyLoc'>
                                         <i class='far fa-edit'></i> 

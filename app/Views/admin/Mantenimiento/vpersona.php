@@ -190,22 +190,23 @@
                                                     </div>
                                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                         <div class="form-group">
-                                                            <label for="sle_percrud_nivel">Nivel de Usuario</label>
+                                                            <label for="sle_percrud_nivel">Nivel de Usuario del sistema</label>
                                                             <select id="sle_percrud_nivel" name="sle_percrud_nivel" class="form-control">
                                                                 <option value="#">Selecciona un nivel de usuario</option>
                                                                 <option value="MQ--">Administrador</option>
-                                                                <option value="Mg--">Supervisor</option>
-                                                                <option value="Mw--">Brigada</option>
+                                                                <option value="Mg--">Inspector</option>
+                                                                <option value="Mw--">Jefe de Brigada</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                         <div class="form-group">
-                                                            <label for="sle_percrud_tip_col">Colaborador</label>
+                                                            <label for="sle_percrud_tip_col">Tipo de Colaborador</label>
                                                             <select id="sle_percrud_tip_col" name="sle_percrud_tip_col" class="form-control">
                                                                 <option value="#">Selecciona un tipo de colaborador</option>
-                                                                <option value="MQ--">Inspector</option>
-                                                                <option value="Mg--">Jefe</option>
+                                                                <option value="MQ--">Administrador</option>
+                                                                <option value="Mg--">Inspector</option>
+                                                                <option value="Mw--">Jefe de Brigada</option>
                                                             </select>
                                                         </div>
                                                     </div>

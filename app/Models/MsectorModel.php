@@ -13,10 +13,18 @@ class MsectorModel extends Model{
                 `tb_sector`.`nombre_sector` sec,
                 `tb_sector`.`referencia_sector` sec_ref,
                 `tb_localidad`.`id_localidad` key_loc,
-                `tb_localidad`.`nombre_localidad` loc
+                `tb_localidad`.`nombre_localidad` loc,
+                `tb_distrito`.`nombre_distrito` dis,
+                `tb_provincia`.`nombre_provincia` pro,
+                `tb_departamento`.`nombre_departamento` dep,
+                `tb_region`.`nombre_region` reg
             FROM
                 `tb_localidad`
                 INNER JOIN `tb_sector` ON (`tb_localidad`.`id_localidad` = `tb_sector`.`id_localidad`)
+                INNER JOIN `tb_distrito` ON (`tb_localidad`.`id_distrito` = `tb_distrito`.`id_distrito`)
+                INNER JOIN `tb_provincia` ON (`tb_distrito`.`id_provincia` = `tb_provincia`.`id_provincia`)
+                INNER JOIN `tb_departamento` ON (`tb_provincia`.`id_departamento` = `tb_departamento`.`id_departamento`)
+                INNER JOIN `tb_region` ON (`tb_departamento`.`id_region` = `tb_region`.`id_region`)
             WHERE
                 `tb_sector`.`nombre_sector` LIKE ? AND 
                 `tb_localidad`.`id_localidad` LIKE ? AND 
