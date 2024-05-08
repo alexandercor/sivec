@@ -28,7 +28,7 @@
                         <div class="card-header p-0">
                             <ul id="tab_es" class="nav nav-pills ml-auto p-2">
                                 <li class="nav-item"><a class="nav-link active" href="#tabes" data-toggle="tab">Lista</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#tabadd" data-toggle="tab">Agregar</a></li>
+                                <!-- <li class="nav-item"><a class="nav-link" href="#tabadd" data-toggle="tab">Agregar</a></li> -->
                             </ul>
                         </div>
                         <div class="card-body">
@@ -63,7 +63,7 @@
     setTimeout(() => {
         window.location.reload();
         fn_cargarCoordenadas();
-    }, 30000);
+    }, 50000);
     // const puntos = [
     //     [51.5, -0.09],
     //     [51.51, -0.1],
@@ -89,7 +89,10 @@
             if(status){
                 for (let i = 0; i < dataCoordenadas.length; i++) {
                     const element = dataCoordenadas[i];
-                    L.marker(element).addTo(map);
+                    const { ejex, ejey, supervisor } = element;
+                    const ubicacion = [ ejex, ejey ];
+                    const marker = L.marker(ubicacion).addTo(map);
+                    marker.bindPopup(`<b>${supervisor}</b>`);
                 }
             }
         })
@@ -104,12 +107,12 @@
     // }
     // const marker = L.marker([51.5, -0.09]).addTo(map);
 
-    const circle = L.circle([51.508, -0.11], {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.5,
-        radius: 500
-    }).addTo(map);
+    // const circle = L.circle([51.505, -0.09], {
+    //     color: 'red',
+    //     fillColor: '#f03',
+    //     fillOpacity: 0.5,
+    //     radius: 500
+    // }).addTo(map);
 
   </script>
 

@@ -97,6 +97,9 @@
                                                         <th>#</th>
                                                         <th>Localidad</th>
                                                         <th>Distrito</th>
+                                                        <th>Provincia</th>
+                                                        <th>Departamento</th>
+                                                        <th>Region</th>
                                                         <th>Acc.</th>
                                                     </tr>
                                                 </thead>

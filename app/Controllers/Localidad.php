@@ -33,7 +33,13 @@ class Localidad extends BaseController
             $codDis = $this->request->getPost('codDis');
             $localidad = $this->request->getPost('localidad');
 
-            $codDis = (!empty($codDis))? bs64url_dec($codDis): '%';
+            if(empty($codDis) && empty($localidad)){
+                $codDisTipo = 1580;
+            }else if(!empty($localidad)){
+                $codDisTipo = "%";
+            }
+
+            $codDis = (!empty($codDis))? bs64url_dec($codDis): $codDisTipo;
             $localidad = (!empty($localidad))? $localidad."%": '%';
 
             if(isset($codDis) && !empty($codDis)){
@@ -47,6 +53,9 @@ class Localidad extends BaseController
                         $local  = esc($loc->loca);
                         $keyDis = bs64url_enc($loc->key_dis);
                         $dis    = esc($loc->dis);
+                        $pro    = esc($loc->pro);
+                        $dep    = esc($loc->dep);
+                        $reg    = esc($loc->reg);
 
                         $tabla .= "
                             <tr>
@@ -58,6 +67,9 @@ class Localidad extends BaseController
                                     <i class='fas fa-map-signs text-primary fa-sm'></i> 
                                     $dis
                                 </td>
+                                <td>$pro</td>
+                                <td>$dep</td>
+                                <td>$reg</td>
                                 <td>
                                     <button type='button' class='btn btn-warning btn-sm btn_loca_edit' data-keyest='Mg--' data-keyloc='$keyLoc' data-loc='$local' data-keydis='$keyDis'>
                                         <i class='far fa-edit'></i> 

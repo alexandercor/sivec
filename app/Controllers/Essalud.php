@@ -45,6 +45,11 @@ class Essalud extends BaseController
                         $eess   = esc($ess->ess);
                         $keySec = bs64url_enc($ess->key_sec);
                         $sec    = esc($ess->sec);
+                        $loc    = esc($ess->loca);
+                        $dis    = esc($ess->dis);
+                        $pro    = esc($ess->prov);
+                        $dep    = esc($ess->dep);
+                        $reg    = esc($ess->reg);
 
                         $tabla .= "
                             <tr>
@@ -56,6 +61,11 @@ class Essalud extends BaseController
                                     <i class='fas fa-map-signs text-primary fa-sm'></i> 
                                     $sec
                                 </td>
+                                <td> $loc </td>
+                                <td> $dis </td>
+                                <td> $pro </td>
+                                <td> $dep </td>
+                                <td> $reg </td>
                                 <td>
                                     <button type='button' class='btn btn-warning btn-sm btn_eess_edit' data-keyest='Mg--' data-keyeess='$keyEss' data-eess='$eess' data-keysec='$keySec'>
                                         <i class='far fa-edit'></i> 

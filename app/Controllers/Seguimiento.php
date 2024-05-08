@@ -15,7 +15,6 @@ class Seguimiento extends BaseController
         $this->mseguimiento = new MseguimientoModel();
     }
     public function index(){
-        // $data['dataRegiones'] = $this->minfocore->m_regiones();
         return view('admin/vseguimiento');
     }
 
@@ -27,15 +26,15 @@ class Seguimiento extends BaseController
             $dataCoordenadas = $this->mseguimiento->m_seguimiento_listar_coordenadas();
             $arrCoordenadas = [];
             if(is_array($dataCoordenadas) && !empty($dataCoordenadas)){
-                foreach($dataCoordenadas as $cor){
-                    $ejex = $cor->ejex;
-                    $ejey = $cor->ejey;
-                    $coordenadas = [$ejex,$ejey];
-                    array_push($arrCoordenadas, $coordenadas);
-                }
+                // foreach($dataCoordenadas as $cor){
+                //     $ejex = $cor->ejex;
+                //     $ejey = $cor->ejey;
+                //     $coordenadas = [$ejex,$ejey];
+                //     array_push($arrCoordenadas, $coordenadas);
+                // }
                 $data['status'] = true;
                 $data['msg']    = 'ok';
-                $data['dataCoordenadas'] = $arrCoordenadas;
+                $data['dataCoordenadas'] = $dataCoordenadas;
             }
             
         }

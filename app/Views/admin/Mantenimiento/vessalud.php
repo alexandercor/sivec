@@ -108,6 +108,11 @@
                                                         <th>#</th>
                                                         <th>Centro de salud</th>
                                                         <th>Sector</th>
+                                                        <th>Localidad</th>
+                                                        <th>Distrito</th>
+                                                        <th>Provincia</th>
+                                                        <th>Departamento</th>
+                                                        <th>Región</th>
                                                         <th>Acc.</th>
                                                     </tr>
                                                 </thead>
