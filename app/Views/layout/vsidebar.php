@@ -74,7 +74,7 @@
                 <a href="<?= base_url('/seguimiento'); ?>" class="nav-link">
                 <i class="fas fa-cubes"></i>
                 <p>
-                    Seguimiento
+                    Seguimiento supervisores
                 </p>
                 </a>
             </li>

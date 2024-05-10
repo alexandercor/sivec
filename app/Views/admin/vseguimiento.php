@@ -1,6 +1,6 @@
 <?= $this->extend('layout/vlayout') ?>
 <!--  -->
-<?= $this->section('page_title') ?> Seguimiento | <?= SYS_TITLE; ?> <?= $this->endSection() ?>
+<?= $this->section('page_title') ?> Seguimiento de supervisores| <?= SYS_TITLE; ?> <?= $this->endSection() ?>
 
 <?= $this->section('contenido') ?>
 
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1><i class="fas fa-sliders-h"></i> Seguimiento</h1>
+            <h1><i class="fas fa-sliders-h"></i> Seguimiento de supervisores</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?= base_url('home')?>">Inicio</a></li>
-              <li class="breadcrumb-item active">Seguimiento</li>
+              <li class="breadcrumb-item active">Seguimiento de supervisores</li>
             </ol>
           </div>
         </div>
@@ -27,7 +27,7 @@
                     <div class="card card-navy card-outline">
                         <div class="card-header p-0">
                             <ul id="tab_es" class="nav nav-pills ml-auto p-2">
-                                <li class="nav-item"><a class="nav-link active" href="#tabes" data-toggle="tab">Lista</a></li>
+                                <!-- <li class="nav-item"><a class="nav-link active" href="#tabes" data-toggle="tab">Lista</a></li> -->
                                 <!-- <li class="nav-item"><a class="nav-link" href="#tabadd" data-toggle="tab">Agregar</a></li> -->
                             </ul>
                         </div>
@@ -61,9 +61,10 @@
     })
     
     setTimeout(() => {
-        window.location.reload();
+        // window.location.reload();
         fn_cargarCoordenadas();
     }, 50000);
+
     // const puntos = [
     //     [51.5, -0.09],
     //     [51.51, -0.1],
@@ -71,8 +72,8 @@
     // ];
 
     const map = L.map('map')
-    .setView([51.505, -0.09],
-    13);
+    .setView([-5.2008333333333, -80.625277777778],
+    12);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
