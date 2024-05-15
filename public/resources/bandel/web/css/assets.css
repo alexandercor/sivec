@@ -3,12 +3,14 @@
 }
 
 .loading{
-    width: auto;
-    height: 185px;
+    width: 100%;
+    height: auto;
     background-color: rgba(14, 14, 14, 0.178);
     display: block;
     position: relative;
-    z-index: 999999999;
+    z-index: 999991 !important;
+    top: 0;
+    left: 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -21,8 +23,6 @@
     border-radius: 50%;
     border: 4px solid #fff;
     position: absolute;
-    top: 0;
-    left: 0;
     z-index: 999991;
     border-top-color: orange;
     animation: loading 1s linear infinite;

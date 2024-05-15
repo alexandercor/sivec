@@ -16,7 +16,8 @@ class MusuarioModel extends Model{
                 `tb_usuario`
             WHERE
                 `tb_usuario`.`usu_usuario` = ? AND
-                `tb_usuario`.`usu_estado_habilitado` = 1
+                `tb_usuario`.`usu_estado_habilitado` = 1 AND
+                `tb_usuario`.`usu_nivel` <> 2
         ";
         $response = $this->db->query($sql, $usuNombre);
         return $response->getRow();

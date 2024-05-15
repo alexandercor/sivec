@@ -80,7 +80,7 @@
     </section> -->
 
     <section class="content">
-        <div class="container-fluid">
+        <div class="container-fluid" id="div_overlay">
             <div class="row">
                 <div class="col-12">
                     <div class="card card-navy card-outline">
@@ -128,6 +128,11 @@
                                         <form id="frm_persona" action="<?= base_url(); ?>persona/add" method="POST">
                                             <div class="card-body">
                                                 <div class="row">
+                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                        <div id="div_errors" class="error_danger"></div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
                                                     <input type="hidden" name="txt_crudper_esta" id="txt_crudper_esta" value="MQ--">
                                                     <input type="hidden" name="txt_crudper_keyper" id="txt_crudper_keyper">
 
@@ -174,6 +179,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div id="div_section_user">
                                                 <hr>
                                                 <div class="row">
                                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
@@ -192,7 +198,7 @@
                                                         <div class="form-group">
                                                             <label for="sle_percrud_nivel">Nivel de Usuario del sistema</label>
                                                             <select id="sle_percrud_nivel" name="sle_percrud_nivel" class="form-control">
-                                                                <option value="#">Selecciona un nivel de usuario</option>
+                                                                <option value="">Selecciona un nivel de usuario</option>
                                                                 <option value="MQ--">Administrador</option>
                                                                 <option value="Mg--">Inspector</option>
                                                                 <option value="Mw--">Jefe de Brigada</option>
@@ -203,13 +209,14 @@
                                                         <div class="form-group">
                                                             <label for="sle_percrud_tip_col">Tipo de Colaborador</label>
                                                             <select id="sle_percrud_tip_col" name="sle_percrud_tip_col" class="form-control">
-                                                                <option value="#">Selecciona un tipo de colaborador</option>
+                                                                <option value="">Selecciona un tipo de colaborador</option>
                                                                 <option value="MQ--">Administrador</option>
                                                                 <option value="Mg--">Inspector</option>
                                                                 <option value="Mw--">Jefe de Brigada</option>
                                                             </select>
                                                         </div>
                                                     </div>
+                                                </div>
                                                 </div>
                                             </div>
                                             <div class="card-footer">
@@ -284,13 +291,21 @@
 
     $('#frm_persona').submit(function (e) {
         e.preventDefault();
+
+        $('#div_errors').empty();
+        $('#div_response').empty();
+        
         $.ajax({
             url: $(this).attr('action'),
             type: $(this).attr('method'),
             data: $(this).serialize(),
             dataType: "JSON",
+            beforeSend: function(){
+                $('#div_overlay').loading({message: 'Cargando...'});
+            },
         })
         .done(function(data){
+            $('#div_overlay').loading('stop');
             const { status, msg, errors } = data;
             if(status){
                 $('#div_response').html(`<h4><i class="fas fa-check-circle"></i> ${msg} </h4>`);
@@ -299,7 +314,17 @@
                     window.location.reload();
                 }, 4000);
             }else{
-                $('#div_response').html(`<h4 class="text-danger"><i class="fas fa-check-circle"></i> ${msg} </h4>`);
+                if(msg){
+                    $('#div_response').html(`<h4 class="text-danger"> ${msg} </h4>`);
+                }
+
+                if(Object.keys(errors).length !== 0){
+                    let items = '';
+                    for(const key in errors){
+                        items += `<p>${errors[key]}</p>`; 
+                    }
+                    $('#div_errors').html(`<div class="alert">${items}</div>`);
+                }
             }
         })
         .fail(function(jqXHR, statusText){
@@ -331,7 +356,10 @@
         cel    = $(this).data('celular'),
         cel2   = $(this).data('celular2');
 
-        if(keyEst === 'Mg--' && keyPer && per){
+        if(keyEst === 'Mg--' && keyPer && dni && per && fechnac && cel){
+
+            // $('#div_section_user').hide();
+
             $('#txt_crudper_esta').val(keyEst);
             $('#txt_crudper_keyper').val(keyPer);
             $('#txt_crudper_dni').val(dni);

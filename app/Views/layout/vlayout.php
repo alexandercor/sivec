@@ -14,6 +14,7 @@
         <?= link_tag("$miUrlBase/dist/css/adminlte.min.css")?>
         <?= link_tag("$miUrlBase/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css")?>
         <?= link_tag("$miUrlBase/plugins/leaflet/css/leaflet.css")?>
+        <?= link_tag("$miUrlBase/plugins/loader/css/jquery.loading.css")?>
         <?= link_tag("resources/bandel/web/css/assets.css")?>
 
     </head>
@@ -40,6 +41,7 @@
         <?= script_tag("$miUrlBase/dist/js/adminlte.min.js") ?>
         <?= script_tag("$miUrlBase/plugins/sweetalert2/sweetalert2.min.js") ?>
         <?= script_tag("$miUrlBase/plugins/leaflet/js/leaflet.js") ?>
+        <?= script_tag("$miUrlBase/plugins/loader/js/jquery.loading.min.js") ?>
         <?= script_tag("resources/bandel/web/js/fn.js") ?>
 
         <script type="text/javascript">
@@ -51,6 +53,27 @@
             });
         </script>
         
+        <script type="text/javascript">
+            
+            $(() => {
+                const urlCurrent = window.location.href;
+    
+                $('ul.nav-sidebar .nav-item a').filter(function() {
+                    return this.href == urlCurrent;
+                    console.log(this.href);
+                }).addClass('active');
+
+                $('ul.nav-sidebar .nav-item .nav-treeview a').filter(function() {
+                    return this.href == urlCurrent;
+                }).addClass('active');
+
+                $('ul.nav-sidebar .nav-item .nav-treeview a').filter(function() {
+                    return this.href == urlCurrent;
+                }).parentsUntil("ul.nav-sidebar nav-item > .nav-treeview").children(0).addClass('active');
+
+            })
+
+        </script>
         <?= $this->renderSection('javascript') ?>
 
     </body>

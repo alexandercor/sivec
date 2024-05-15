@@ -87,8 +87,8 @@
                                                             <select id="sle_usucrud_nivel" name="sle_usucrud_nivel" class="form-control">
                                                                 <option value="#">Selecciona una región</option>
                                                                 <option value="MQ--">Administrador</option>
-                                                                <option value="Mg--">Supervisor</option>
-                                                                <option value="Mw--">Brigada</option>
+                                                                <option value="Mg--">Inspector</option>
+                                                                <option value="Mw--">Jefe de Brigada</option>
                                                             </select>
                                                         </div>
                                                     </div>

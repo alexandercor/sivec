@@ -1,6 +1,6 @@
 <?= $this->extend('layout/vlayout') ?>
 <!--  -->
-<?= $this->section('page_title') ?> Seguimiento de supervisores| <?= SYS_TITLE; ?> <?= $this->endSection() ?>
+<?= $this->section('page_title') ?> Seguimiento de inspectores | <?= SYS_TITLE; ?> <?= $this->endSection() ?>
 
 <?= $this->section('contenido') ?>
 
@@ -8,12 +8,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1><i class="fas fa-sliders-h"></i> Seguimiento de supervisores</h1>
+            <h1><i class="fas fa-sliders-h"></i> Seguimiento de inspectores</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?= base_url('home')?>">Inicio</a></li>
-              <li class="breadcrumb-item active">Seguimiento de supervisores</li>
+              <li class="breadcrumb-item active">Seguimiento de inspectores</li>
             </ol>
           </div>
         </div>
@@ -63,7 +63,7 @@
     setTimeout(() => {
         // window.location.reload();
         fn_cargarCoordenadas();
-    }, 50000);
+    }, 180000);
 
     // const puntos = [
     //     [51.5, -0.09],
@@ -72,8 +72,8 @@
     // ];
 
     const map = L.map('map')
-    .setView([-5.2008333333333, -80.625277777778],
-    12);
+    .setView([-5.3745, -80.72755],
+    10);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

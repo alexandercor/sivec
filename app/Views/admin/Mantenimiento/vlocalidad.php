@@ -21,7 +21,7 @@
     </section>
 
     <section class="content">
-        <div class="container-fluid">
+        <div class="container-fluid" id="div_overlay">
             <div class="row">
                 <div class="col-12">
                     <div class="card card-navy card-outline">
@@ -373,8 +373,12 @@
             type: $(this).attr('method'),
             data: $(this).serialize(),
             dataType: "JSON",
+            beforeSend: function(){
+                $('#div_overlay').loading({message: 'Cargando...'});
+            },
         })
         .done(function(data){
+            $('#div_overlay').loading('stop');
             $('#div_errors').empty();
             const { status, msg, errors } = data;
             if(status){

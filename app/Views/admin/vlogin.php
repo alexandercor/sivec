@@ -10,10 +10,12 @@
     <?= link_tag("$miUrlBase/plugins/fontawesome-free/css/all.min.css")?>
     <?= link_tag("$miUrlBase/plugins/icheck-bootstrap/icheck-bootstrap.min.css")?>
     <?= link_tag("$miUrlBase/dist/css/adminlte.min.css")?>
+    <?= link_tag("$miUrlBase/plugins/loader/css/jquery.loading.css")?>
     <?= link_tag("resources/bandel/web/css/assets.css")?>
+
     </head>
     <body class="hold-transition login-page">
-        <div class="login-box">
+        <div class="login-box" id="div_overlay">
             <div class="card">
                 <div class="card-header">
                     <div class="login-logo">
@@ -57,6 +59,8 @@
         <?= script_tag("$miUrlBase/plugins/jquery/jquery.min.js") ?>
         <?= script_tag("$miUrlBase/plugins/bootstrap/js/bootstrap.bundle.min.js") ?>
         <?= script_tag("$miUrlBase/dist/js/adminlte.min.js") ?>
+        <?= script_tag("$miUrlBase/plugins/loader/js/jquery.loading.min.js") ?>
+        <?= script_tag("resources/bandel/web/js/fn.js") ?>
 
         <script>
             $(() => {
@@ -71,21 +75,29 @@
                     type: "POST",
                     data: $(this).serialize(),
                     dataType: "JSON",
+                    beforeSend: function(){
+                        $('#div_overlay').loading({message: 'Cargando...'});
+                    },
                 })
                 .done( function(data){
+                    $('#div_overlay').loading('stop');
                     const { status, msg, urlDestino, errors } = data;
                     if(status){
                         $(location).attr('href', urlDestino);
                     }else{
-                        let items = '';
-                        for(const key in errors){
-                            items += `<p>${errors[key]}</p>`;
+                        // console.log(msg)
+                        $('#div_errors').html(`<div class="alert">${msg}</div>`);
+                        if(Object.keys(errors).length !== 0){
+                            let items = '';
+                            for(const key in errors){
+                                items += `<p>${errors[key]}</p>`;
+                            }
+                            $('#div_errors').html(`<div class="alert">${items}</div>`);
                         }
-                        $('#div_errors').html(`<div class="alert">${items}</div>`);
                     }
                 })
-                .fail( function(jqXHR){
-                    console.log(jqXHR)
+                .fail(function(jqXHR, statusText){
+                    fn_errorJqXHR(jqXHR, statusText);
                 });
    
             });

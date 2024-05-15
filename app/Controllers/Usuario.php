@@ -45,12 +45,13 @@ class Usuario extends BaseController
             if($this->validation->withRequest($this->request)->run()){
                 $usuNombre   = $this->request->getPost('txtLogSendUsu');
                 $usuPassword = $this->request->getPost('txtLogSendPas');
-    
+
                 if( (isset($usuNombre) && !empty($usuNombre)) && (isset($usuPassword) && !empty($usuPassword))){
     
                     $resDataUser = $this->musuario->m_usuario_buscar($usuNombre);
-    
-                    if($resDataUser){
+                    
+                    if(!empty($resDataUser->usuario)){
+
                         $usuBBDD     = $resDataUser->usuario;
                         $pasHashBBDD = $resDataUser->pass_hash;
                         
@@ -59,7 +60,7 @@ class Usuario extends BaseController
                         if(($usuNombre === $usuBBDD) && (password_verify($usuPassword, $pasHashBBDD))){
     
                             $resDatPer = $this->musuario->m_usuario_persona($keyPer);
-                            if($resDatPer){
+                            if(!empty($resDatPer->persona)){
                                 $data['status'] = true;
                                 $data['msg']    = 'Correcto';
                                 $data['urlDestino'] = base_url('/home');
@@ -67,20 +68,27 @@ class Usuario extends BaseController
                                 $this->session->set('dataPer', $resDatPer);
                                 $datase = $this->session->get('dataPer');
                                 
-                                if(!empty($datase)){
-                                    redirect()->to('/home');
-                                }else{
-                                    redirect()->to('/acceso');
-                                }
+                                // if(!empty($datase)){
+                                //     $data['status'] = false;
+                                //     $data['msg']    = 'Usuario Y/o incorrectos.';
+                                // }else{
+                                //     
+                                // }
+                            }else{
+                                $data['status'] = false;
+                                $data['msg']    = 'Usuario Y/o incorrectos.';
                             }
+                        }else{
+                            $data['status'] = false;
+                            $data['msg']    = 'Usuario Y/o incorrectos.';
                         }
                     }else{
-                        return redirect()->to(base_url('acceso'));
+                        $data['status'] = false;
+                        $data['msg']    = 'Usuario Y/o incorrectos.';
                     }
-                }
-    
-                if(empty($datase)){
-                    return redirect()->to(base_url('acceso'));
+                }else{
+                    $data['status'] = false;
+                    $data['msg']    = 'Usuario Y/o incorrectos.';
                 }
             }else{
                 $data['errors'] = $this->validation->getErrors();
