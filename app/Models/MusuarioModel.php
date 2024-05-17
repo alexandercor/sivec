@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class MusuarioModel extends Model{
 
-    public function m_usuario_buscar($usuNombre): object {
+    public function m_usuario_buscar($usuNombre) {
         $sql = "
             SELECT 
                 `tb_usuario`.`usu_usuario` usuario,
@@ -20,7 +20,7 @@ class MusuarioModel extends Model{
                 `tb_usuario`.`usu_nivel` <> 2
         ";
         $response = $this->db->query($sql, $usuNombre);
-        return $response->getRow();
+        return ($response->getNumRows() === 1)? $response->getRow() : 0;
     }
 
     public function m_usuario_persona($keyPer): object {

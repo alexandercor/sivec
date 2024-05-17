@@ -139,7 +139,7 @@
                                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                         <div class="form-group">
                                                             <label for=id="txt_crudper_dni" >Dni</label>
-                                                            <input type="text" class="form-control" id="txt_crudper_dni" name="txt_crudper_dni"   placeholder="Dni">
+                                                            <input type="number" class="form-control" id="txt_crudper_dni" name="txt_crudper_dni"   placeholder="Dni">
                                                         </div>
                                                     </div>
 
@@ -168,14 +168,14 @@
                                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                         <div class="form-group">
                                                             <label for="txt_crudper_celular">Celular 1</label>
-                                                            <input type="text" class="form-control" id="txt_crudper_celular" name="txt_crudper_celular" placeholder="Celular 1">
+                                                            <input type="number" class="form-control" id="txt_crudper_celular" name="txt_crudper_celular" placeholder="Celular 1">
                                                         </div>
                                                     </div>
 
                                                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                         <div class="form-group">
                                                             <label for="txt_crudper_celular2">Celular 2</label>
-                                                            <input type="text" class="form-control" id="txt_crudper_celular2" name="txt_crudper_celular2" placeholder="Celular 2">
+                                                            <input type="number" class="form-control" id="txt_crudper_celular2" name="txt_crudper_celular2" placeholder="Celular 2">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -336,10 +336,15 @@
     $('#tab_persona a[href="#tabadd"]').click(function(e){
         $('#frm_persona')[0].reset();
         $('#txt_crudper_esta').val('MQ--');
+        $('#div_errors').empty();
+        $('#div_response').empty();
+        $('#div_section_user').show();
     })
 
     $('#tab_persona a[href="#tabper"]').click(function(){
         $('#tab_persona a[href="#tabadd"]').text('Agregar');
+        $('#div_errors').empty();
+        $('#div_response').empty();
     })
 
     $(document).on('click', '.btn_per_edit', function () {
@@ -368,6 +373,13 @@
             $('#txt_crudper_email').val(email);
             $('#txt_crudper_celular').val(cel);
             $('#txt_crudper_celular2').val(cel2);
+
+            $('#div_section_user').hide();
+            $('#txt_crudper_usuario').val('_');
+            $('#txt_crudper_contraseña').val('_');
+            $('#sle_percrud_nivel').val('MQ--');
+            $('#sle_percrud_tip_col').val('MQ--');
+            
             $('#tab_persona a[href="#tabadd"]').tab('show');
         }
     });

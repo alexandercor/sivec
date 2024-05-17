@@ -85,8 +85,8 @@
                     if(status){
                         $(location).attr('href', urlDestino);
                     }else{
-                        // console.log(msg)
                         $('#div_errors').html(`<div class="alert">${msg}</div>`);
+                        
                         if(Object.keys(errors).length !== 0){
                             let items = '';
                             for(const key in errors){

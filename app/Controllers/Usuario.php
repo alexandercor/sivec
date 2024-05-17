@@ -46,6 +46,15 @@ class Usuario extends BaseController
                 $usuNombre   = $this->request->getPost('txtLogSendUsu');
                 $usuPassword = $this->request->getPost('txtLogSendPas');
 
+                // if( (isset($usuNombre) && !empty($usuNombre)) && (isset($usuPassword) && !empty($usuPassword)) ){
+
+                //     $resDataUser = $this->musuario->m_usuario_buscar($usuNombre);
+                //     if(!empty($resDataUser->usuario)){
+                //         var_dump($usuNombre);
+                //     }else{
+                //         var_dump('na hay');
+                //     }
+                // }
                 if( (isset($usuNombre) && !empty($usuNombre)) && (isset($usuPassword) && !empty($usuPassword))){
     
                     $resDataUser = $this->musuario->m_usuario_buscar($usuNombre);
@@ -84,7 +93,7 @@ class Usuario extends BaseController
                         }
                     }else{
                         $data['status'] = false;
-                        $data['msg']    = 'Usuario Y/o incorrectos.';
+                        $data['msg']    = 'Usuario Y/o Contraseña incorrectos.';
                     }
                 }else{
                     $data['status'] = false;
