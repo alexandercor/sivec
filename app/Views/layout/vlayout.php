@@ -21,7 +21,7 @@
     <body class="hold-transition sidebar-mini">
 
         <div class="wrapper">
-            
+
             <?= $this->include('layout/vnavbar') ?>
 
             <?= $this->include('layout/vsidebar') ?>

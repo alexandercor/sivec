@@ -1,12 +1,13 @@
 <?php
     $session = session('dataPer');
     
-    if(!empty($session)){
+    if( !empty($session) && (!empty($session->dni)) && (!empty($session->persona)) && (!empty($session->email)) ){
         $dni     = $session->dni;
         $persona = $session->persona;
         $email   = $session->email;
     }else{
-        header("Location: http://localhost/ci4-sivec-app/public/acceso");
+        header('Location: ' . base_url('acceso'));
+        exit;
     }
 ?>
 

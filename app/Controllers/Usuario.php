@@ -19,8 +19,15 @@ class Usuario extends BaseController
     }
 
     public function index() {
-        $data = ['miUrlBase' => 'resources/adle'];
-        return view('admin/vlogin', $data);
+
+        if( $this->session->has('dataPer') ){
+            return redirect()->to(base_url('home'));
+            exit;
+        }else{
+            $data = ['miUrlBase' => 'resources/adle'];
+            return view('admin/vlogin', $data);
+        }
+
     }
 
     public function c_login_in() {
@@ -46,15 +53,6 @@ class Usuario extends BaseController
                 $usuNombre   = $this->request->getPost('txtLogSendUsu');
                 $usuPassword = $this->request->getPost('txtLogSendPas');
 
-                // if( (isset($usuNombre) && !empty($usuNombre)) && (isset($usuPassword) && !empty($usuPassword)) ){
-
-                //     $resDataUser = $this->musuario->m_usuario_buscar($usuNombre);
-                //     if(!empty($resDataUser->usuario)){
-                //         var_dump($usuNombre);
-                //     }else{
-                //         var_dump('na hay');
-                //     }
-                // }
                 if( (isset($usuNombre) && !empty($usuNombre)) && (isset($usuPassword) && !empty($usuPassword))){
     
                     $resDataUser = $this->musuario->m_usuario_buscar($usuNombre);
@@ -77,12 +75,10 @@ class Usuario extends BaseController
                                 $this->session->set('dataPer', $resDatPer);
                                 $datase = $this->session->get('dataPer');
                                 
-                                // if(!empty($datase)){
-                                //     $data['status'] = false;
-                                //     $data['msg']    = 'Usuario Y/o incorrectos.';
-                                // }else{
-                                //     
+                                // if($this->session->hash('dataPer')){
+                                //     return redirect()->to(base_url('home'));
                                 // }
+
                             }else{
                                 $data['status'] = false;
                                 $data['msg']    = 'Usuario Y/o incorrectos.';
@@ -99,6 +95,7 @@ class Usuario extends BaseController
                     $data['status'] = false;
                     $data['msg']    = 'Usuario Y/o incorrectos.';
                 }
+                
             }else{
                 $data['errors'] = $this->validation->getErrors();
             }
