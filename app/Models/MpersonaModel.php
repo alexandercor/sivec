@@ -8,22 +8,25 @@ class MpersonaModel extends Model{
 
     public function m_personas_list($persona): array {
         $sql = "
-            SELECT 
-                `tb_persona`.`id_persona` key_per,
-                `tb_persona`.`dni` dni,
-                `tb_persona`.`apellidos_nombres` persona,
-                `tb_persona`.`fecha_nacimiento` fech_nac,
-                `tb_persona`.`celular1` celular,
-                `tb_persona`.`celular2` celular2,
-                `tb_persona`.`email` email,
-                `tb_persona`.`fecha_registro` fecha_reg
-            FROM
-                `tb_persona`
-            WHERE
-                `tb_persona`.`apellidos_nombres` LIKE ? AND
-                `tb_persona`.`fdelete` = 1
-            ORDER BY
-                `tb_persona`.`apellidos_nombres`
+        SELECT 
+            `tb_persona`.`id_persona` key_per,
+            `tb_persona`.`dni` dni,
+            `tb_persona`.`apellidos_nombres` persona,
+            `tb_persona`.`fecha_nacimiento` fech_nac,
+            `tb_persona`.`celular1` celular,
+            `tb_persona`.`celular2` celular2,
+            `tb_persona`.`email` email,
+            `tb_persona`.`fecha_registro` fecha_reg,
+            `tb_colaborador`.`id_colaborador` key_col,
+            `tb_colaborador`.`tipo_col` tipo_colaborador
+        FROM
+            `tb_colaborador`
+            INNER JOIN `tb_persona` ON (`tb_colaborador`.`id_persona` = `tb_persona`.`id_persona`)
+        WHERE
+            `tb_persona`.`apellidos_nombres` LIKE ? AND 
+            `tb_persona`.`fdelete` = 1
+        ORDER BY
+            `tb_persona`.`apellidos_nombres`
         ";
         $response = $this->db->query($sql, $persona);
         return $response->getResult();
