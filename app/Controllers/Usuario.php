@@ -135,13 +135,23 @@ class Usuario extends BaseController
                         $perso  = $usu->persona;
 
                         $arrNivel = [
-                            1 => 'Administrador',
-                            2 => 'Inspector',
-                            3 => 'Jefe de Brigada',
+                            1 => [
+                                'nivel' => 'Administrador',
+                                'color_badge' => 'badge-success',
+                            ],
+                            2 => [
+                                'nivel' => 'Inspector',
+                                'color_badge' => 'badge-warning',
+                            ],
+                            3 => [
+                                'nivel' => 'Jefe de Brigada',
+                                'color_badge' => 'badge-danger',
+                            ],
                         ];
 
                         if(array_key_exists($keyNiv, $arrNivel)){
-                            $nivel = $arrNivel[$keyNiv];
+                            $nivel = $arrNivel[$keyNiv]['nivel'];
+                            $color_badge = $arrNivel[$keyNiv]['color_badge'];
                         }
 
                         $tabla .= "
@@ -149,10 +159,12 @@ class Usuario extends BaseController
                                 <td class='font-weight-bolder'>$count</td>
                                 <td>$perso</td>
                                 <td><i class='fas fa-user'></i> $usuario</td>
-                                <td>$nivel</td>
+                                <td>
+                                    <span class='badge $color_badge font-weight-normal' style='font-size: 14px;'><i class='fas fa-chalkboard-teacher'></i> $nivel</span>
+                                </td>
                                 
                                 <td>
-                                    <button type='button' class='btn bg-teal btn-sm btn_usu_update' data-keyusu='$keyUsu' data-usu='$usuario' data-keynivel='$keyNivEnc' ><i class='far fa-edit'></i> Actualizar</button>
+                                    <button type='button' class='btn bg-primary btn-sm btn_usu_update' data-keyusu='$keyUsu' data-usu='$usuario' data-keynivel='$keyNivEnc' ><i class='far fa-edit'></i> Actualizar</button>
                                 </td>
                             </tr>
                         ";

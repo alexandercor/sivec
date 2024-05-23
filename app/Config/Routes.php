@@ -48,3 +48,5 @@ $routes->post('/sector/add', 'Sector::c_sector_crud');
 $routes->post('/sector/del', 'Sector::c_sector_del');
 $routes->get('/seguimiento', 'Seguimiento::index');
 $routes->post('/seguimiento/coordenadaslist', 'Seguimiento::c_seguimiento_listar_coordenadas');
+$routes->get('/seguimiento-sospechosos', 'Seguimiento::csospechoso_index');
+$routes->post('/seguimiento/sospechosos', 'Seguimiento::c_seguimiento_sospechosos');

@@ -20,6 +20,39 @@ class MseguimientoModel extends Model{
         $response = $this->db->query($sql);
         return $response->getResult();
     }
+
+    public function m_seguimiento_sospechosos_listar(): array {
+        $sql = "
+            SELECT 
+                `tb_det_sospechoso`.`id_sospechoso` key_sos,
+                `tb_persona`.`id_persona` key_per,
+                `tb_persona`.`apellidos_nombres` per
+            FROM
+                `tb_persona`
+                INNER JOIN `tb_det_sospechoso` ON (`tb_persona`.`id_persona` = `tb_det_sospechoso`.`id_persona`)
+        ";
+        $response = $this->db->query($sql);
+        return $response->getResult();
+    }
+
+    public function m_seguimiento_sospechosos_referencias_coordenadas($codSos): array {
+        $sql = "
+            SELECT 
+                `tb_det_sospechoso`.`id_sospechoso` key_sos,
+                `tb_persona`.`id_persona` key_per,
+                `tb_det_sospechoso_referencias`.`eje_x`,
+                `tb_det_sospechoso_referencias`.`eje_y`
+            FROM
+                `tb_persona`
+                INNER JOIN `tb_det_sospechoso` ON (`tb_persona`.`id_persona` = `tb_det_sospechoso`.`id_persona`)
+                INNER JOIN `tb_det_sospechoso_referencias` ON (`tb_det_sospechoso`.`id_sospechoso` = `tb_det_sospechoso_referencias`.`id_sospechoso`)
+            WHERE
+                `tb_det_sospechoso`.`id_sospechoso` = ?
+        ";
+        $response = $this->db->query($sql, $codSos);
+        return $response->getResult();
+    }
+
     // **
 }
 ?>

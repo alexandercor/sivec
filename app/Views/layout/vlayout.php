@@ -41,6 +41,7 @@
         <?= script_tag("$miUrlBase/dist/js/adminlte.min.js") ?>
         <?= script_tag("$miUrlBase/plugins/sweetalert2/sweetalert2.min.js") ?>
         <?= script_tag("$miUrlBase/plugins/leaflet/js/leaflet.js") ?>
+        <?= script_tag("$miUrlBase/plugins/leaflet/js/leaflet-heat.js") ?>
         <?= script_tag("$miUrlBase/plugins/loader/js/jquery.loading.min.js") ?>
         <?= script_tag("resources/bandel/web/js/fn.js") ?>
 

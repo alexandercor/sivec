@@ -29,7 +29,7 @@
                         <div class="input-group mb-3">
                             <div class="input-group-append">
                                 <div class="input-group-text">
-                                    <span class="fas fa-envelope"></span>
+                                    <i class="fas fa-user"></i>
                                 </div>
                             </div>
                             <input type="text" id="txtLogSendUsu" name="txtLogSendUsu" class="form-control" placeholder="Usuario">
@@ -44,7 +44,7 @@
                         </div>
                         <div class="row mt-4">
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-check-circle"></i> Ingresar </button>
+                                <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-sign-out-alt"></i> Ingresar </button>
                             </div>
                         </div>
                     </form>

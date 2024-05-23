@@ -95,6 +95,17 @@
                 </li>
             <?php endif ?>
 
+            <?php if($keyNivel === 1 || $keyNivel === 3): ?>    
+                <li class="nav-item">
+                    <a href="<?= base_url('/seguimiento-sospechosos'); ?>" class="nav-link">
+                    <i class="fas fa-route"></i>
+                    <p>
+                        Seguimiento sospechosos
+                    </p>
+                    </a>
+                </li>
+            <?php endif ?>
+
             <?php if($keyNivel === 1 || $keyNivel === 3): ?>
                 <li class="nav-item menu-is-opening menu-open">
                     <a href="#" class="nav-link">
