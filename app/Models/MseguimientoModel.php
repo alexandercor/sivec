@@ -39,7 +39,6 @@ class MseguimientoModel extends Model{
         $sql = "
             SELECT 
                 `tb_det_sospechoso`.`id_sospechoso` key_sos,
-                `tb_persona`.`id_persona` key_per,
                 `tb_det_sospechoso_referencias`.`eje_x`,
                 `tb_det_sospechoso_referencias`.`eje_y`
             FROM

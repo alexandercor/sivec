@@ -13,6 +13,7 @@ class Seguimiento extends BaseController
     public function __construct()
     {
         $this->mseguimiento = new MseguimientoModel();
+        helper('fn_helper');
     }
     public function index(){
         return view('admin/vseguimiento');
@@ -64,6 +65,7 @@ class Seguimiento extends BaseController
                         if(is_array($resSosRef) && !empty($resSosRef)){
                             foreach ($resSosRef as $key => $ref) {
                                 $dataReferenciasXSos[] = $ref;
+                                $ref->key_sos = bs64url_enc($ref->key_sos);
                             }
                         }else{
                             $data['msg']  = 'Sin referencias!!!';
@@ -74,11 +76,12 @@ class Seguimiento extends BaseController
 
                 if( is_array($dataReferenciasXSos)){
                     $data['status']  = true;
+                    $data['msg']  = 'Ok';
                     $data['dataSospechosoRef']  = $dataSosReferencias;
                 }
                 return $this->response->setJSON($data);
             }else{
-                $data['msg']    = 'Sin resultados';
+                $data['msg'] = 'Sin resultados';
             }
         }
         return $this->response->setJSON($data);
