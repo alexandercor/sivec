@@ -50,3 +50,6 @@ $routes->get('/seguimiento', 'Seguimiento::index');
 $routes->post('/seguimiento/coordenadaslist', 'Seguimiento::c_seguimiento_listar_coordenadas');
 $routes->get('/seguimiento-sospechosos', 'Seguimiento::csospechoso_index');
 $routes->post('/seguimiento/sospechosos', 'Seguimiento::c_seguimiento_sospechosos');
+// ---
+$routes->get('/reportes', 'Reportes::c_reportes_inspeccion_index');
+$routes->get('/reportes/inspeccion', 'Reportes::c_reportes_inspeccion');
