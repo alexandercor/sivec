@@ -79,7 +79,7 @@
                                         <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-xs-12">  
                                             <div class="form-group">
                                                 <label for="" class="color_white">.</label>
-                                                <a href="<?= base_url();?>reportes/inspeccion" id="btn_excel" class="btn btn-primary btn-block">Buscar</a>
+                                                <a href="<?= base_url();?>reportes/inspeccion/xls" id="btn_excel" class="btn btn-primary btn-block">Buscar</a>
                                             </div>
                                         </div>
                                     </div>

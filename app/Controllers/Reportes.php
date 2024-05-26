@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controllers;
-use App\Models\MreportesModel;
+use App\Models\Reportes\MreportesModel;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -47,7 +47,7 @@ class Reportes extends BaseController
 
         $response = service('response');
         $response->setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        $response->setHeader('Content-Disposition', 'attachment; filename="Reporte.xlsx"');
+        $response->setHeader('Content-Disposition', 'attachment; filename="'.$filePath.'"');
         $response->setBody(file_get_contents($filePath));
 
         return $response;
