@@ -14,7 +14,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Borders;
 use PhpOffice\PhpSpreadsheet\RichText;
 use PhpOffice\PhpSpreadsheet\RichText\Run;
-use PhpOffice\PhpSpreadsheet\Shared\Drawing;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 
 
@@ -146,19 +146,24 @@ class ReportesInspeccion extends BaseController
                 ],
             ];
             $row6 = 6;
-            // $logo = new Drawing();
-            // $logo->setCoordinates($LI.$row6);
-            // $logo->setPath('resources/img/logo.png');
-            // $logo->setWidth(1398);
+            $logo = new Drawing();
+            $logo->setCoordinates($LI.$row6);
+            $logo->setPath('resources/img/msalud.png');
+            $logo->setHeight(35);
+            $logo->setWorksheet($sheet);
 
-            // $logo->setWorksheet($sheet);
-
-            // $sheet->setCellValue($LI.$row6,'od');
             $sheet->setCellValue("J".$row6,'INSPECCIÓN DE VIVIENDAS PARA LA VIGILANCIA Y CONTROL DEL Aedes aegypti');
             
             $sheet->getStyle("J".$row6)->applyFromArray($headTitleInspeccion);
             $sheet->mergeCells("J".$row6.":".$LF.$row6);
+            $sheet->getRowDimension($row6)->setRowHeight(28);
 
+            $row7 = 7;
+            $row8 = 8;
+            $sheet->getRowDimension($row7)->setRowHeight(28);
+            $sheet->getRowDimension($row8)->setRowHeight(28);
+            $sheet->mergeCells($LI."7:".$LF."7");
+            $sheet->mergeCells($LI."8:".$LF."8");
 
         }else{
             return redirect()->to(base_url('reportes-inspeccion'));
@@ -166,7 +171,89 @@ class ReportesInspeccion extends BaseController
     }
     
     public function c_reportes_inspeccion_body($sheet) {
-        // $sheet->setCellValue('A2','BODY');
+        
+        if(isset($sheet) && !empty($sheet)){
+            $LI = $this->configLetterInicia;
+            $LF = $this->configLetterFin;
+
+            $styleHeadTableTexVertical = [
+                'font' => [
+                    'name' => $this->styleFontName,
+                    'size' => 11,
+                    'bold' => true
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical'   => Alignment::VERTICAL_CENTER,
+                    'textRotation' => 90,
+                    'wrapText'    => true,    
+                ]
+            ];
+            $styleHeadTableTexHorizontal = [
+                'font' => [
+                    'name' => $this->styleFontName,
+                    'size' => 11,
+                    'bold' => true
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical'   => Alignment::VERTICAL_CENTER,
+                    'wrapText'    => true,    
+                ]
+            ];
+            $row9 = 9;
+            $row12 = 12;
+
+            $sheet->mergeCells($LI.$row9.":".$LI.$row12);
+            $sheet->mergeCells("B".$row9.":"."B".$row12);
+            $sheet->mergeCells("C".$row9.":"."C".$row12);
+            $sheet->mergeCells("D".$row9.":"."D".$row12);
+
+            $sheet->setCellValue($LI.$row9,'N°');
+            $sheet->setCellValue("B".$row9,'Codigo de Manzana');
+            $sheet->setCellValue("C".$row9,'Dirección o persona que atiende');
+            $sheet->setCellValue("D".$row9,'N° de residentes');
+
+            $arrColTextVert = ['B','D'];
+            foreach ($arrColTextVert as $key => $cel) {
+                $sheet->getStyle($cel.$row9)->applyFromArray($styleHeadTableTexVertical);
+            }
+            $arrColTextHori = ['A9','C9'];
+            foreach ($arrColTextHori as $key => $cel) {
+                $sheet->getStyle($cel)->applyFromArray($styleHeadTableTexHorizontal);
+            }
+
+            $sheet->setCellValue("E9",'Depositos');
+
+            $arrDepositosColLetter = 
+            [
+                ['E','F','G','H'],
+                ['I','J','K','L'],
+                ['M','N','O','P'],
+                ['Q','R','S','T'],
+                ['U','V','W','X'],
+                ['Y','Z','AA','AB'],
+                ['AC','AD','AE','AF'],
+                ['AG','AH','AI','AJ','AK'],
+                ['AL','AM','AN','AO','AP']
+            ];
+            $arrDepositoTipo = ['I','P','TQ','TF','D'];
+
+            foreach ($arrDepositosColLetter as $key => $col) {
+                foreach ($col as $key => $let) {
+                    $depTipo = $arrDepositoTipo[$key];
+                    $sheet->setCellValue($let.$row12,$depTipo);
+                    $sheet->getColumnDimension($let)->setWidth(4);
+                    $sheet->getStyle($let)->applyFromArray($styleHeadTableTexHorizontal);
+                }
+            }
+
+
+
+
+        }else{
+            return redirect()->to(base_url('reportes-inspeccion'));
+        }
     }
 
     public function c_reportes_inspeccion_footer($sheet) {
