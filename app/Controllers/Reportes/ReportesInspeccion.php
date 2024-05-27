@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Reportes;
 use App\Controllers\BaseController;
-use App\Models\Reportes\MreportesModel;
+use App\Models\Reportes\MreportesInspeccionModel;
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -28,7 +28,7 @@ class ReportesInspeccion extends BaseController
 
     public function __construct()
     {
-        $this->mreportes = new MreportesModel();
+        $this->mreportes = new MreportesInspeccionModel();
         $this->styleFontName      = 'calibri';
         $this->configLetterInicia = 'A';
         $this->configLetterFin    = 'AR';
@@ -40,10 +40,9 @@ class ReportesInspeccion extends BaseController
 
     public function c_reportes_inspeccion() {
 
-        $response = $this->mreportes->cdato();
-        $dis = $response->nombre_distrito;
+        $dataInspeccion = $this->mreportes->mreporte_inspecciones_x_inspecctor(40);
 
-        if(isset($response) && !empty($response)){
+        if(isset($dataInspeccion) && !empty($dataInspeccion)){
 
             $objSheet = new Spreadsheet();
             $sheet = $objSheet->getActiveSheet();
@@ -55,12 +54,15 @@ class ReportesInspeccion extends BaseController
             $sheet->getPageMargins()->setLeft(0.472441);
 			$sheet->getPageMargins()->setRight(0.393701);
 
-            $this->c_reportes_inspeccion_header($sheet);
-            $this->c_reportes_inspeccion_body($sheet);
-            $this->c_reportes_inspeccion_footer($sheet);
+            $codInspeccion = $dataInspeccion->key_control;
+            if ( isset($codInspeccion) && !empty($codInspeccion) ) {
+                $dataInspeccionDetalle = $this->mreportes->mreporte_inspeccion_inspeccionados_detalle_lista($codInspeccion);
+            }
 
-            // $sheet->setCellValue('C1','TEXTO DE PRUEBA');
-            // $sheet->setCellValue('C5',$dis);
+
+            $this->c_reportes_inspeccion_header($sheet, $dataInspeccion);
+            $this->c_reportes_inspeccion_body($sheet, $dataInspeccionDetalle);
+            $this->c_reportes_inspeccion_footer($sheet);
 
             $writer = new Xlsx($objSheet);
             $filePath = "Reporte Inspeccion.xlsx";
@@ -77,13 +79,18 @@ class ReportesInspeccion extends BaseController
         }
     }
 
-    public function c_reportes_inspeccion_header($sheet) {
+    public function c_reportes_inspeccion_header($sheet, $dataInspeccion) {
 
         if($sheet){
 
             $LI = $this->configLetterInicia;
             $LF = $this->configLetterFin;
             
+            $inspecctor = $dataInspeccion->inspecctor;
+            $eess       = $dataInspeccion->eess;
+            $sector     = $dataInspeccion->sector;
+
+
             $headTitleA1 = [
                 'font' => [
                     'name' => $this->styleFontName,
@@ -173,12 +180,15 @@ class ReportesInspeccion extends BaseController
             $sheet->mergeCells($LI."7:".$LF."7");
             $sheet->mergeCells($LI."8:".$LF."8");
 
+            $sheet->setCellValue("A7",$eess.$sector);
+            $sheet->setCellValue("A8",$inspecctor);
+
         }else{
             return redirect()->to(base_url('reportes-inspeccion'));
         }
     }
     
-    public function c_reportes_inspeccion_body($sheet) {
+    public function c_reportes_inspeccion_body($sheet, $dataInspeccionDetalle) {
         
         if(isset($sheet) && !empty($sheet)){
             $LI = $this->configLetterInicia;
@@ -335,6 +345,45 @@ class ReportesInspeccion extends BaseController
             $row38 = 38;
             $sheet->mergeCells($LI.$row38.":"."D38");
             $sheet->setCellValue($LI.$row38, 'Total');
+
+            $arrDataInspeccionDetalle = [];
+            $rowActual = 13;
+            foreach ($dataInspeccionDetalle as $key => $det) {
+                $count = ++$key;
+                $keyDetIns = $det->key_detalle_control;
+                $codManza  = $det->cod_manzan;
+                $perAtien  = $det->per_aten;
+                $Nres      = $det->n_resid;
+
+                $arrDataInspeccionDetalle[$key] = [$count, $codManza, $perAtien, $Nres];
+
+                // Detalle
+
+                $letterDepTipDetalle = [
+                    1 => [1 => 'E',2 => 'F',3 => 'G',4 => 'H'],
+                    2 => [1 => 'I',2 => 'J',3 => 'K',4 => 'L'],
+                ];
+
+                $dataDetalleInspTipoDep = $this->mreportes->mreporte_inspeccion_inspeccionados_depositos_tipos($keyDetIns);
+
+                foreach ($dataDetalleInspTipoDep as $key => $dtp) {
+                    $keyDep      = (int) $dtp->key_deposito;
+                    $keyDepTip   = (int) $dtp->key_dep_tipo;
+                    $depTipSigla = $dtp->depo_tip_sigla;
+
+                    if(array_key_exists($keyDep, $letterDepTipDetalle)){
+                        $arrDepTipDetalle = $letterDepTipDetalle[$keyDep];
+                        if(array_key_exists($keyDepTip, $arrDepTipDetalle)){
+                            $letteCurrent = $arrDepTipDetalle[$keyDepTip];
+                            $sheet->setCellValue($letteCurrent.$rowActual,$depTipSigla);
+                        }
+                    }
+                }
+                $rowActual++;
+            }
+            
+            $sheet->fromArray($arrDataInspeccionDetalle, NULL, $LI."13");
+
         }else{
             return redirect()->to(base_url('reportes-inspeccion'));
         }
