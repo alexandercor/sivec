@@ -127,6 +127,8 @@ class ReportesInspeccion extends BaseController
                     'vertical' => Alignment::VERTICAL_CENTER
                 ],
             ];
+
+            //** */
             $row4 = 4;
             $sheet->mergeCells($LI.$row4.":".$LF.$row4);
             $sheet->getStyle($LI.$row4)->applyFromArray($headTitleFormato);
@@ -141,10 +143,14 @@ class ReportesInspeccion extends BaseController
                     'bold' => true
                 ],
                 'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                    'vertical'   => Alignment::VERTICAL_CENTER
+                    'horizontal' => Alignment::HORIZONTAL_LEFT,
+                    'vertical'   => Alignment::VERTICAL_CENTER,
+                    'indent'     => 21
                 ],
             ];
+            //** */
+
+            //** */
             $row6 = 6;
             $logo = new Drawing();
             $logo->setCoordinates($LI.$row6);
@@ -152,12 +158,14 @@ class ReportesInspeccion extends BaseController
             $logo->setHeight(35);
             $logo->setWorksheet($sheet);
 
-            $sheet->setCellValue("J".$row6,'INSPECCIÓN DE VIVIENDAS PARA LA VIGILANCIA Y CONTROL DEL Aedes aegypti');
+            $sheet->setCellValue("D".$row6,'INSPECCIÓN DE VIVIENDAS PARA LA VIGILANCIA Y CONTROL DEL Aedes aegypti');
             
-            $sheet->getStyle("J".$row6)->applyFromArray($headTitleInspeccion);
-            $sheet->mergeCells("J".$row6.":".$LF.$row6);
+            $sheet->getStyle("D".$row6)->applyFromArray($headTitleInspeccion);
+            $sheet->mergeCells("D".$row6.":".$LF.$row6);
             $sheet->getRowDimension($row6)->setRowHeight(28);
+            //** */
 
+            //** */
             $row7 = 7;
             $row8 = 8;
             $sheet->getRowDimension($row7)->setRowHeight(28);
@@ -175,6 +183,25 @@ class ReportesInspeccion extends BaseController
         if(isset($sheet) && !empty($sheet)){
             $LI = $this->configLetterInicia;
             $LF = $this->configLetterFin;
+
+            $styleTableLista = [
+                'font' => [
+                    'name' => $this->styleFontName,
+                    'size' => 11,
+                    'bold' => true
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical'   => Alignment::VERTICAL_CENTER,
+                    'wrapText'    => true,    
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN
+                    ],
+                ],
+            ];
+            $sheet->getStyle($LI."9:".$LF."38")->applyFromArray($styleTableLista);
 
             $styleHeadTableTexVertical = [
                 'font' => [
@@ -201,6 +228,8 @@ class ReportesInspeccion extends BaseController
                     'wrapText'    => true,    
                 ]
             ];
+            $sheet->getStyle("E9:AR12")->applyFromArray($styleHeadTableTexHorizontal);
+
             $row9 = 9;
             $row12 = 12;
 
@@ -208,23 +237,77 @@ class ReportesInspeccion extends BaseController
             $sheet->mergeCells("B".$row9.":"."B".$row12);
             $sheet->mergeCells("C".$row9.":"."C".$row12);
             $sheet->mergeCells("D".$row9.":"."D".$row12);
+            $sheet->mergeCells("AQ".$row9.":"."AQ".$row12);
+            $sheet->mergeCells("AR".$row9.":"."AR".$row12);
 
             $sheet->setCellValue($LI.$row9,'N°');
             $sheet->setCellValue("B".$row9,'Codigo de Manzana');
             $sheet->setCellValue("C".$row9,'Dirección o persona que atiende');
             $sheet->setCellValue("D".$row9,'N° de residentes');
+            $sheet->setCellValue("AQ".$row9,'Consumo de Larvicida(g)');
+            $sheet->setCellValue("AR".$row9,'Febriles');
 
-            $arrColTextVert = ['B','D'];
+            $arrColTextVert = ['B','D','AQ','AR'];
             foreach ($arrColTextVert as $key => $cel) {
                 $sheet->getStyle($cel.$row9)->applyFromArray($styleHeadTableTexVertical);
             }
-            $arrColTextHori = ['A9','C9'];
+            $arrColTextHori = ['A','C'];
             foreach ($arrColTextHori as $key => $cel) {
-                $sheet->getStyle($cel)->applyFromArray($styleHeadTableTexHorizontal);
+                $sheet->getStyle($cel.$row9)->applyFromArray($styleHeadTableTexHorizontal);
             }
 
-            $sheet->setCellValue("E9",'Depositos');
+            $sheet->getColumnDimension("A")->setWidth(4);
+            $sheet->getColumnDimension("B")->setWidth(6);
+            $sheet->getColumnDimension("C")->setWidth(25);
+            $sheet->getColumnDimension("D")->setWidth(5);
+            $sheet->getColumnDimension("AQ")->setWidth(6);
+            $sheet->getColumnDimension("AR")->setWidth(4);
 
+            /** */
+            $row9= 9;
+            $sheet->mergeCells("E$row9:AP$row9");
+            $sheet->setCellValue("E9",'Depósitos');
+            /** */
+
+            //** */
+            $row10 = 10;
+            $sheet->mergeCells("E$row10:L$row10");
+            $sheet->mergeCells("M$row10:P$row10");
+            $sheet->mergeCells("Q$row10:T$row10");
+            $sheet->mergeCells("U$row10:X$row10");
+
+            $sheet->setCellValue("E$row10", "> 500 L");
+            $sheet->setCellValue("M$row10", "- 200 L");
+            $sheet->setCellValue("Q$row10", "> 200 L - 100 L");
+            $sheet->setCellValue("U$row10", "< 100 L");
+            //** */
+
+            // ***
+            $row11 = 11;
+            $arrDepositosCol = ['E,H', 'I,L', 'M,P', 'Q,T', 'U,X'];
+            foreach ($arrDepositosCol as $key => $dep) {
+                $arrLetter = explode(',', $dep);
+                [$colIni, $colFin] = $arrLetter;
+                $sheet->mergeCells("$colIni$row11:$colFin$row11");  
+            }
+            $sheet->mergeCells("Y10:AB$row11");
+            $sheet->mergeCells("AC10:AF$row11");
+            $sheet->mergeCells("AG10:AK$row11");
+            $sheet->mergeCells("AL10:AP$row11");
+            $sheet->getRowDimension($row11)->setRowHeight(37);
+
+            $sheet->setCellValue("E".$row11, "Tanque alto");
+            $sheet->setCellValue("I".$row11, "Tanque bajo");
+            $sheet->setCellValue("M".$row11, "Barril-cilindro");
+            $sheet->setCellValue("Q".$row11, "Sansón-bidon");
+            $sheet->setCellValue("U".$row11, "Baldes, bateas, tinajas");
+            $sheet->setCellValue("Y10", "Llantas");
+            $sheet->setCellValue("AC10", "Floreros, maceteros");
+            $sheet->setCellValue("AG10", "Latas, botellas");
+            $sheet->setCellValue("AL10", "Otros");
+            //** */
+
+            //** Row 12*/
             $arrDepositosColLetter = 
             [
                 ['E','F','G','H'],
@@ -244,13 +327,14 @@ class ReportesInspeccion extends BaseController
                     $depTipo = $arrDepositoTipo[$key];
                     $sheet->setCellValue($let.$row12,$depTipo);
                     $sheet->getColumnDimension($let)->setWidth(4);
-                    $sheet->getStyle($let)->applyFromArray($styleHeadTableTexHorizontal);
                 }
             }
+            //** */
 
-
-
-
+            //** */
+            $row38 = 38;
+            $sheet->mergeCells($LI.$row38.":"."D38");
+            $sheet->setCellValue($LI.$row38, 'Total');
         }else{
             return redirect()->to(base_url('reportes-inspeccion'));
         }
