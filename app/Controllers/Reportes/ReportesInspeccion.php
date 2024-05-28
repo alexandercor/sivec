@@ -32,48 +32,52 @@ class ReportesInspeccion extends BaseController
         $this->styleFontName      = 'calibri';
         $this->configLetterInicia = 'A';
         $this->configLetterFin    = 'AR';
+        helper('fn_helper');
     }
 
-    public function c_reportes_inspeccion_index() {
-        return view('admin/reportes/vinspeccion');
-    }
+    public function c_reportes_inspeccion_xls($codControl) {
 
-    public function c_reportes_inspeccion() {
+        $codControl = bs64url_dec($codControl);
 
-        $dataInspeccion = $this->mreportes->mreporte_inspecciones_x_inspecctor(40);
+        if(isset($codControl) && !empty($codControl)){
 
-        if(isset($dataInspeccion) && !empty($dataInspeccion)){
+            $dataInspeccion = $this->mreportes->mreporte_inspecciones_inspeccion_head($codControl);
 
-            $objSheet = new Spreadsheet();
-            $sheet = $objSheet->getActiveSheet();
-            $sheet->setTitle('Reporte Ispeccion');
-            $sheet->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A4);
-            $sheet->getPageSetup()->setHorizontalCentered(true);
-            $sheet->getPageSetup()->setScale(90);
-            $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
-            $sheet->getPageMargins()->setLeft(0.472441);
-			$sheet->getPageMargins()->setRight(0.393701);
+            if(isset($dataInspeccion) && !empty($dataInspeccion)){
 
-            $codInspeccion = $dataInspeccion->key_control;
-            if ( isset($codInspeccion) && !empty($codInspeccion) ) {
-                $dataInspeccionDetalle = $this->mreportes->mreporte_inspeccion_inspeccionados_detalle_lista($codInspeccion);
+                $objSheet = new Spreadsheet();
+                $sheet = $objSheet->getActiveSheet();
+                $sheet->setTitle('Reporte Ispeccion');
+                $sheet->getPageSetup()->setPaperSize(PageSetup::PAPERSIZE_A4);
+                $sheet->getPageSetup()->setHorizontalCentered(true);
+                $sheet->getPageSetup()->setScale(90);
+                $sheet->getPageSetup()->setOrientation(PageSetup::ORIENTATION_LANDSCAPE);
+                $sheet->getPageMargins()->setLeft(0.472441);
+                $sheet->getPageMargins()->setRight(0.393701);
+
+                $codInspeccion = $dataInspeccion->key_control;
+                if ( isset($codInspeccion) && !empty($codInspeccion) ) {
+                    $dataInspeccionDetalle = $this->mreportes->mreporte_inspeccion_inspeccionados_detalle_lista($codInspeccion);
+                }
+
+
+                $this->c_reportes_inspeccion_header($sheet, $dataInspeccion);
+                $this->c_reportes_inspeccion_body($sheet, $dataInspeccionDetalle);
+                $this->c_reportes_inspeccion_footer($sheet);
+
+                $writer = new Xlsx($objSheet);
+                $filePath = "Reporte Inspeccion.xlsx";
+                $writer->save($filePath);
+
+                $response = service('response');
+                $response->setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                $response->setHeader('Content-Disposition', 'attachment; filename="'.$filePath.'"');
+                $response->setBody(file_get_contents($filePath));
+
+                return $response;
+            }else{
+                return redirect()->to(base_url('reportes-inspeccion'));
             }
-
-
-            $this->c_reportes_inspeccion_header($sheet, $dataInspeccion);
-            $this->c_reportes_inspeccion_body($sheet, $dataInspeccionDetalle);
-            $this->c_reportes_inspeccion_footer($sheet);
-
-            $writer = new Xlsx($objSheet);
-            $filePath = "Reporte Inspeccion.xlsx";
-            $writer->save($filePath);
-
-            $response = service('response');
-            $response->setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            $response->setHeader('Content-Disposition', 'attachment; filename="'.$filePath.'"');
-            $response->setBody(file_get_contents($filePath));
-
-            return $response;
         }else{
             return redirect()->to(base_url('reportes-inspeccion'));
         }
@@ -353,15 +357,23 @@ class ReportesInspeccion extends BaseController
                 $keyDetIns = $det->key_detalle_control;
                 $codManza  = $det->cod_manzan;
                 $perAtien  = $det->per_aten;
-                $Nres      = $det->n_resid;
+                $rresiden  = $det->n_resid;
+                $consLarv  = $det->cons_larvi;
 
-                $arrDataInspeccionDetalle[$key] = [$count, $codManza, $perAtien, $Nres];
-
+                $arrDataInspeccionDetalle[$key] = [$count, $codManza, $perAtien, $rresiden];
+                $sheet->setCellValue("AQ".$rowActual, $consLarv);
                 // Detalle
 
                 $letterDepTipDetalle = [
                     1 => [1 => 'E',2 => 'F',3 => 'G',4 => 'H'],
                     2 => [1 => 'I',2 => 'J',3 => 'K',4 => 'L'],
+                    3 => [1 => 'M',2 => 'N',3 => 'O',4 => 'P'],
+                    4 => [1 => 'Q',2 => 'R',3 => 'S',4 => 'T'],
+                    5 => [1 => 'U',2 => 'V',3 => 'W',4 => 'X'],
+                    6 => [1 => 'Y',2 => 'Z',3 => 'AA',4 => 'AB'],
+                    7 => [1 => 'AC',2 => 'AD',3 => 'AE',4 => 'AF'],
+                    8 => [1 => 'AG',2 => 'AH',3 => 'AI',4 => 'AJ', 5 => 'AK'],
+                    11 => [1 => 'AL',2 => 'AM',3 => 'AN',4 => 'AO', 5 => 'AO'],
                 ];
 
                 $dataDetalleInspTipoDep = $this->mreportes->mreporte_inspeccion_inspeccionados_depositos_tipos($keyDetIns);
@@ -369,13 +381,13 @@ class ReportesInspeccion extends BaseController
                 foreach ($dataDetalleInspTipoDep as $key => $dtp) {
                     $keyDep      = (int) $dtp->key_deposito;
                     $keyDepTip   = (int) $dtp->key_dep_tipo;
-                    $depTipSigla = $dtp->depo_tip_sigla;
+                    $depCantidad = $dtp->cantidad;
 
                     if(array_key_exists($keyDep, $letterDepTipDetalle)){
                         $arrDepTipDetalle = $letterDepTipDetalle[$keyDep];
                         if(array_key_exists($keyDepTip, $arrDepTipDetalle)){
                             $letteCurrent = $arrDepTipDetalle[$keyDepTip];
-                            $sheet->setCellValue($letteCurrent.$rowActual,$depTipSigla);
+                            $sheet->setCellValue($letteCurrent.$rowActual,$depCantidad);
                         }
                     }
                 }

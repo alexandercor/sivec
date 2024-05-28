@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class MreportesInspeccionModel extends Model{
 
-    public function mreporte_inspecciones_x_inspecctor($codInspector): object {
+    public function mreporte_inspecciones_inspeccion_head($codInspector): object {
         $sql = "
             SELECT 
                 `tb_control`.`id_control` key_control,
@@ -23,7 +23,7 @@ class MreportesInspeccionModel extends Model{
                 INNER JOIN `tb_sector` ON (`tb_control`.`id_sector` = `tb_sector`.`id_sector`)
                 INNER JOIN `tb_eess` ON (`tb_control`.`id_eess` = `tb_eess`.`id_eess`)
             WHERE
-                `tb_persona`.`id_persona` = ?
+                `tb_control`.`id_control` = ?
         ";
         $response = $this->db->query($sql, $codInspector);
         return $response->getRow();
@@ -60,8 +60,8 @@ class MreportesInspeccionModel extends Model{
                 `tb_depositos`.`nombre_deposito` depo,
                 `tb_depositos_tipos`.`id_depositotipo` key_dep_tipo,
                 `tb_depositos_tipos`.`denominacion` depo_tip,
-                `tb_depositos_tipos`.`sigla` depo_tip_sigla
-                
+                `tb_depositos_tipos`.`sigla` depo_tip_sigla,
+                `tb_det_control_depositos`.`det_cantidad` cantidad
             FROM
                 `tb_det_control_depositos`
                 INNER JOIN `tb_det_control` ON (`tb_det_control_depositos`.`id_detalle_control` = `tb_det_control`.`id_detalle_control`)
