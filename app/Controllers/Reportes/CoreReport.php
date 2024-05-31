@@ -55,9 +55,9 @@ class CoreReport extends BaseController
                                 <td><i class='fas fa-hospital text-danger'></i> $eess</td>
                                 <td>$sector</td>
                                 <td>
-                                    <a href='".base_url()."reportes/inspeccion/xls/".$keyContr."' class='btn btn-success btn-sm btn_loca_edit'>
+                                    <a href='".base_url()."reportes/inspeccion/xls/".$keyContr."' class='btn btn-success btn-sm'>
                                     <i class='fas fa-file-excel'></i> 
-                                        Reporte
+                                        Descargar Reporte
                                     </a>
                                 </td>
                             </tr>

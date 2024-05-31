@@ -36,9 +36,8 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tabloc">
                                     <div class="row">
-                                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                        <div class="col-xl-5 col-lg-5 col-md-5 col-sm-12 col-xs-12">
                                             <div class="form-group">
-                                                <label for="sle_insview_supervisor"><i class="fas fa-user-tie"></i> Inspector</label>
                                                 <select id="sle_insview_supervisor" class="form-control form-control-lg" data-send="view">
                                                     <option value="">Selecciona un Inspector</option>
                                                     <?php
@@ -53,8 +52,7 @@
                                         </div>
                                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                             <div class="form-group">
-                                                <label for="sle_insview_supervisor"><i class="fas fa-user-tie"></i>.</label>
-                                                <button type="button" id="btn_inspecciones_buscar" class="btn btn-primary"><i class="fas fa-search"></i> Buscar</button>
+                                                <button type="button" id="btn_inspecciones_buscar" class="btn btn-primary btn-lg"><i class="fas fa-search"></i> Buscar</button>
                                             </div>                    
                                         </div>
                                     </div>
@@ -110,8 +108,12 @@
                 type: "POST",
                 data: {codIns: codIns},
                 dataType: "JSON",
+                beforeSend: function(){
+                    $('#div_overlay').loading({message: 'Cargando...'});
+                },
             })
             .done(function(data){
+                $('#div_overlay').loading('stop');
                 const { status, dataInspecciones } = data;
                 if(status){
                     $('#tbl_inspec tbody').html(`${dataInspecciones}`);

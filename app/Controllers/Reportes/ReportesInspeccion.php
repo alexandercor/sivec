@@ -62,7 +62,7 @@ class ReportesInspeccion extends BaseController
 
 
                 $this->c_reportes_inspeccion_header($sheet, $dataInspeccion);
-                $this->c_reportes_inspeccion_body($sheet, $dataInspeccionDetalle);
+                $this->c_reportes_inspeccion_body($sheet, $dataInspeccionDetalle, $codInspeccion);
                 $this->c_reportes_inspeccion_footer($sheet);
 
                 $writer = new Xlsx($objSheet);
@@ -140,10 +140,10 @@ class ReportesInspeccion extends BaseController
             ];
 
             //** */
-            $row4 = 4;
-            $sheet->mergeCells($LI.$row4.":".$LF.$row4);
-            $sheet->getStyle($LI.$row4)->applyFromArray($headTitleFormato);
-            $sheet->setCellValue($LI.$row4, 'Formato 03: Inspección de viviendas para la vigilancia y control del Aedes aegypti');
+            $row3 = 3;
+            $sheet->mergeCells($LI.$row3.":".$LF.$row3);
+            $sheet->getStyle($LI.$row3)->applyFromArray($headTitleFormato);
+            $sheet->setCellValue($LI.$row3, 'Formato 03: Inspección de viviendas para la vigilancia y control del Aedes aegypti');
 
             $sheet->mergeCells($LI."5:".$LF."5");
 
@@ -192,17 +192,29 @@ class ReportesInspeccion extends BaseController
         }
     }
     
-    public function c_reportes_inspeccion_body($sheet, $dataInspeccionDetalle) {
+    public function c_reportes_inspeccion_body($sheet, $dataInspeccionDetalle, $codInspeccion) {
         
         if(isset($sheet) && !empty($sheet)){
             $LI = $this->configLetterInicia;
             $LF = $this->configLetterFin;
 
+            $styleTableHead = [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical'   => Alignment::VERTICAL_CENTER,
+                    'wrapText'    => true,    
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN
+                    ],
+                ],
+            ];
+
             $styleTableLista = [
                 'font' => [
                     'name' => $this->styleFontName,
-                    'size' => 11,
-                    'bold' => true
+                    'size' => 11
                 ],
                 'alignment' => [
                     'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -215,7 +227,8 @@ class ReportesInspeccion extends BaseController
                     ],
                 ],
             ];
-            $sheet->getStyle($LI."9:".$LF."38")->applyFromArray($styleTableLista);
+            $sheet->getStyle($LI."9:".$LF."12")->applyFromArray($styleTableHead);
+            $sheet->getStyle($LI."13:".$LF."37")->applyFromArray($styleTableLista);
 
             $styleHeadTableTexVertical = [
                 'font' => [
@@ -352,6 +365,8 @@ class ReportesInspeccion extends BaseController
 
             $arrDataInspeccionDetalle = [];
             $rowActual = 13;
+            $cantidad = 0;
+
             foreach ($dataInspeccionDetalle as $key => $det) {
                 $count = ++$key;
                 $keyDetIns = $det->key_detalle_control;
@@ -385,16 +400,159 @@ class ReportesInspeccion extends BaseController
 
                     if(array_key_exists($keyDep, $letterDepTipDetalle)){
                         $arrDepTipDetalle = $letterDepTipDetalle[$keyDep];
+                        
                         if(array_key_exists($keyDepTip, $arrDepTipDetalle)){
                             $letteCurrent = $arrDepTipDetalle[$keyDepTip];
                             $sheet->setCellValue($letteCurrent.$rowActual,$depCantidad);
+                            
                         }
+                    }
+
+                    if($keyDepTip === 1 && $keyDep === 1){
+                        $cantidad = $cantidad + $depCantidad;
                     }
                 }
                 $rowActual++;
             }
-            
+
             $sheet->fromArray($arrDataInspeccionDetalle, NULL, $LI."13");
+
+            // ****
+
+            $styleTableListaTotal = [
+                'font' => [
+                    'name' => $this->styleFontName,
+                    'size' => 11,
+                    'bold' => true
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical'   => Alignment::VERTICAL_CENTER,
+                    'wrapText'    => true,    
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN
+                    ],
+                ],
+            ];
+            $sheet->getStyle($LI."38:".$LF."38")->applyFromArray($styleTableListaTotal);
+
+            $row38 = 38;
+            $dataDepTipw = $this->mreportes->mreporte_inspeccion_inspeccionados_depositos_tipos_total($codInspeccion);
+            $tanque_elevado_I = $dataDepTipw->tanque_elevado_I;
+            $tanque_elevado_P = $dataDepTipw->tanque_elevado_P;
+            $tanque_elevado_TQ = $dataDepTipw->tanque_elevado_TQ;
+            $tanque_elevado_TH = $dataDepTipw->tanque_elevado_TH;
+
+            $sheet->setCellValue("E".$row38, $tanque_elevado_I);
+            $sheet->setCellValue("F".$row38, $tanque_elevado_P);
+            $sheet->setCellValue("G".$row38, $tanque_elevado_TQ);
+            $sheet->setCellValue("H".$row38, $tanque_elevado_TH);
+
+            $tanque_bajo_I = $dataDepTipw->tanque_bajo_I;
+            $tanque_bajo_P = $dataDepTipw->tanque_bajo_P;
+            $tanque_bajo_TQ = $dataDepTipw->tanque_bajo_TQ;
+            $tanque_bajo_TH = $dataDepTipw->tanque_bajo_TH;
+            
+            $sheet->setCellValue("I".$row38, $tanque_bajo_I);
+            $sheet->setCellValue("J".$row38, $tanque_bajo_P);
+            $sheet->setCellValue("K".$row38, $tanque_bajo_TQ);
+            $sheet->setCellValue("L".$row38, $tanque_bajo_TH);
+
+            $barril_I = $dataDepTipw->barril_I;
+            $barril_P = $dataDepTipw->barril_P;
+            $barril_TQ = $dataDepTipw->barril_TQ;
+            $barril_TH = $dataDepTipw->barril_TH;
+
+            $sheet->setCellValue("M".$row38, $barril_I);
+            $sheet->setCellValue("N".$row38, $barril_P);
+            $sheet->setCellValue("O".$row38, $barril_TQ);
+            $sheet->setCellValue("P".$row38, $barril_TH);
+
+            $sanzon_I = $dataDepTipw->sanzon_I;
+            $sanzon_P = $dataDepTipw->sanzon_P;
+            $sanzon_TQ = $dataDepTipw->sanzon_TQ;
+            $sanzon_TH = $dataDepTipw->sanzon_TH;
+
+            $sheet->setCellValue("Q".$row38, $sanzon_I);
+            $sheet->setCellValue("R".$row38, $sanzon_P);
+            $sheet->setCellValue("S".$row38, $sanzon_TQ);
+            $sheet->setCellValue("T".$row38, $sanzon_TH);
+
+            $balde_I = $dataDepTipw->balde_I;
+            $balde_P = $dataDepTipw->balde_P;
+            $balde_TQ = $dataDepTipw->balde_TQ;
+            $balde_TH = $dataDepTipw->balde_TH;
+
+            $sheet->setCellValue("U".$row38, $balde_I);
+            $sheet->setCellValue("V".$row38, $balde_P);
+            $sheet->setCellValue("W".$row38, $balde_TQ);
+            $sheet->setCellValue("X".$row38, $balde_TH);
+
+                // $recipientes = [1, 2, 3, 4, 5, 6, 7, 8];
+                // $tipoRec     = [1, 2, 3, 4, 5];
+
+                // $res = $this->mreportes->mreporte_inspeccion_inspeccionados_depositos_re([1, 2, $codInspeccion]);
+
+                // $dataTotal= [];
+                // foreach ($recipientes as $keyRec => $rec) {
+                //     foreach ($tipoRec as $keyTre => $tre) {
+                //         if($rec < 7 && $tre < 5){
+                //             break;
+                //         }
+
+                //         $codRec = $recipientes[$keyRec];
+                //         $codTipRec = $tipoRec[$keyTre];
+                //         $data = [$codRec, $codTipRec];
+                //         $dataTotal[] = $this->mreportes->mreporte_inspeccion_inspeccionados_depositos_re([$codRec, $codTipRec, $codInspeccion]);
+                        
+                //     }
+                // }
+                // $count = $dataTotal[0]->total;
+                // $sheet->setCellValue("E".$row38, $res->total);
+            
+            // $this->mreportes->mreporte_inspeccion_inspeccionados_depositos_tipos_total($codInspeccion);
+            // if(!empty($dataDepTip)){
+            //     // $arrTotalDepTip = [
+            //     //     ['E',$dataDepTip->tanque_elevado_I],
+            //     //     ['F',$dataDepTip->tanque_elevado_P],
+            //     //     ['G',$dataDepTip->tanque_elevado_TQ],
+            //     //     ['H',$dataDepTip->tanque_elevado_TH],
+            //     // ];
+
+            //     // $arrTotalDepTip = [
+            //     //     [
+            //     //         $dataDepTip->tanque_elevado_I,
+            //     //         $dataDepTip->tanque_elevado_P,
+            //     //         $dataDepTip->tanque_elevado_TQ,
+            //     //         $dataDepTip->tanque_elevado_TH
+            //     //     ],
+            //     //     [1]
+            //     // ];
+
+            //     $arrDepTip = [];
+            //     // foreach($dataDepTip as $key => $tip){
+            //     //     $arrTotalDepTip[] = $tip;
+            //     // }
+            //     // foreach ($arrDepositosColLetter as $key => $arrCol) {
+            //     //     foreach($arrCol as $keyChil => $colttt){//A,B,C,D
+            //     //         // if ($keyChil < 4) {
+            //     //             # code...
+            //     //             $count = $arrTotalDepTip[$key][$keyChil];
+            //     //             // $arrDepTip[$key] = [$colttt, $count];
+            //     //             $sheet->setCellValue($colttt.$row38, $count);
+            //     //         // }
+            //     //     }
+            //     // }
+
+            //     // foreach ($arrDepTip as $key => $tdt) {
+            //     //     [$letter, $suma] = $tdt;
+            //     //     $sheet->setCellValue($letter.$row38,$suma);
+            //     // }
+            // }
+            
+            // $sheet->fromArray($dataDepTip, NULL, "E39");
 
         }else{
             return redirect()->to(base_url('reportes-inspeccion'));

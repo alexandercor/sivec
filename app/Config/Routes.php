@@ -51,8 +51,9 @@ $routes->post('/seguimiento/coordenadaslist', 'Seguimiento::c_seguimiento_listar
 $routes->get('/seguimiento-sospechosos', 'Seguimiento::csospechoso_index');
 $routes->post('/seguimiento/sospechosos', 'Seguimiento::c_seguimiento_sospechosos');
 // ---
-// $routes->get('/reportes', 'Reportes::c_reportes_inspeccion_index');
-// $routes->get('/reportes/inspeccion', 'Reportes::c_reportes_inspeccion');
+$routes->get('reportes/prueba', 'Reportes\Reporteprueba::c_reportes_prueba');
 $routes->get('reportes-inspeccion', 'Reportes\CoreReport::c_inspeccion_inspeccion_index');
 $routes->post('inspecciones/list', 'Reportes\CoreReport::c_inspeccion_inspeccionados_list');
 $routes->get('reportes/inspeccion/xls/(:any)', 'Reportes\ReportesInspeccion::c_reportes_inspeccion_xls/$1');
+
+
