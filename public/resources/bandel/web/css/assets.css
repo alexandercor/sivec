@@ -47,3 +47,23 @@
    width: 100%;
    height: 580px;    
 }
+
+.numbered-div-icon {
+    width: 135px;
+    display: flex;
+    align-items: center;
+}
+.numbered-div-icon .number {
+    width: 30px;
+    height: 30px;
+    background-color: white;
+    border: 1px solid black;
+    font-size: 13px;
+    font-weight: bold;
+    margin-left: 4px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

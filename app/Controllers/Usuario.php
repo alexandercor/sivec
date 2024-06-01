@@ -132,6 +132,7 @@ class Usuario extends BaseController
                         $usuario = $usu->usuario;
                         $keyNiv = (int) $usu->key_nivel;
                         $keyNivEnc = bs64url_enc($keyNiv);
+                        $keyEstaHab = (int) $usu->est_habi;
                         $perso  = $usu->persona;
 
                         $arrNivel = [
@@ -154,15 +155,40 @@ class Usuario extends BaseController
                             $color_badge = $arrNivel[$keyNiv]['color_badge'];
                         }
 
+                        $arrCheckeyStateHab = [
+                            1 => [
+                                'chkvisible' => 'custom-switch-off-primary',
+                                'chknovisible' => 'custom-switch-on-danger',
+                                'ischecked' => ''
+                            ],
+                            2 => [
+                                'chkvisible' => 'custom-switch-on-danger',
+                                'chknovisible' => 'custom-switch-off-primary',
+                                'ischecked' => 'checked'
+                            ],
+                        ];
+
+                        if (array_key_exists($keyEstaHab, $arrCheckeyStateHab)) {
+                            $arrKeyCheckeyStateHab = $arrCheckeyStateHab[$keyEstaHab];
+                            $fieldCheckeyVisible = $arrKeyCheckeyStateHab['chkvisible'];
+                            $fieldCheckeyNoVisible = $arrKeyCheckeyStateHab['chknovisible'];
+                            $ischecked = $arrKeyCheckeyStateHab['ischecked'];
+                        }
+
                         $tabla .= "
                             <tr>
                                 <td class='font-weight-bolder'>$count</td>
                                 <td>$perso</td>
                                 <td><i class='fas fa-user'></i> $usuario</td>
                                 <td>
-                                    <span class='badge $color_badge font-weight-normal' style='font-size: 14px;'><i class='fas fa-chalkboard-teacher'></i> $nivel</span>
+                                    <span class='badge $color_badge font-weight-normal' style='font-size: 14px;'><i class='fas fa-chalkboard-teacher'></i> $nivel $keyEstaHab</span>
                                 </td>
-                                
+                                <td>
+                                    <div class='custom-control custom-switch $fieldCheckeyVisible $fieldCheckeyNoVisible'>
+                                        <input type='checkbox' class='custom-control-input chk_userestate_hab' id='chk_userestate_hab_$keyUsu' data-keyusu='$keyUsu' $ischecked>
+                                        <label class='custom-control-label' for='chk_userestate_hab_$keyUsu'></label>
+                                    </div>
+                                </td>
                                 <td>
                                     <button type='button' class='btn bg-primary btn-sm btn_usu_update' data-keyusu='$keyUsu' data-usu='$usuario' data-keynivel='$keyNivEnc' ><i class='far fa-edit'></i> Actualizar</button>
                                 </td>
@@ -218,6 +244,29 @@ class Usuario extends BaseController
         return $this->response->setJSON($data);
     }
 
+    public function c_usuario_update_habilitado() {
+        $data['status'] = $this->status;
+        $data['msg']    = $this->msg;
+
+        if($this->request->isAJAX()){
+            $estHab = bs64url_dec($this->request->getPost('isChecked'));
+            $keyUsu = bs64url_dec($this->request->getPost('codUser'));
+
+            if((isset($keyUsu) && !empty($keyUsu)) && (isset($estHab) && !empty($estHab))){
+                $resDataUpdate = (int) $this->musuario->m_usuario_update_habilitado([$estHab, $keyUsu]);
+
+                if($resDataUpdate === 1){
+                    $data['status'] = true;
+                    $data['msg']    = $this->msgsuccess;
+                }else{
+                    $data['status'] = false;
+                    $data['msg']    = $this->msgerror;
+                }
+                return $this->response->setJSON($data);
+            }
+        }
+        return $this->response->setJSON($data);
+    }
     // ***
 }
 ?>

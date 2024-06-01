@@ -52,6 +52,7 @@
                                                         <th>Persona</th>
                                                         <th>Usuario</th>
                                                         <th>Nivel</th>
+                                                        <th>Habilitar</th>
                                                         <th>Acc.</th>
                                                     </tr>
                                                 </thead>
@@ -198,6 +199,44 @@
         }
         $(`${tabusu}`).tab('show');
     })
+
+    $(document).on('click', '.chk_userestate_hab', function () {
+        
+        const codUser = $(this).data('keyusu')
+        let isChecked;
+        if($(this).is(':checked')){
+            isChecked = 'Mg--';
+        }else{
+            isChecked = 'MQ--';
+        }
+
+        $.ajax({
+            url: `${base_url}usuario/show`,
+            type: 'POST',
+            data: {isChecked: isChecked, codUser: codUser},
+            dataType: "JSON",
+        })
+        .done(function(data){
+            const { status, msg } = data;
+            if(status){
+                Toast.fire({
+                    icon: 'success',
+                    title: `${msg}`
+                })
+            }else{
+                Toast.fire({
+                    icon: 'danger',
+                    title: `${msg}`
+                })
+            }
+            setTimeout(() => {   
+                window.location.reload();
+            }, 4000);
+        })
+        .fail(function(jqXHR, statusText){
+            fn_errorJqXHR(jqXHR, statusText);
+        });
+    });
 
   </script>
 

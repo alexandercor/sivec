@@ -46,6 +46,7 @@ class MusuarioModel extends Model{
                 `tb_usuario`.`id_usuario` key_usu,
                 `tb_usuario`.`usu_usuario` usuario,
                 `tb_usuario`.`usu_nivel` key_nivel,
+                `tb_usuario`.`usu_estado_habilitado` est_habi,
                 `tb_persona`.`apellidos_nombres` persona
             FROM
                 `tb_usuario`
@@ -93,6 +94,19 @@ class MusuarioModel extends Model{
         VALUES (?,?,?,?)
         ";
         $this->db->query($sql, $data);
+        return ($this->db->affectedRows() >= 1)? 1: 2;
+    }
+
+    public function m_usuario_update_habilitado(array $params): int{
+        $sql = 
+        "UPDATE 
+            `tb_usuario`  
+        SET 
+            `usu_estado_habilitado` = ?
+        WHERE 
+            `id_usuario` = ?;
+        ";
+        $this->db->query($sql, $params);
         return ($this->db->affectedRows() >= 1)? 1: 2;
     }
 
