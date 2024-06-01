@@ -145,7 +145,8 @@ class ReportesInspeccion extends BaseController
             $sheet->getStyle($LI.$row3)->applyFromArray($headTitleFormato);
             $sheet->setCellValue($LI.$row3, 'Formato 03: Inspección de viviendas para la vigilancia y control del Aedes aegypti');
 
-            $sheet->mergeCells($LI."5:".$LF."5");
+            // $sheet->mergeCells($LI."5:".$LF."5");
+            $sheet->getRowDimension($row3)->setRowHeight(24);
 
             $headTitleInspeccion = [
                 'font' => [
@@ -162,30 +163,78 @@ class ReportesInspeccion extends BaseController
             //** */
 
             //** */
-            $row6 = 6;
+            $row4 = 4;
             $logo = new Drawing();
-            $logo->setCoordinates($LI.$row6);
+            $logo->setCoordinates($LI.$row4);
             $logo->setPath('resources/img/msalud.png');
             $logo->setHeight(35);
             $logo->setWorksheet($sheet);
 
-            $sheet->setCellValue("D".$row6,'INSPECCIÓN DE VIVIENDAS PARA LA VIGILANCIA Y CONTROL DEL Aedes aegypti');
+            $sheet->setCellValue("D".$row4,'INSPECCIÓN DE VIVIENDAS PARA LA VIGILANCIA Y CONTROL DEL Aedes aegypti');
             
-            $sheet->getStyle("D".$row6)->applyFromArray($headTitleInspeccion);
-            $sheet->mergeCells("D".$row6.":".$LF.$row6);
-            $sheet->getRowDimension($row6)->setRowHeight(28);
+            $sheet->getStyle("D".$row4)->applyFromArray($headTitleInspeccion);
+            $sheet->mergeCells("D".$row4.":".$LF.$row4);
+            $sheet->getRowDimension($row4)->setRowHeight(28);
             //** */
 
             //** */
+            $row5 = 5;
+            $row6 = 6;
             $row7 = 7;
             $row8 = 8;
-            $sheet->getRowDimension($row7)->setRowHeight(28);
-            $sheet->getRowDimension($row8)->setRowHeight(28);
-            $sheet->mergeCells($LI."7:".$LF."7");
-            $sheet->mergeCells($LI."8:".$LF."8");
+            $sheet->getRowDimension($row6)->setRowHeight(9);
+            $sheet->getRowDimension($row8)->setRowHeight(14);
+            $sheet->getRowDimension($row5)->setRowHeight(17);
+            $sheet->getRowDimension($row7)->setRowHeight(17);
+            $sheet->mergeCells($LI.$row5.":C".$row6);
+            $sheet->mergeCells($LI.$row7.":C".$row8);
 
-            $sheet->setCellValue("A7",$eess.$sector);
-            $sheet->setCellValue("A8",$inspecctor);
+            $sheet->setCellValue("A5", "LOCALIDAD (EESS):");
+            $sheet->setCellValue("A7","NOMBRES Y APELLIDOS DEL INSPECTOR:");
+            $sheet->mergeCells("D".$row5.":G".$row5);
+            $sheet->mergeCells("I".$row5.":O".$row5);
+            $sheet->mergeCells("D".$row6.":G".$row6);
+            $sheet->mergeCells("I".$row6.":O".$row6);
+
+            $sheet->mergeCells("D".$row7.":O".$row7);
+            $sheet->mergeCells("D".$row8.":O".$row8);
+
+            $sheet->getStyle("D".$row5.":G".$row5)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->getStyle("I".$row5.":O".$row5)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->getStyle("D".$row7.":O".$row7)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+
+            $sheet->mergeCells("Q".$row5.":S".$row6);
+            $sheet->mergeCells("Q".$row7.":S".$row8);
+            $sheet->setCellValue("Q".$row5, "SECTOR:");
+            $sheet->setCellValue("Q".$row7, "ACTIVIDAD:");
+
+            $sheet->mergeCells("T".$row5.":AG".$row5);
+            $sheet->mergeCells("T".$row6.":AG".$row6);
+            $sheet->getStyle("T".$row5.":AG".$row5)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+
+            $sheet->mergeCells("AI".$row5.":AK".$row6);
+            $sheet->setCellValue("AI".$row5, "FECHA:");
+            $sheet->mergeCells("AM".$row5.":AQ".$row5);
+            $sheet->mergeCells("AM".$row6.":AQ".$row6);
+            $sheet->getStyle("AM".$row5.":AQ".$row5)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+
+            $sheet->mergeCells("U".$row7.":W".$row7);
+            $sheet->setCellValue("U".$row7, "VIGILANCIA");
+            $sheet->getStyle("Y".$row7)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->mergeCells("AA".$row7.":AC".$row7);
+            $sheet->setCellValue("AA".$row7, "CONTROL");
+            $sheet->getStyle("AD".$row7)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->mergeCells("AF".$row7.":AI".$row7);
+            $sheet->setCellValue("AF".$row7, "RECUPERACIÓN");
+            $sheet->getStyle("AJ".$row7)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->mergeCells("AL".$row7.":AN".$row7);
+            $sheet->setCellValue("AL".$row7, "CONTROL");
+            $sheet->getStyle("AO".$row7)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+
+            $sheet->mergeCells("T".$row8.":AR".$row8);
+
+            $sheet->setCellValue("I5",$eess.$sector);
+            $sheet->setCellValue("D7",$inspecctor);
 
         }else{
             return redirect()->to(base_url('reportes-inspeccion'));
