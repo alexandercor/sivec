@@ -7,14 +7,16 @@ use CodeIgniter\Model;
 class MreportesInspeccionModel extends Model{
 
     public function mreporte_inspecciones_inspeccion_head($codInspector): object {
-        $sql = "
-            SELECT 
+        $sql = 
+            "SELECT 
                 `tb_control`.`id_control` key_control,
                 `tb_persona`.`apellidos_nombres` inspecctor,
                 `tb_control`.`fecha_control` fecha_reg,
-                `tb_actividadtipo`.`nombre_actividadtipo` actividad,
                 `tb_eess`.`nombre_eess` eess,
-                `tb_sector`.`nombre_sector` sector
+                `tb_sector`.`nombre_sector` sector,
+                `tb_localidad`.`nombre_localidad` localidad,
+                `tb_actividadtipo`.`id_actividadtipo` tipo_act,
+                `tb_actividadtipo`.`nombre_actividadtipo` actividad
             FROM
                 `tb_colaborador`
                 INNER JOIN `tb_control` ON (`tb_colaborador`.`id_colaborador` = `tb_control`.`id_colaborador`)
@@ -22,6 +24,7 @@ class MreportesInspeccionModel extends Model{
                 INNER JOIN `tb_actividadtipo` ON (`tb_control`.`id_actividadtipo` = `tb_actividadtipo`.`id_actividadtipo`)
                 INNER JOIN `tb_sector` ON (`tb_control`.`id_sector` = `tb_sector`.`id_sector`)
                 INNER JOIN `tb_eess` ON (`tb_control`.`id_eess` = `tb_eess`.`id_eess`)
+                INNER JOIN `tb_localidad` ON (`tb_sector`.`id_localidad` = `tb_localidad`.`id_localidad`)
             WHERE
                 `tb_control`.`id_control` = ?
         ";

@@ -16,7 +16,7 @@ use PhpOffice\PhpSpreadsheet\RichText;
 use PhpOffice\PhpSpreadsheet\RichText\Run;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
-
+use PhpOffice\PhpSpreadsheet\Calculation\Calculation;
 
 
 class ReportesInspeccion extends BaseController
@@ -93,8 +93,16 @@ class ReportesInspeccion extends BaseController
             $inspecctor = $dataInspeccion->inspecctor;
             $eess       = $dataInspeccion->eess;
             $sector     = $dataInspeccion->sector;
+            $localidad  = $dataInspeccion->localidad;
+            $tipoActi   = (int) $dataInspeccion->tipo_act;    
 
-
+            $cellTipoAct = match($tipoActi){
+                1 => 'AD',
+                2 => 'Y',
+                3 => 'AJ',
+                4 => 'AO',
+                default => '',
+            };
             $headTitleA1 = [
                 'font' => [
                     'name' => $this->styleFontName,
@@ -182,6 +190,20 @@ class ReportesInspeccion extends BaseController
             $row6 = 6;
             $row7 = 7;
             $row8 = 8;
+
+            $headTitleLocalidad = [
+                'font' => [
+                    'name' => $this->styleFontName,
+                    'size' => 10.5,
+                    'bold' => true
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_LEFT,
+                    'vertical'   => Alignment::VERTICAL_CENTER
+                ],
+            ];
+            $sheet->getStyle("A".$row5.":$LF".$row8)->applyFromArray($headTitleLocalidad);
+
             $sheet->getRowDimension($row6)->setRowHeight(9);
             $sheet->getRowDimension($row8)->setRowHeight(14);
             $sheet->getRowDimension($row5)->setRowHeight(17);
@@ -199,9 +221,22 @@ class ReportesInspeccion extends BaseController
             $sheet->mergeCells("D".$row7.":O".$row7);
             $sheet->mergeCells("D".$row8.":O".$row8);
 
+            $sheet->getStyle("D".$row5)->getFont()->setBold(false);
+            $sheet->getStyle("D".$row7)->getFont()->setBold(false);
+            $sheet->getStyle("I".$row5)->getFont()->setBold(false);
+            $sheet->getStyle("T".$row5)->getFont()->setBold(false);
+            $sheet->getStyle("AM".$row5)->getFont()->setBold(false);
+
             $sheet->getStyle("D".$row5.":G".$row5)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
             $sheet->getStyle("I".$row5.":O".$row5)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
             $sheet->getStyle("D".$row7.":O".$row7)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+
+            $sheet->mergeCells("H5:H6");
+            $sheet->mergeCells("P5:P8");
+            $sheet->mergeCells("AH5:AH6");
+            $sheet->mergeCells("AL5:AL6");
+            $sheet->mergeCells("AR5:AR6");
+            $sheet->mergeCells("AQ7:AR7");
 
             $sheet->mergeCells("Q".$row5.":S".$row6);
             $sheet->mergeCells("Q".$row7.":S".$row8);
@@ -218,24 +253,41 @@ class ReportesInspeccion extends BaseController
             $sheet->mergeCells("AM".$row6.":AQ".$row6);
             $sheet->getStyle("AM".$row5.":AQ".$row5)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
 
-            $sheet->mergeCells("U".$row7.":W".$row7);
-            $sheet->setCellValue("U".$row7, "VIGILANCIA");
-            $sheet->getStyle("Y".$row7)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+            $tipoActividadChecked = [
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN
+                    ],
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical'   => Alignment::VERTICAL_CENTER
+                ],
+            ];
+
+            $sheet->mergeCells("T".$row7.":W".$row7);
+            $sheet->setCellValue("T".$row7, "VIGILANCIA");
+            $sheet->getStyle("Y".$row7)->applyFromArray($tipoActividadChecked);
+
             $sheet->mergeCells("AA".$row7.":AC".$row7);
             $sheet->setCellValue("AA".$row7, "CONTROL");
-            $sheet->getStyle("AD".$row7)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->getStyle("AD".$row7)->applyFromArray($tipoActividadChecked);
+
             $sheet->mergeCells("AF".$row7.":AI".$row7);
             $sheet->setCellValue("AF".$row7, "RECUPERACIÓN");
-            $sheet->getStyle("AJ".$row7)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->getStyle("AJ".$row7)->applyFromArray($tipoActividadChecked);
+
             $sheet->mergeCells("AL".$row7.":AN".$row7);
-            $sheet->setCellValue("AL".$row7, "CONTROL");
-            $sheet->getStyle("AO".$row7)->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->setCellValue("AL".$row7, "CERCO");
+            $sheet->getStyle("AO".$row7)->applyFromArray($tipoActividadChecked);
 
             $sheet->mergeCells("T".$row8.":AR".$row8);
 
-            $sheet->setCellValue("I5",$eess.$sector);
+            $sheet->setCellValue("D5",$localidad);
+            $sheet->setCellValue("I5",$eess);
+            $sheet->setCellValue("T5",$sector);
             $sheet->setCellValue("D7",$inspecctor);
-
+            $sheet->setCellValue($cellTipoAct."7",'X');
         }else{
             return redirect()->to(base_url('reportes-inspeccion'));
         }
@@ -488,120 +540,20 @@ class ReportesInspeccion extends BaseController
             $sheet->getStyle($LI."38:".$LF."38")->applyFromArray($styleTableListaTotal);
 
             $row38 = 38;
-            $dataDepTipw = $this->mreportes->mreporte_inspeccion_inspeccionados_depositos_tipos_total($codInspeccion);
-            $tanque_elevado_I = $dataDepTipw->tanque_elevado_I;
-            $tanque_elevado_P = $dataDepTipw->tanque_elevado_P;
-            $tanque_elevado_TQ = $dataDepTipw->tanque_elevado_TQ;
-            $tanque_elevado_TH = $dataDepTipw->tanque_elevado_TH;
+            $CI = 13;
+            // $sheet->setCellValue("E38", "=SUM(E$CI:E37)" );
+            // $sheet->getCell("E$row38")->getCalculatedValue();
 
-            $sheet->setCellValue("E".$row38, $tanque_elevado_I);
-            $sheet->setCellValue("F".$row38, $tanque_elevado_P);
-            $sheet->setCellValue("G".$row38, $tanque_elevado_TQ);
-            $sheet->setCellValue("H".$row38, $tanque_elevado_TH);
+            foreach($arrDepositosColLetter as $arrCel){
+                foreach($arrCel as $cel){
+                    $colSuma = $cel.$CI.":".$cel."37";
+                    $sheet->setCellValue("$cel$row38", "=SUM($colSuma)" );
+                    $sheet->getCell("$cel$row38")->getCalculatedValue();
+                }
+            }
 
-            $tanque_bajo_I = $dataDepTipw->tanque_bajo_I;
-            $tanque_bajo_P = $dataDepTipw->tanque_bajo_P;
-            $tanque_bajo_TQ = $dataDepTipw->tanque_bajo_TQ;
-            $tanque_bajo_TH = $dataDepTipw->tanque_bajo_TH;
-            
-            $sheet->setCellValue("I".$row38, $tanque_bajo_I);
-            $sheet->setCellValue("J".$row38, $tanque_bajo_P);
-            $sheet->setCellValue("K".$row38, $tanque_bajo_TQ);
-            $sheet->setCellValue("L".$row38, $tanque_bajo_TH);
-
-            $barril_I = $dataDepTipw->barril_I;
-            $barril_P = $dataDepTipw->barril_P;
-            $barril_TQ = $dataDepTipw->barril_TQ;
-            $barril_TH = $dataDepTipw->barril_TH;
-
-            $sheet->setCellValue("M".$row38, $barril_I);
-            $sheet->setCellValue("N".$row38, $barril_P);
-            $sheet->setCellValue("O".$row38, $barril_TQ);
-            $sheet->setCellValue("P".$row38, $barril_TH);
-
-            $sanzon_I = $dataDepTipw->sanzon_I;
-            $sanzon_P = $dataDepTipw->sanzon_P;
-            $sanzon_TQ = $dataDepTipw->sanzon_TQ;
-            $sanzon_TH = $dataDepTipw->sanzon_TH;
-
-            $sheet->setCellValue("Q".$row38, $sanzon_I);
-            $sheet->setCellValue("R".$row38, $sanzon_P);
-            $sheet->setCellValue("S".$row38, $sanzon_TQ);
-            $sheet->setCellValue("T".$row38, $sanzon_TH);
-
-            $balde_I = $dataDepTipw->balde_I;
-            $balde_P = $dataDepTipw->balde_P;
-            $balde_TQ = $dataDepTipw->balde_TQ;
-            $balde_TH = $dataDepTipw->balde_TH;
-
-            $sheet->setCellValue("U".$row38, $balde_I);
-            $sheet->setCellValue("V".$row38, $balde_P);
-            $sheet->setCellValue("W".$row38, $balde_TQ);
-            $sheet->setCellValue("X".$row38, $balde_TH);
-
-                // $recipientes = [1, 2, 3, 4, 5, 6, 7, 8];
-                // $tipoRec     = [1, 2, 3, 4, 5];
-
-                // $res = $this->mreportes->mreporte_inspeccion_inspeccionados_depositos_re([1, 2, $codInspeccion]);
-
-                // $dataTotal= [];
-                // foreach ($recipientes as $keyRec => $rec) {
-                //     foreach ($tipoRec as $keyTre => $tre) {
-                //         if($rec < 7 && $tre < 5){
-                //             break;
-                //         }
-
-                //         $codRec = $recipientes[$keyRec];
-                //         $codTipRec = $tipoRec[$keyTre];
-                //         $data = [$codRec, $codTipRec];
-                //         $dataTotal[] = $this->mreportes->mreporte_inspeccion_inspeccionados_depositos_re([$codRec, $codTipRec, $codInspeccion]);
-                        
-                //     }
-                // }
-                // $count = $dataTotal[0]->total;
-                // $sheet->setCellValue("E".$row38, $res->total);
-            
-            // $this->mreportes->mreporte_inspeccion_inspeccionados_depositos_tipos_total($codInspeccion);
-            // if(!empty($dataDepTip)){
-            //     // $arrTotalDepTip = [
-            //     //     ['E',$dataDepTip->tanque_elevado_I],
-            //     //     ['F',$dataDepTip->tanque_elevado_P],
-            //     //     ['G',$dataDepTip->tanque_elevado_TQ],
-            //     //     ['H',$dataDepTip->tanque_elevado_TH],
-            //     // ];
-
-            //     // $arrTotalDepTip = [
-            //     //     [
-            //     //         $dataDepTip->tanque_elevado_I,
-            //     //         $dataDepTip->tanque_elevado_P,
-            //     //         $dataDepTip->tanque_elevado_TQ,
-            //     //         $dataDepTip->tanque_elevado_TH
-            //     //     ],
-            //     //     [1]
-            //     // ];
-
-            //     $arrDepTip = [];
-            //     // foreach($dataDepTip as $key => $tip){
-            //     //     $arrTotalDepTip[] = $tip;
-            //     // }
-            //     // foreach ($arrDepositosColLetter as $key => $arrCol) {
-            //     //     foreach($arrCol as $keyChil => $colttt){//A,B,C,D
-            //     //         // if ($keyChil < 4) {
-            //     //             # code...
-            //     //             $count = $arrTotalDepTip[$key][$keyChil];
-            //     //             // $arrDepTip[$key] = [$colttt, $count];
-            //     //             $sheet->setCellValue($colttt.$row38, $count);
-            //     //         // }
-            //     //     }
-            //     // }
-
-            //     // foreach ($arrDepTip as $key => $tdt) {
-            //     //     [$letter, $suma] = $tdt;
-            //     //     $sheet->setCellValue($letter.$row38,$suma);
-            //     // }
-            // }
-            
-            // $sheet->fromArray($dataDepTip, NULL, "E39");
+            $sheet->setCellValue("AQ38", "=SUM(AQ$CI:AQ37)" );
+            $sheet->getCell("AQ$row38")->getCalculatedValue();
 
         }else{
             return redirect()->to(base_url('reportes-inspeccion'));
