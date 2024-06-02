@@ -5,6 +5,8 @@ use App\Models\MseguimientoModel;
 
 use Config\Services;
 use CodeIgniter\Controller;
+use DateTime;
+use PhpOffice\PhpSpreadsheet\Calculation\DateTimeExcel\Date;
 
 class Seguimiento extends BaseController
 {   
@@ -24,20 +26,38 @@ class Seguimiento extends BaseController
         $data['msg']    = $this->msg;
 
         if($this->request->isAJAX()){
-            $dataCoordenadas = $this->mseguimiento->m_seguimiento_listar_coordenadas();
-            $arrCoordenadas = [];
-            if(is_array($dataCoordenadas) && !empty($dataCoordenadas)){
-                // foreach($dataCoordenadas as $cor){
-                //     $ejex = $cor->ejex;
-                //     $ejey = $cor->ejey;
-                //     $coordenadas = [$ejex,$ejey];
-                //     array_push($arrCoordenadas, $coordenadas);
-                // }
+
+            $currentFecha = date('Y-m-d');
+            if(!empty($currentFecha)){
+
+                $dataCoordenadas = $this->mseguimiento->m_seguimiento_listar_coordenadas($currentFecha);
+
+                $arrCoordenadas = [];
+                if(is_array($dataCoordenadas) && !empty($dataCoordenadas)){
+
+
+                    foreach($dataCoordenadas as $cor){
+                        $keyPer = (int) $cor->key_per;
+
+                        $dataCoordenadasXinsp = $this->mseguimiento->m_seguimiento_listar_coordenadas_x_inspector($keyPer);
+
+                        if(!empty($dataCoordenadasXinsp)){
+                            $ejex = $dataCoordenadasXinsp->ejex;
+                            $ejey = $dataCoordenadasXinsp->ejey;
+                            $insp = $dataCoordenadasXinsp->inspector;
+                            $coordenadas = [$ejex,$ejey, $insp];
+                            array_push($arrCoordenadas, $coordenadas);
+                        }
+                    }
+                    
+                }else{
+                    $data['msg']    = 'Sin datos';
+                }
                 $data['status'] = true;
                 $data['msg']    = 'ok';
-                $data['dataCoordenadas'] = $dataCoordenadas;
+                $data['dataCoordenadas'] = $arrCoordenadas;
+
             }
-            
         }
         return $this->response->setJSON($data);
     }

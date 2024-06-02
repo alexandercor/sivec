@@ -126,7 +126,7 @@
                 for (let i = 0; i < dataCoordenadas.length; i++) {
                     count++;
                     const element = dataCoordenadas[i];
-                    const { ejex, ejey, supervisor } = element;
+                    const [ ejex, ejey, supervisor ] = element;
                     const ubicacion = [ ejex, ejey ];
                     const marker = L.marker(ubicacion, { icon: createNumberedIcon(count)}).addTo(map);
                     marker.bindPopup(`<b>${supervisor}</b>`);

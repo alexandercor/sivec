@@ -6,19 +6,51 @@ use CodeIgniter\Model;
 
 class MseguimientoModel extends Model{
 
-    public function m_seguimiento_listar_coordenadas(): array {
-        $sql = "
-            SELECT 
-                `tb_registro_gps`.`ejex` ejex,
-                `tb_registro_gps`.`ejey` ejey,
-                `tb_persona`.`apellidos_nombres` supervisor
-            FROM
-                `tb_colaborador`
-                INNER JOIN `tb_registro_gps` ON (`tb_colaborador`.`id_colaborador` = `tb_registro_gps`.`id_colaborador`)
-                INNER JOIN `tb_persona` ON (`tb_colaborador`.`id_persona` = `tb_persona`.`id_persona`)
+    public function m_seguimiento_listar_coordenadas($fecha): array {
+        $sql = 
+        "SELECT 
+            `tb_persona`.`id_persona` key_per,
+            `tb_persona`.`apellidos_nombres` AS `inspector`
+        FROM
+            `tb_colaborador`
+            INNER JOIN `tb_registro_gps` ON (`tb_colaborador`.`id_colaborador` = `tb_registro_gps`.`id_colaborador`)
+            INNER JOIN `tb_persona` ON (`tb_colaborador`.`id_persona` = `tb_persona`.`id_persona`)
+        WHERE
+            DATE(`tb_registro_gps`.`fech_reg`) = ? AND 
+            `tb_colaborador`.`tipo_col` = 2
+        GROUP BY
+            `tb_persona`.`id_persona`,
+            `tb_persona`.`apellidos_nombres`
+        ORDER BY
+            `tb_registro_gps`.`fech_reg` DESC    
         ";
-        $response = $this->db->query($sql);
+        $response = $this->db->query($sql, $fecha);
         return $response->getResult();
+    }
+
+    public function m_seguimiento_listar_coordenadas_x_inspector($codPer): object {
+        $sql = 
+        "SELECT 
+            `tb_registro_gps`.`id_registro_gps`,
+            `tb_registro_gps`.`ejex`,
+            `tb_registro_gps`.`ejey`,
+            `tb_persona`.`id_persona` key_per,
+            `tb_persona`.`apellidos_nombres` AS `inspector`,
+            `tb_registro_gps`.`fech_reg`,
+            `tb_colaborador`.`id_colaborador` key_insp
+        FROM
+            `tb_colaborador`
+            INNER JOIN `tb_registro_gps` ON (`tb_colaborador`.`id_colaborador` = `tb_registro_gps`.`id_colaborador`)
+            INNER JOIN `tb_persona` ON (`tb_colaborador`.`id_persona` = `tb_persona`.`id_persona`)
+        WHERE
+            `tb_persona`.`id_persona` = ? AND 
+            `tb_colaborador`.`tipo_col` = 2
+        ORDER BY
+            `tb_registro_gps`.`fech_reg` DESC
+        LIMIT 1
+        ";
+        $response = $this->db->query($sql, $codPer);
+        return $response->getLastRow();
     }
 
     public function m_seguimiento_sospechosos_listar(): array {
