@@ -76,6 +76,13 @@ class CoreReport extends BaseController
         return $this->response->setJSON($data);
     }
 
+
+    public function c_consolidado_diario_index() {
+        // $data['inspectores'] = $this->mcorereport->m_inspeccion_inspectores();
+        return view('admin/reportes/vconsolidadoDiario');
+    }
+
+
 // ***
 }
 ?>

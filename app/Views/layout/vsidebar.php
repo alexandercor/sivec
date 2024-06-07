@@ -123,6 +123,14 @@
                             </a>
                         </li>
                     </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?= base_url('reportes/consolidado-diario');?> " class="nav-link">
+                            <i class="fas fa-list nav-icon"></i>
+                            <p>Consolidado Diario</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             <?php endif ?>
 

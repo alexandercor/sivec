@@ -252,25 +252,25 @@
     })
 
 
-    $(document).on('input', '#txt_crudper_dni', function(e){
-        const valor = $(this).val();
-        if(valor.length > 8){
-            $('#div_response').html(`<h4 class="text-danger"> El valor ingresado debe tener exactamente 8 caracteres </h4>`);
-            $(this).attr('readonly', true);
-        }else{
-            $('#div_response').html('');
-        }
-    })
+    // $(document).on('input', '#txt_crudper_dni', function(e){
+    //     const valor = $(this).val();
+    //     if(valor.length > 8){
+    //         $('#div_response').html(`<h4 class="text-danger"> El valor ingresado debe tener exactamente 8 caracteres </h4>`);
+    //         $(this).attr('readonly', true);
+    //     }else{
+    //         $('#div_response').html('');
+    //     }
+    // })
 
-    $(document).on('input', '#txt_crudper_celular, #txt_crudper_celular2', function(e){
-        const valor = $(this).val();
-        if(valor.length > 9){
-            $('#div_response').html(`<h4 class="text-danger"> El valor ingresado debe tener exactamente 9 caracteres </h4>`);
-            $(this).attr('readonly', true);
-        }else{
-            $('#div_response').html('');
-        }
-    })
+    // $(document).on('input', '#txt_crudper_celular, #txt_crudper_celular2', function(e){
+    //     const valor = $(this).val();
+    //     if(valor.length > 9){
+    //         $('#div_response').html(`<h4 class="text-danger"> El valor ingresado debe tener exactamente 9 caracteres </h4>`);
+    //         $(this).attr('readonly', true);
+    //     }else{
+    //         $('#div_response').html('');
+    //     }
+    // })
 
     const div_overlay_act = 'div_overlay_act';
 

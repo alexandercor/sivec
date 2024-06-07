@@ -108,7 +108,7 @@ class Persona extends BaseController
                 ],
                 'txt_crudper_usuario' => [
                     'label' => 'Usuario',
-                    'rules'  => 'required|alpha'
+                    'rules'  => 'required'
                 ],
                 'txt_crudper_contraseña' => [
                     'label' => 'Constraseña',

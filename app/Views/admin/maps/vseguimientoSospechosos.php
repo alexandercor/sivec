@@ -26,16 +26,91 @@
                 <div class="col-12">
                     <div class="card card-navy card-outline">
                         <div class="card-header p-0">
-                            <ul id="tab_es" class="nav nav-pills ml-auto p-2">
-                                <!-- <li class="nav-item"><a class="nav-link active" href="#tabes" data-toggle="tab">Lista</a></li> -->
-                                <!-- <li class="nav-item"><a class="nav-link" href="#tabadd" data-toggle="tab">Agregar</a></li> -->
-                            </ul>
+                            <!-- <ul id="tab_es" class="nav nav-pills ml-auto p-2">
+                                <li class="nav-item"><a class="nav-link active" href="#tabes" data-toggle="tab">Lista</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#tabadd" data-toggle="tab">Agregar</a></li>
+                            </ul> -->
                         </div>
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tabes">
                                     <div class="row">
-                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="row">
+                                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label for="sle_ssoview_region">Region</label>
+                                                        <select id="sle_ssoview_region" class="form-control" data-send="view">
+                                                            <option value="">Selecciona una región</option>
+                                                            <?php
+                                                                foreach($dataRegiones as $reg){
+                                                                    $keyReg = bs64url_enc($reg->key_reg);
+                                                                    echo "<option value='$keyReg'>$reg->reg</option>";
+                                                                }
+                                                            ?>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xl-12 col-lg-12 col-md-3 col-sm-12 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label for="sle_ssoview_depa">Departamento</label>
+                                                        <select id="sle_ssoview_depa" class="form-control" data-send="view">
+                                                            <option value="">Selecciona un departamento</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label for="sle_ssoview_prov">Provincia</label>
+                                                        <select id="sle_ssoview_prov" class="form-control" data-send="view">
+                                                            <option value="">Selecciona una provincia</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label for="sle_ssoview_distr">Distrito</label>
+                                                        <select id="sle_ssoview_distr" class="form-control" data-send="view">
+                                                            <option value="">Selecciona una distrito</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <div class="form-group">
+                                                        <label for="sle_ssoview_locali">Localidad</label>
+                                                        <select id="sle_ssoview_locali" class="form-control" data-send="view">
+                                                            <option value="">Selecciona una localidad</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <button type="button" id="btn_buscar" class="btn btn-primary">Buscar</button>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mt-2">
+                                                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <div id="div_response_sos"></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
                                             <div id="map"></div>
                                         </div>
                                     </div>
@@ -60,18 +135,20 @@
         fn_cargarSospechososReferencias();
     })
 
-    var map = L.map('map').setView([-5.3745, -80.72755], 13); 
+    var map = L.map('map').setView([-5.3745, -80.72755], 11); 
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
-
+    
+    $div_response_sos = $('#div_response_sos');
     const fn_cargarSospechososReferencias = () => {
+        $div_response_sos.html('');
 
         const optionshHeadMap = {
-            radius: 17, // Radio del punto de calor
-            blur: 19, // Desenfoque del punto de calor
-            maxZoom: 11, // Zoom máximo en el que el calor se mostrará
+            radius: 20,
+            blur: 15, 
+            maxZoom: 11,
             gradient: {
                 0.4: 'blue',
                 0.6: 'cyan',
@@ -82,13 +159,21 @@
         }
         
         $.ajax({
-            url: `${base_url}/seguimiento/sospechosos`,
+            url: `${base_url}seguimiento/sospechosos`,
             type: "POST",
             dataType: "JSON",
+            data : {codLoc : codLoc}
         })
         .done((data) => {
-            const { status, dataSospechosoRef } = data;
+            const { status, msg, dataSospechosoRef, mapLoc } = data;
+
+            if(mapLoc && Array.isArray(mapLoc) && mapLoc.length === 2){
+                map.panTo(mapLoc);
+                map.setView(mapLoc, 11);
+            }
+
             if(status){
+
               dataSospechosoRef.forEach((childrem, i) => {
                 let heatLayer = `heatLayer${i}`;
                 let heatData = `heatData${i}`;
@@ -100,6 +185,8 @@
                 })
                 heatLayer = L.heatLayer(heatData, optionshHeadMap).addTo(map);
               });
+            }else{
+                $div_response_sos.html(`<div class="alert alert-warning" role="alert"><i class="fas fa-ban"></i> ${msg}</div>`);
             }
         })
         .fail((jqXHR, statusText) => {
@@ -107,35 +194,115 @@
         });
     }
 
-    // const optionshHeadMap = {
-    //     radius: 20, // Radio del punto de calor
-    //     blur: 19, // Desenfoque del punto de calor
-    //     maxZoom: 11, // Zoom máximo en el que el calor se mostrará
-    //     gradient: {
-    //         0.4: 'blue',
-    //         0.6: 'cyan',
-    //         0.7: 'lime',
-    //         0.8: 'yellow',
-    //         1.0: 'red'
-    //     }
-    // }
+    $sle_ssoview_region = $('#sle_ssoview_region');
+    $sle_ssoview_depa   = $('#sle_ssoview_depa');
+    $sle_ssoview_prov   = $('#sle_ssoview_prov');
+    $sle_ssoview_distr  = $('#sle_ssoview_distr');
+    $sle_ssoview_locali = $('#sle_ssoview_locali');
 
-    // var heatData = [
-    //   [-5.3745, -80.72755],
-    //   [-5.37409409103852, -80.72698137654706],
-    //   [-5.373634778783446, -80.72730324161623],
-    //   [-5.375717703675289, -80.72704574956087]
-    // ];
+    $sle_ssoview_region.change(function (e) {
+        e.preventDefault();
+        
+        codReg = $(this).val();
+        if(codReg){
+            $.ajax({
+                url: `${base_url}departamentos`,
+                type: "POST",
+                data: {codReg: codReg},
+                dataType: "JSON",
+            })
+            .done((data) => {
+                const { status, dataDepartamentos } = data;
+                if(status){
+                    $sle_ssoview_depa.html(`${dataDepartamentos}`);
+                }
+            })
+            .fail((jqXHR, statusText) => {
+                fn_errorJqXHR(jqXHR, statusText);
+            });
+        }
+    });
 
-    // var heat = L.heatLayer(heatData, optionshHeadMap).addTo(map);
+    $sle_ssoview_depa.change(function (e) {
+        e.preventDefault();
+        
+        codDep = $(this).val();
 
-    // var heatData2 = [
-    //   [-5.3748204445953345, -80.72364470866336],
-    //   [-5.373389099993218, -80.723269199416],
-    //   [-5.374809762931653, -80.72404167558199],
-    //   [-5.376679051222254, -80.72542569537941]
-    // ];
-    // var heatLayer2 = L.heatLayer(heatData2, optionshHeadMap).addTo(map);
+        if(codDep){
+            $.ajax({
+                url: `${base_url}provincias`,
+                type: "POST",
+                data: {codDep: codDep},
+                dataType: "JSON",
+            })
+            .done((data) => {
+                const { status, dataProvincias } = data;
+                if(status){
+                    $sle_ssoview_prov.html(`${dataProvincias}`);
+                }
+            })
+            .fail((jqXHR, statusText) => {
+                fn_errorJqXHR(jqXHR, statusText);
+            });
+        }
+    });
+
+    $sle_ssoview_prov.change(function (e) {
+        e.preventDefault();
+
+        codProv = $(this).val();
+
+        if(codDep){
+            $.ajax({
+                url: `${base_url}distritos`,
+                type: "POST",
+                data: {codProv: codProv},
+                dataType: "JSON"
+            })
+            .done((data) => {
+                const { status, dataDistritos } = data;
+                if(status){
+                    $sle_ssoview_distr.html(`${dataDistritos}`);
+                }
+            })
+            .fail((jqXHR, statusText) => {
+                fn_errorJqXHR(jqXHR, statusText);
+            });
+        }
+    });
+
+    $sle_ssoview_distr.change(function (e) {
+        e.preventDefault();
+        
+        codDis = $(this).val();
+
+        if(codDep){
+            $.ajax({
+                url: `${base_url}localidad`,
+                type: "POST",
+                data: {codDis: codDis},
+                dataType: "JSON",
+            })
+            .done((data) => {
+                const { status, dataLocalidad } = data;
+                if(status){
+                    $sle_ssoview_locali.html(`${dataLocalidad}`);
+                }
+            })
+            .fail((jqXHR, statusText) => {
+                fn_errorJqXHR(jqXHR, statusText);
+            });
+        }
+    });
+
+    let codLoc;
+    $sle_ssoview_locali.change(function (e) {
+        codLoc = $(this).val();
+    })
+
+    $('#btn_buscar').click(function(){
+        fn_cargarSospechososReferencias();
+    })
 
   </script>
 
