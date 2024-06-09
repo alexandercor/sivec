@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class MreportesConsolidadoModel extends Model{
 
-    public function m_reporte_consolidado_inspectores($params): object {
+    public function m_reporte_consolidado_inspectores($params): array {
         $sql =
         'SELECT 
             `tb_persona`.`apellidos_nombres` inspector
@@ -47,6 +47,9 @@ class MreportesConsolidadoModel extends Model{
         return $response->getRow();
     }
 
+
+
+    
     // ***
 }
 ?>

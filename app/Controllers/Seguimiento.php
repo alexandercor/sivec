@@ -101,7 +101,6 @@ class Seguimiento extends BaseController
 
         if($this->request->isAJAX()){
 
-            
             $codLoc = $this->request->getPost('codLoc');
             $codLoc = (!empty($codLoc))? bs64url_dec($codLoc) : 18707;
 
