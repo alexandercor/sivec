@@ -55,7 +55,7 @@ class ReporteConsolidado extends BaseController
                 $sheet->getPageMargins()->setRight(0.393701);
         
                 $this->c_reportes_consolidado_header($sheet);
-                $this->c_reportes_consolidado_body($sheet, $resDataInsp);
+                $this->c_reportes_consolidado_body($sheet, $resDataInsp, $fechaIni, $fechaFin);
                 $this->c_reportes_consolidado_footer($sheet);
         
                 $writer = new Xlsx($objSheet);
@@ -279,7 +279,7 @@ class ReporteConsolidado extends BaseController
         }
     }
 
-    public function c_reportes_consolidado_body($sheet, $resDataInsp) {
+    public function c_reportes_consolidado_body($sheet, $resDataInsp, $fechaIni, $fechaFin) {
 
         if (isset($sheet) && !empty($sheet)) {
             $LI = $this->configLetterInicia;
@@ -462,10 +462,79 @@ class ReporteConsolidado extends BaseController
 
             $count = 13;
             foreach ($resDataInsp as $key => $ins) {
-            
+                $keyPer = $ins->key_persona;
                 $insp = $ins->inspector;
+                $canRes  = $ins->cant_resi;
+                $consLer = $ins->con_ler;
+
+                $sheet->setCellValue("A$count", $count);
                 $sheet->setCellValue("B$count", $insp);
+                $sheet->setCellValue("C$count", $canRes);
+                $sheet->setCellValue("AV$count", $consLer);
+
+                $resTotalesViviInp = $this->mreportes->m_reporte_consolidado_viviendas_totales([$fechaIni, $fechaFin, $keyPer]);
+
+                if(!empty($resTotalesViviInp)){
+                    $vivInsp = $resTotalesViviInp->inspeccionada;
+                    $vivCerr = $resTotalesViviInp->cerrada;
+                    $vivRen  = $resTotalesViviInp->renuente;
+                    $vivDes  = $resTotalesViviInp->deshabitada;
+                    $vivTrat = $resTotalesViviInp->tratada;
+                    $vivPosi = $resTotalesViviInp->positivos;
+
+                    $sheet->setCellValue("D$count", $vivInsp);
+                    $sheet->setCellValue("E$count", $vivCerr);
+                    $sheet->setCellValue("F$count", $vivRen);
+                    $sheet->setCellValue("G$count", $vivDes);
+                    $sheet->setCellValue("H$count", $vivTrat);
+                    $sheet->setCellValue("I$count", $vivPosi);
+                }
+
+                $letterDepositoTipDetalle = [
+                    1 => [1 => 'J',2 => 'K',3 => 'L',4 => 'M'],
+                    2 => [1 => 'N',2 => 'O',3 => 'P',4 => 'Q'],
+                    3 => [1 => 'R',2 => 'S',3 => 'T',4 => 'U'],
+                    4 => [1 => 'V',2 => 'W',3 => 'X',4 => 'Y'],
+                    5 => [1 => 'Z',2 => 'AA',3 => 'AB',4 => 'AC'],
+                    6 => [1 => 'AD',2 => 'AE',3 => 'AF',4 => 'AG'],
+                    7 => [1 => 'AH',2 => 'AI',3 => 'AJ',4 => 'AK'],
+                    8 => [1 => 'AL',2 => 'AM',3 => 'AN',4 => 'AO', 5 => 'AP'],
+                    9 => [1 => 'AQ',2 => 'AR',3 => 'AS',4 => 'AT', 5 => 'AU'],
+                ];
+
+                // $resTotalXTipo = $this->mreportes->m_reporte_consolidado_totales_X_deposito_tipo_X_inspector([1, 1, $keyPer]);
+                //         if(!empty($resTotalXTipo)){
+                //             $total = $resTotalXTipo->total;
+                //             $sheet->setCellValue("J13", $total);
+                //         }
+
+                $countDeposito = 1;
+                $countTipoDep = 1;
+
+                foreach ($letterDepositoTipDetalle as $keyDeposito => $arrlde) {
+                       
+                    foreach ($arrlde as $keyTipoDep => $item) {
+                        $celdaTipoDep = $item;
+
+                        $resTotalXTipo = $this->mreportes->m_reporte_consolidado_totales_X_deposito_tipo_X_inspector([$countDeposito, $countTipoDep, $keyPer]);
+                        if(!empty($resTotalXTipo)){
+                            $total = $resTotalXTipo->total;
+                            $sheet->setCellValue($celdaTipoDep.$count,$total);
+                        }
+                        $countDeposito++;
+                    }
+                    $countTipoDep++;
+                }
                 $count++;
+            }
+
+            $row37 = 37;
+            foreach ($arrDepositosColLetter as $key => $arrDepTipo) {
+               foreach ($arrDepTipo as $key => $col) {
+                    $colSuma = $col."13:".$col.$row37;
+                    $sheet->setCellValue($col.$row37, "=SUM($colSuma)");
+                    $sheet->getCell($col.$row37)->getCalculatedValue();
+               }
             }
 
         }
