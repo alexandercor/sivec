@@ -131,6 +131,22 @@
                             </a>
                         </li>
                     </ul>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?= base_url('reportes-sector');?> " class="nav-link">
+                            <i class="fas fa-list nav-icon"></i>
+                            <p>Por sector</p>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?= base_url('reportes-inspector');?> " class="nav-link">
+                            <i class="fas fa-list nav-icon"></i>
+                            <p>Por Inspector</p>
+                            </a>
+                        </li>
+                    </ul> -->
                 </li>
             <?php endif ?>
 

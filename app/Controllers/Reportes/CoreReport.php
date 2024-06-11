@@ -2,15 +2,18 @@
 
 namespace App\Controllers\Reportes;
 use App\Models\Reportes\McoreReportModel;
+use App\Models\MinfocoreModel;
 use App\Controllers\BaseController;
 
 class CoreReport extends BaseController
 {   
     protected $mcorereport;
+    public $minfocore;
 
     public function __construct()
     {
         $this->mcorereport = new McoreReportModel();
+        $this->minfocore = new MinfocoreModel();
         helper('fn_helper');
     }
 
@@ -82,6 +85,15 @@ class CoreReport extends BaseController
         return view('admin/reportes/vconsolidadoDiario');
     }
 
+    public function c_reporte_sector_index() {
+        $data['dataRegiones'] = $this->minfocore->m_regiones();
+        return view('admin/reportes/vreporteSector', $data);
+    }
+
+    public function c_reporte_inspector_index() {
+        // $data['inspectores'] = $this->mcorereport->m_inspeccion_inspectores();
+        return view('admin/reportes/vinspector');
+    }
 
 // ***
 }

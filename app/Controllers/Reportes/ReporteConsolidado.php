@@ -502,12 +502,6 @@ class ReporteConsolidado extends BaseController
                     9 => [1 => 'AQ',2 => 'AR',3 => 'AS',4 => 'AT', 5 => 'AU'],
                 ];
 
-                // $resTotalXTipo = $this->mreportes->m_reporte_consolidado_totales_X_deposito_tipo_X_inspector([1, 1, $keyPer]);
-                //         if(!empty($resTotalXTipo)){
-                //             $total = $resTotalXTipo->total;
-                //             $sheet->setCellValue("J13", $total);
-                //         }
-
                 $countDeposito = 1;
                 $countTipoDep = 1;
 
@@ -529,14 +523,25 @@ class ReporteConsolidado extends BaseController
             }
 
             $row37 = 37;
+
             foreach ($arrDepositosColLetter as $key => $arrDepTipo) {
                foreach ($arrDepTipo as $key => $col) {
-                    $colSuma = $col."13:".$col.$row37;
+                    $colSuma = $col."13:".$col."36";
                     $sheet->setCellValue($col.$row37, "=SUM($colSuma)");
                     $sheet->getCell($col.$row37)->getCalculatedValue();
                }
             }
 
+            $sheet->mergeCells("A".$row37.":C".$row37);
+            $sheet->setCellValue("A".$row37, "Total");
+            $colCalcularTotales = ['D', 'E', 'F', 'G', 'H', 'I', 'AV'];
+            foreach ($colCalcularTotales as $key => $col) {
+                $colSumaTipoViv = $col."13:".$col."36";
+                $sheet->setCellValue($col.$row37, "=SUM($colSumaTipoViv)");
+                $sheet->getCell($col.$row37)->getCalculatedValue();
+            }
+
+            $sheet->getStyle("A37:AW37")->getFont()->setBold(true);
         }
     }
 

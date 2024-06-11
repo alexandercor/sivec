@@ -58,3 +58,6 @@ $routes->post('inspecciones/list', 'Reportes\CoreReport::c_inspeccion_inspeccion
 $routes->get('reportes/inspeccion/xls/(:any)', 'Reportes\ReportesInspeccion::c_reportes_inspeccion_xls/$1');
 $routes->get('reportes-consolidado-diario', 'Reportes\CoreReport::c_consolidado_diario_index');
 $routes->get('reportes/consolidado-diario/xls/(:any)/(:any)', 'Reportes\ReporteConsolidado::c_reportes_consolidado_xls/$1/$2');
+$routes->get('reportes-sector', 'Reportes\CoreReport::c_reporte_sector_index');
+$routes->get('reportes/sector/xls/(:any)', 'Reportes\ReporteSector::c_reportes_sector/$1');
+$routes->get('reportes-inspector', 'Reportes\CoreReport::c_reporte_inspector_index');
