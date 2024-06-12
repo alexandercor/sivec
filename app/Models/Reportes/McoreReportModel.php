@@ -46,6 +46,27 @@ class McoreReportModel extends Model{
         return $response->getResult();
     }
 
+    public function m_control_get_img($codControl) {
+        $sql =
+        "SELECT 
+            `tb_control`.`id_control` key_control,
+            `tb_det_fotografias`.`fotografia1` ft1,
+            `tb_det_fotografias`.`fotografia2` ft2,
+            `tb_det_fotografias`.`fotografia3` ft3,
+            `tb_det_fotografias`.`fotografia4` ft4,
+            `tb_det_fotografias`.`fotografia5` ft5
+        FROM
+            `tb_control`
+            INNER JOIN `tb_det_control` ON (`tb_control`.`id_control` = `tb_det_control`.`id_control`)
+            INNER JOIN `tb_det_fotografias` ON (`tb_det_control`.`id_detalle_control` = `tb_det_fotografias`.`id_detalle_control`)
+        WHERE
+            `tb_control`.`id_control` = ?
+        ";
+        $response = $this->db->query($sql, $codControl);
+        $response = $response->getRow();
+        return (!empty($response))? $response : '';
+    }
+
     // ** *
 }
 ?>

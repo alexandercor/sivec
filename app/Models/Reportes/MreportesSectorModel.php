@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class MreportesSectorModel extends Model{
 
-    public function mreporte_sector_localidad_head($codLoc) {
+    public function mreporte_sector_localidad_head($codLoc): object {
         $sql = 
         'SELECT 
             `tb_localidad`.`id_localidad` key_loca,
@@ -22,14 +22,12 @@ class MreportesSectorModel extends Model{
             `tb_localidad`.`nombre_localidad`
         ';
         $response = $this->db->query($sql, $codLoc);
-        return (!empty($response))? $response->getRow(): "";
+        return $response->getRow();
     }
 
     public function mreporte_sector_lista_sectores($codLoc): array {
         $sql = 
         'SELECT 
-            `tb_control`.`id_control` key_control,
-            `tb_control`.`fecha_control` fech_cont,
             `tb_sector`.`id_sector` key_sect,
             `tb_sector`.`nombre_sector` sector,
             `tb_localidad`.`id_localidad` key_loca,
@@ -39,7 +37,12 @@ class MreportesSectorModel extends Model{
             INNER JOIN `tb_sector` ON (`tb_control`.`id_sector` = `tb_sector`.`id_sector`)
             INNER JOIN `tb_localidad` ON (`tb_sector`.`id_localidad` = `tb_localidad`.`id_localidad`)
         WHERE
-            `tb_localidad`.`id_localidad` = ? 
+            `tb_localidad`.`id_localidad` = ?
+        GROUP BY 
+            `tb_sector`.`id_sector`,
+            `tb_sector`.`nombre_sector`,
+            `tb_localidad`.`id_localidad`,
+            `tb_localidad`.`nombre_localidad`
         ';
         $response = $this->db->query($sql, $codLoc);
         return $response->getResult();
@@ -71,7 +74,7 @@ class MreportesSectorModel extends Model{
     public function m_reporte_sector_totales_tipodeposito_x_sector($params): object {
         $sql =
         'SELECT 
-            SUM(CASE WHEN `tb_depositos`.`id_deposito` = 1 AND `tb_depositos_tipos`.`id_depositotipo` = ? THEN ? ELSE 0 END ) total
+            SUM(CASE WHEN `tb_depositos`.`id_deposito` = ? AND `tb_depositos_tipos`.`id_depositotipo` = ? THEN 1 ELSE 0 END ) total
 
         FROM
             `tb_control`

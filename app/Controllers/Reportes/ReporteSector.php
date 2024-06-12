@@ -43,7 +43,7 @@ class ReporteSector extends BaseController
         
             $resDataSecLocHeader = $this->mreportes->mreporte_sector_localidad_head($codLoc);
 
-            if(empty($resDataSecLocHeader)){
+            if(!empty($resDataSecLocHeader)){
 
                 // $resDataSectores = $this->mreportes->mreporte_sector_lista_sectores($codLoc);
 
@@ -367,12 +367,40 @@ class ReporteSector extends BaseController
                 $sheet->setCellValue("E".$count, $vivDes);
                 $sheet->setCellValue("F".$count, $vivCerr);
                 $sheet->setCellValue("G".$count, $vivTra);
-                $sheet->setCellValue("H".$count, $vivRen);
-                $sheet->setCellValue("I".$count, $vivPos);
-                $sheet->setCellValue("F".$count, $vivOtr);
+                $sheet->setCellValue("H".$count, $vivPos);
+                $sheet->setCellValue("I".$count, $vivOtr);
 
 
+                $arrColDepositoTip = [
+                    1 => [1 => 'J',2 => 'K',3 => 'L'],
+                    2 => [1 => 'M',2 => 'N',3 => 'O'],
+                    3 => [1 => 'P',2 => 'Q',3 => 'R'],
+                    4 => [1 => 'S',2 => 'T',3 => 'U'],
+                    5 => [1 => 'V',2 => 'W',3 => 'X'],
+                    6 => [1 => 'Y',2 => 'Z',3 => 'AA'],
+                    7 => [1 => 'AB',2 => 'AC',3 => 'AD'],
+                    8 => [1 => 'AE',2 => 'AF',3 => 'AG'],
+                    10 => [1 => 'AH',2 => 'AI',3 => 'AJ'],
+                    11 => [1 => 'AK',2 => 'AL',3 => 'AM'],
+                    12 => [1 => 'AN',2 => 'AO',3 => 'AP'],
+                    13 => [1 => 'AQ',2 => 'AR',3 => 'AS'],
+                ];
 
+                $countDepo = 1;
+                $countTipDepo = 1;
+                foreach ($arrColDepositoTip as $key => $rowDepo) {
+                    
+                    foreach ($rowDepo as $key => $colLetter) {
+                        $resTotalDepo = $this->mreportes->m_reporte_sector_totales_tipodeposito_x_sector([$countDepo, $countTipDepo, $keySec]);
+
+                        if(!empty($resTotalDepo)){
+                            $total = $resTotalDepo->total;
+                            $sheet->setCellValue($colLetter.$count, $total);
+                        }
+                        $countTipDepo++;
+                    }
+                    $countDepo++;
+                }
 
                 $sheet->setCellValue("AT".$count,"=SUM(J$count:AS$count)");
                 $sheet->getCell("AT".$count)->getCalculatedValue();

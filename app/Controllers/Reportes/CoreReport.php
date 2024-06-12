@@ -58,6 +58,11 @@ class CoreReport extends BaseController
                                 <td><i class='fas fa-hospital text-danger'></i> $eess</td>
                                 <td>$sector</td>
                                 <td>
+                                    <button type='button' class='btn btn-info btn-sm' data-toggle='modal' data-target='#mdl_control_imgg' data-keycontrol='$keyContr'>
+                                        <i class='fas fa-images'></i> Ver Imágenes
+                                    </button>
+                                </td>
+                                <td>
                                     <a href='".base_url()."reportes/inspeccion/xls/".$keyContr."' class='btn btn-success btn-sm'>
                                     <i class='fas fa-file-excel'></i> 
                                         Descargar Reporte
@@ -79,6 +84,39 @@ class CoreReport extends BaseController
         return $this->response->setJSON($data);
     }
 
+    public function c_control_get_img(){
+        $data['status'] = $this->status;
+        $data['msg']    = $this->msg;
+
+        if($this->request->isAJAX()){
+            $keyControl = bs64url_dec($this->request->getPost('keyControl'));
+
+            if(isset($keyControl) && !empty($keyControl))
+            $resControlImg = $this->mcorereport->m_control_get_img($keyControl);
+
+            $dataImgs = '';
+            if(!empty($resControlImg->ft1)){
+                $arrFotos = [$resControlImg->ft1, $resControlImg->ft2, $resControlImg->ft3, $resControlImg->ft4, $resControlImg->ft5];
+
+                foreach($arrFotos as $img){
+                    if(!empty($img)){
+                        $dataImgs .= "<img src='".base_url('images/photos/').$img."' class='img-fluid' alt='Img'>";
+                    }
+                    
+                }
+            }else{
+                $dataImgs .= '<div class="alert alert-warning" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> No se encontraron resultados
+                </div>';
+            }
+
+            $data['status'] = true;
+            $data['dataImgs'] = $dataImgs;
+            $data['msg'] = 'Ok';
+
+        }
+        return $this->response->setJSON($data);
+    }
 
     public function c_consolidado_diario_index() {
         // $data['inspectores'] = $this->mcorereport->m_inspeccion_inspectores();

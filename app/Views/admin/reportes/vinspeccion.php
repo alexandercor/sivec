@@ -68,6 +68,7 @@
                                                         <th>Actividad</th>
                                                         <th>EESS</th>
                                                         <th>Sector</th>
+                                                        <th>Imágenes</th>
                                                         <th>Acc.</th>
                                                     </tr>
                                                 </thead>
@@ -84,8 +85,37 @@
                     </div>
                 </div>
             </div>
+            
         </div>
+
+        <div class="modal fade" id="mdl_control_imgg">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title"><i class="far fa-images"></i> Imagenes de Control e Inspección</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div id="mdl_content_images"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="far fa-times-circle"></i> Close</button>
+                    </div>
+                </div>
+            <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+
     </section>
+
+
 <?= $this->endSection() ?>
 
 <?= $this->section('javascript') ?>
@@ -94,6 +124,9 @@
         $(() => {
             fn_getDataInspecciones();
         })
+
+        $mdl_control_imgg =$('#mdl_control_imgg');
+        $mdl_content_img  = $('#mdl_content_img');
 
         let codIns;
         $('#sle_insview_supervisor').change( function(){
@@ -127,6 +160,27 @@
         $('#btn_inspecciones_buscar').click(function(){
             fn_getDataInspecciones();
         })
+
+        $mdl_control_imgg.on('show.bs.modal', function(e){
+            let target = $(e.relatedTarget);
+            const keyControl = target.data('keycontrol');
+
+            $.ajax({
+                url: `${base_url}control/getimg`,
+                type: "POST",
+                data: {keyControl: keyControl},
+                dataType: "JSON",
+                success: function (data) {
+                    const { status, dataImgs } = data;
+                    if(status){
+                        $('#mdl_control_imgg .modal-body #mdl_content_images').html(dataImgs);
+                    }
+                }
+            });
+        })
+        .on("hidden.bs.modal",function(){
+            $('#mdl_control_imgg .modal-body #mdl_content_images').html('');
+        });
 
     </script>
 

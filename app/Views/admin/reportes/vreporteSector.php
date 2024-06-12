@@ -87,13 +87,13 @@
                                         </div>
                                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                             <div class="form-group">
-                                                <botton type="botton" id="btn_repxsec_buscar" class="btn btn-primary btn-block"> <i class="fas fa-search" aria-hidden="true"></i> Buscar</botton>
+                                                <botton type="botton" id="btn_repxsec_buscar" class="btn btn-primary btn-block"> <i class="fas fa-undo-alt"></i> Generar Reporte</botton>
                                             </div>                    
                                         </div>
 
                                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                             <div class="form-group">
-                                                <a href="#" id='lnk_repxsec_generar' class="btn btn-success"> <i class="fas fa-file-excel"></i> Exportar Reporte</a>
+                                                <a href="#" id='lnk_repxsec_generar' class="btn btn-success hidden"> <i class="fas fa-file-excel"></i> Exportar Reporte</a>
                                             </div>                    
                                         </div>
 
@@ -248,6 +248,10 @@
                 })
             }
         });
+
+        $('#sle_repsecview_region, #sle_repsecview_depa, #sle_repsecview_prov, #sle_repsecview_distr, #sle_repsecview_locali').change(function(){
+            $lnk_repxsec_generar.css({'visibility': 'hidden'});
+        })
 
     </script>
 
