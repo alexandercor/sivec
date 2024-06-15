@@ -11,7 +11,7 @@ class MreportesInspeccionModel extends Model{
             "SELECT 
                 `tb_control`.`id_control` key_control,
                 `tb_persona`.`apellidos_nombres` inspecctor,
-                `tb_control`.`fecha_control` fecha_reg,
+                `tb_control`.`fecha_control` fecha_control,
                 `tb_eess`.`nombre_eess` eess,
                 `tb_sector`.`nombre_sector` sector,
                 `tb_localidad`.`nombre_localidad` localidad,
@@ -127,6 +127,45 @@ class MreportesInspeccionModel extends Model{
         ";
         $response = $this->db->query($sql, $params);
         return $response->getRow();
+    }
+
+    public function mreporte_inspeccion_inspeccionados_consolidado_viv($codControl) {
+        $sql = 
+        "SELECT 
+            SUM(CASE WHEN `tb_situacion_viv`.`id_situacion_vivienda` = 1 THEN 1 ELSE 0 END) AS `inspe`,
+            SUM(CASE WHEN `tb_situacion_viv`.`id_situacion_vivienda` = 2 THEN 1 ELSE 0 END) AS `renu`,
+            SUM(CASE WHEN `tb_situacion_viv`.`id_situacion_vivienda` = 3 THEN 1 ELSE 0 END) AS `desha`,
+            SUM(CASE WHEN `tb_situacion_viv`.`id_situacion_vivienda` = 4 THEN 1 ELSE 0 END) AS `cerra`
+        FROM
+            `tb_det_control`
+            INNER JOIN `tb_control` ON (`tb_det_control`.`id_control` = `tb_control`.`id_control`)
+            INNER JOIN `tb_situacion_viv` ON (`tb_det_control`.`id_situacion_vivienda` = `tb_situacion_viv`.`id_situacion_vivienda`)
+        WHERE
+            `tb_control`.`id_control` = ?
+        ";
+        $response = $this->db->query($sql, $codControl);
+        $response = $response->getRow();
+        return (!empty($response))? $response: '';
+
+    }
+
+    public function mreporte_inspeccion_inspeccionados_consolidado_tipodep($codControl) {
+        $sql = 
+        "SELECT 
+            SUM(CASE WHEN `tb_depositos_tipos`.`id_depositotipo` = 2 THEN 1 ELSE 0 END) AS `posi`,
+            SUM(CASE WHEN `tb_depositos_tipos`.`id_depositotipo` = 3 THEN 1 ELSE 0 END) AS `trat`
+        FROM
+            `tb_det_control`
+            INNER JOIN `tb_control` ON (`tb_det_control`.`id_control` = `tb_control`.`id_control`)
+            INNER JOIN `tb_det_control_depositos` ON (`tb_det_control`.`id_detalle_control` = `tb_det_control_depositos`.`id_detalle_control`)
+            INNER JOIN `tb_depositos_tipos` ON (`tb_det_control_depositos`.`id_depositotipo` = `tb_depositos_tipos`.`id_depositotipo`)
+        WHERE
+            `tb_control`.`id_control` = ?
+        ";
+        $response = $this->db->query($sql, $codControl);
+        $response = $response->getRow();
+        return (!empty($response))? $response: '';
+
     }
 
     // ***

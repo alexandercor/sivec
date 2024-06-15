@@ -12,8 +12,7 @@ use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\Borders;
-use PhpOffice\PhpSpreadsheet\RichText;
-use PhpOffice\PhpSpreadsheet\RichText\Run;
+use PhpOffice\PhpSpreadsheet\RichText\RichText;
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\PageSetup;
 use PhpOffice\PhpSpreadsheet\Calculation\Calculation;
@@ -63,7 +62,7 @@ class ReportesInspeccion extends BaseController
 
                 $this->c_reportes_inspeccion_header($sheet, $dataInspeccion);
                 $this->c_reportes_inspeccion_body($sheet, $dataInspeccionDetalle, $codInspeccion);
-                $this->c_reportes_inspeccion_footer($sheet);
+                $this->c_reportes_inspeccion_footer($sheet, $codControl);
 
                 $writer = new Xlsx($objSheet);
                 $filePath = "Reporte Inspeccion.xlsx";
@@ -94,6 +93,7 @@ class ReportesInspeccion extends BaseController
             $eess       = $dataInspeccion->eess;
             $sector     = $dataInspeccion->sector;
             $localidad  = $dataInspeccion->localidad;
+            $fechCont   = fdate($dataInspeccion->fecha_control);
             $tipoActi   = (int) $dataInspeccion->tipo_act;    
 
             $cellTipoAct = match($tipoActi){
@@ -249,6 +249,7 @@ class ReportesInspeccion extends BaseController
 
             $sheet->mergeCells("AI".$row5.":AK".$row6);
             $sheet->setCellValue("AI".$row5, "FECHA:");
+            $sheet->setCellValue("AM".$row5,  $fechCont);
             $sheet->mergeCells("AM".$row5.":AQ".$row5);
             $sheet->mergeCells("AM".$row6.":AQ".$row6);
             $sheet->getStyle("AM".$row5.":AQ".$row5)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
@@ -489,7 +490,7 @@ class ReportesInspeccion extends BaseController
                     6 => [1 => 'Y',2 => 'Z',3 => 'AA',4 => 'AB'],
                     7 => [1 => 'AC',2 => 'AD',3 => 'AE',4 => 'AF'],
                     8 => [1 => 'AG',2 => 'AH',3 => 'AI',4 => 'AJ', 5 => 'AK'],
-                    11 => [1 => 'AL',2 => 'AM',3 => 'AN',4 => 'AO', 5 => 'AO'],
+                    9 => [1 => 'AL',2 => 'AM',3 => 'AN',4 => 'AO', 5 => 'AO'],
                 ];
 
                 $dataDetalleInspTipoDep = $this->mreportes->mreporte_inspeccion_inspeccionados_depositos_tipos($keyDetIns);
@@ -560,8 +561,167 @@ class ReportesInspeccion extends BaseController
         }
     }
 
-    public function c_reportes_inspeccion_footer($sheet) {
-        // $sheet->setCellValue('A3','FOOTER');
+    public function c_reportes_inspeccion_footer($sheet, $codControl) {
+        if($sheet){
+            $LI = $this->configLetterInicia;
+            $LF = $this->configLetterFin;
+
+            $styleConsolidadoTable = [
+                'font' => [
+                    'name' => $this->styleFontName,
+                    'size' => 11
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN
+                    ],
+                ],
+            ];
+
+            $styleBordetBotton = [
+                'borders' => [
+                    'bottom' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['argb' => Color::COLOR_BLACK],
+                    ],
+                ],
+            ];
+
+            $styleBorderTableBorderWhite = [
+                'borders' => [
+                    'inside' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['argb' => Color::COLOR_WHITE],
+                    ],
+                ],
+            ];
+
+            $styleBorderTableBorderDark = [
+                'borders' => [
+                    'outline' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['argb' => Color::COLOR_BLACK],
+                    ],
+                ],
+            ];
+
+            // $headTitleFormato = [
+            //     'alignment' => [
+            //         'horizontal' => Alignment::HORIZONTAL_CENTER,
+            //         'vertical' => Alignment::VERTICAL_CENTER
+            //     ],
+            // ];
+            
+            $row40 = 40;
+            $row41 = 41;
+            $row42 = 42;
+            $row43 = 43;
+            $row44 = 44;
+            $row45 = 45;
+            $row46 = 46;
+            $row47 = 47;
+
+            $sheet->mergeCells("B$row40:D$row40");
+            $sheet->mergeCells("F$row40:AR$row40");
+            $sheet->mergeCells("G$row41:AR$row41");
+            $sheet->mergeCells("G$row42:AR$row42");
+            $sheet->mergeCells("F$row43:$LF$row43");
+            $sheet->mergeCells("F$row47:$LF$row47");
+            $sheet->mergeCells("F$row44:I$row44");
+            $sheet->mergeCells("F$row45:I$row45");
+            $sheet->mergeCells("J$row44:N$row44");
+            $sheet->mergeCells("J$row45:N$row45");
+            $sheet->mergeCells("S$row45:Y$row45");
+            $sheet->mergeCells("S$row46:Y$row46");
+            $sheet->mergeCells("AH$row45:AO$row45");
+            $sheet->mergeCells("AH$row46:AO$row46");
+
+            $sheet->setCellValue("B$row40", "Consolidado");
+            $sheet->getStyle("B$row40:D47")->applyFromArray($styleConsolidadoTable);
+            $sheet->getStyle("F$row40:$LF$row42")->applyFromArray($styleConsolidadoTable);
+            $sheet->getStyle("F$row44:$LF$row46")->applyFromArray($styleBorderTableBorderWhite);
+            $sheet->getStyle("F$row44:$LF$row46")->applyFromArray($styleBorderTableBorderDark);
+            $sheet->setCellValue("F$row44", "Hora de ingreso");
+            $sheet->getStyle("J$row44:N$row44")->applyFromArray($styleBordetBotton);
+            $sheet->setCellValue("F$row45", "Hora de salida");
+            $sheet->getStyle("J$row45:N$row45")->applyFromArray($styleBordetBotton);
+            $sheet->setCellValue("S$row46", "FIRMA DEL JEFE DE BRIGADA");
+            $sheet->getStyle("S$row46")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle("S$row45:Y$row45")->applyFromArray($styleBordetBotton);
+            $sheet->setCellValue("AH$row46", "FIRMA DEL JEFE DEL INSPECTOR");
+            $sheet->getStyle("AH$row45:AO$row45")->applyFromArray($styleBordetBotton);
+            $sheet->getStyle("AH$row46")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+            $arrNum = [1,2,3,4,5,6,7];
+            $arrTipViv = ['inspeccionadas','cerradas','renuentes','deshabitadas','tratadas','positivas','positivos'];
+
+            $count = 41;
+            foreach ($arrNum as $key => $num) {
+                $sheet->getStyle("B$count")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->setCellValue("B$count", $num);
+
+                $tipo = ($key < 6) ? 'viviendas ' : 'recipientes ';
+                $sheet->setCellValue("C$count", $tipo.$arrTipViv[$key]);
+                $count++;
+            }
+
+            $consolidadoViv = $this->mreportes->mreporte_inspeccion_inspeccionados_consolidado_viv($codControl);
+            $consolidadoTipoDep = $this->mreportes->mreporte_inspeccion_inspeccionados_consolidado_tipodep($codControl);
+
+            if(!empty($consolidadoViv) && !empty($consolidadoTipoDep)){
+                $insp = $consolidadoViv->inspe;
+                $renu = $consolidadoViv->renu;
+                $desha = $consolidadoViv->desha;
+                $cerra = $consolidadoViv->cerra;
+                $posi = $consolidadoTipoDep->posi;
+                $trat = $consolidadoTipoDep->trat;
+
+                $sheet->setCellValue("D41", $insp);
+                $sheet->setCellValue("D42", $cerra);
+                $sheet->setCellValue("D43", $renu);
+                $sheet->setCellValue("D44", $desha);
+
+                $sheet->setCellValue("D45", $trat);
+                $sheet->setCellValue("D46", $posi);
+                $sheet->setCellValue("D47", $posi);
+
+            }
+
+            $sheet->setCellValue("F$row40", "Abreriaturas");
+            $sheet->setCellValue("F$row41", "1");
+            $sheet->setCellValue("F$row42", "2");
+
+            $objRichTextViv = new RichText();
+            $textResDir = $objRichTextViv->createText("");
+            $textResDir = $objRichTextViv->createTextRun("Viviendas: ");
+            $textResDir->getFont()->setBold(true);
+            $textResDir = $objRichTextViv->createText("si la vivienda no se pudo inspeccionar consignar C(vivienda cerrada), R(vivienda renuente) o D(vivienda deshabitada).");
+
+            $sheet->setCellValue("G$row41", $objRichTextViv);
+
+            $objRichTextDep = new RichText();
+            $textResDir = $objRichTextDep->createText("");
+            $textResDir = $objRichTextDep->createTextRun("Depositos: ");
+                $textResDir->getFont()->setBold(true);
+            $textResDir = $objRichTextDep->createText("en la columna: ");
+            $textResDir = $objRichTextDep->createTextRun("I");
+                $textResDir->getFont()->setBold(true);
+            $textResDir = $objRichTextDep->createText("(inspeccionado), ");
+            $textResDir = $objRichTextDep->createTextRun("P");
+            $textResDir->getFont()->setBold(true);
+            $textResDir = $objRichTextDep->createText("(positivo), ");
+            $textResDir = $objRichTextDep->createTextRun("TQ");
+            $textResDir->getFont()->setBold(true);
+            $textResDir = $objRichTextDep->createText("(tratamiento fisico), ");
+            $textResDir = $objRichTextDep->createTextRun("D");
+            $textResDir->getFont()->setBold(true);
+            $textResDir = $objRichTextDep->createText("(destruido), ");
+            $textResDir = $objRichTextDep->createText("colocar el número de recipientes segun corresponda.");
+            $sheet->setCellValue("G$row42", $objRichTextDep);
+
+
+
+        }
     }
 
 }

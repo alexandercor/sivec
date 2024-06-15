@@ -118,7 +118,7 @@
                         <li class="nav-item">
                             <a href="<?= base_url('reportes-inspeccion');?> " class="nav-link">
                             <i class="fas fa-list nav-icon"></i>
-                            <p>Inspección</p>
+                            <p>Inspección y Control</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -136,7 +136,7 @@
                         <li class="nav-item">
                             <a href="<?= base_url('reportes-indices');?> " class="nav-link">
                             <i class="fas fa-list nav-icon"></i>
-                            <p>Indices</p>
+                            <p>Por Indices</p>
                             </a>
                         </li>
                     </ul>

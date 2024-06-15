@@ -64,3 +64,4 @@ $routes->get('reportes/sector/xls/(:any)', 'Reportes\ReporteSector::c_reportes_s
 $routes->get('reportes-inspector', 'Reportes\CoreReport::c_reporte_inspector_index');
 $routes->get('reportes-indices', 'Reportes\CoreReport::c_reporte_indices_index');
 $routes->get('reportes/indices/xls/(:any)/(:any)/(:any)', 'Reportes\ReporteIndices::c_reportes_indices_xls/$1/$2/$3');
+
