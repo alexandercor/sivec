@@ -102,7 +102,9 @@ class Seguimiento extends BaseController
         if($this->request->isAJAX()){
 
             $codLoc = $this->request->getPost('codLoc');
-            $codLoc = (!empty($codLoc))? bs64url_dec($codLoc) : 18707;
+            // $codLoc = (!empty($codLoc))? bs64url_dec($codLoc) : 18707;
+
+            $codLoc = (!empty($codLoc))? bs64url_dec($codLoc) : 2;
 
             if (isset($codLoc) && !empty($codLoc)) {
 
@@ -111,9 +113,10 @@ class Seguimiento extends BaseController
                 
                 if(!empty($dataLoca)){
                     $mapLoca = [$dataLoca->eje_x, $dataLoca->eje_y];
-                }else{
-                    $mapLoca = [-5.557222222, -80.82222222];
                 }
+                //else{
+                //     // $mapLoca = [-5.557222222, -80.82222222];
+                // }
 
                 if((is_array($resSospechosos) && !empty($resSospechosos)) && !empty($dataLoca) ){
 

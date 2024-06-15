@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Syvec | Login</title>
-
+    <link rel="icon" href="<?= base_url();?>resources/img/logocem.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
     <?= link_tag("$miUrlBase/plugins/fontawesome-free/css/all.min.css")?>
@@ -19,11 +19,12 @@
             <div class="card">
                 <div class="card-header">
                     <div class="login-logo">
-                        <a href="<?= base_url();?>home"><b>Admin</b>Sys</a>
+                        <img src="<?= base_url();?>resources/img/logo_login.png" width="190">
                     </div>
                 </div>
                 <div class="card-body login-card-body">
-                    <p class="login-box-msg">Ingresa tus datos para acceder a tu cuenta</p>
+                    <p class="login-box-msg font-weight-bold m-0">CEM</p>
+                    <p class="login-box-msg">Control de Enfermedades Metaxénicas</p>
 
                     <form id="frm_login" action="<?= base_url()?>login" method="POST">
                         <div class="input-group mb-3">

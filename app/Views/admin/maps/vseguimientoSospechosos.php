@@ -142,8 +142,13 @@
     }).addTo(map);
     
     $div_response_sos = $('#div_response_sos');
+
+    let heatLayers = [];
     const fn_cargarSospechososReferencias = () => {
         $div_response_sos.html('');
+
+        heatLayers.forEach(layer => map.removeLayer(layer));
+        heatLayers = [];
 
         const optionshHeadMap = {
             radius: 20,
@@ -184,6 +189,7 @@
                     heatData.push(coordenadas);
                 })
                 heatLayer = L.heatLayer(heatData, optionshHeadMap).addTo(map);
+                heatLayers.push(heatLayer);
               });
             }else{
                 $div_response_sos.html(`<div class="alert alert-warning" role="alert"><i class="fas fa-ban"></i> ${msg}</div>`);

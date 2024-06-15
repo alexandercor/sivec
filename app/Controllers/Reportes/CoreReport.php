@@ -133,6 +133,11 @@ class CoreReport extends BaseController
         return view('admin/reportes/vinspector');
     }
 
+    public function c_reporte_indices_index() {
+        $data['dataRegiones'] = $this->minfocore->m_regiones();
+        return view('admin/reportes/vreporteIndice', $data);
+    }
+
 // ***
 }
 ?>
