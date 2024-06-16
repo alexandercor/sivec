@@ -70,11 +70,11 @@ class ReporteConsolidado extends BaseController
                 return $response;
 
             }else{
-                return redirect()->to(base_url('reportes-inspeccion'));
+                return redirect()->to(base_url('reportes-consolidado-diario'));
             }
 
         }else{
-            return redirect()->to(base_url('reportes-inspeccion'));
+            return redirect()->to(base_url('reportes-consolidado-diario'));
         }
 
     }
@@ -301,7 +301,7 @@ class ReporteConsolidado extends BaseController
             $styleTableLista = [
                 'font' => [
                     'name' => $this->styleFontName,
-                    'size' => 11
+                    'size' => 9
                 ],
                 'alignment' => [
                     'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -462,32 +462,39 @@ class ReporteConsolidado extends BaseController
 
             $count = 13;
             foreach ($resDataInsp as $key => $ins) {
+                $numReg = ++$key;
                 $keyPer = $ins->key_persona;
                 $insp = $ins->inspector;
                 $canRes  = $ins->cant_resi;
                 $consLer = $ins->con_ler;
 
-                $sheet->setCellValue("A$count", $count);
+                $sheet->setCellValue("A$count", $numReg);
                 $sheet->setCellValue("B$count", $insp);
                 $sheet->setCellValue("C$count", $canRes);
                 $sheet->setCellValue("AV$count", $consLer);
+                $sheet->getStyle("A$count")->getFont()->setBold(true);
+                $sheet->getStyle("B$count")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
                 $resTotalesViviInp = $this->mreportes->m_reporte_consolidado_viviendas_totales([$fechaIni, $fechaFin, $keyPer]);
 
-                if(!empty($resTotalesViviInp)){
+                $resTotalesTipoDep = $this->mreportes->m_reporte_consolidado_tipodep_totales([$fechaIni, $fechaFin, $keyPer]);
+
+                if(!empty($resTotalesViviInp) && !empty($resTotalesTipoDep)){
                     $vivInsp = $resTotalesViviInp->inspeccionada;
                     $vivCerr = $resTotalesViviInp->cerrada;
                     $vivRen  = $resTotalesViviInp->renuente;
                     $vivDes  = $resTotalesViviInp->deshabitada;
-                    $vivTrat = $resTotalesViviInp->tratada;
-                    $vivPosi = $resTotalesViviInp->positivos;
+                    
+                    $tdePos = $resTotalesTipoDep->positivos;
+                    $tdeTra = $resTotalesTipoDep->tratados;
 
                     $sheet->setCellValue("D$count", $vivInsp);
                     $sheet->setCellValue("E$count", $vivCerr);
                     $sheet->setCellValue("F$count", $vivRen);
                     $sheet->setCellValue("G$count", $vivDes);
-                    $sheet->setCellValue("H$count", $vivTrat);
-                    $sheet->setCellValue("I$count", $vivPosi);
+
+                    $sheet->setCellValue("H$count", $tdeTra);
+                    $sheet->setCellValue("I$count", $tdePos);
                 }
 
                 $letterDepositoTipDetalle = [
@@ -510,7 +517,7 @@ class ReporteConsolidado extends BaseController
                     foreach ($arrlde as $keyTipoDep => $item) {
                         $celdaTipoDep = $item;
 
-                        $resTotalXTipo = $this->mreportes->m_reporte_consolidado_totales_X_deposito_tipo_X_inspector([$countDeposito, $countTipoDep, $keyPer]);
+                        $resTotalXTipo = $this->mreportes->m_reporte_consolidado_totales_X_deposito_tipo_X_inspector([$keyDeposito, $keyTipoDep, $keyPer]);
                         if(!empty($resTotalXTipo)){
                             $total = $resTotalXTipo->total;
                             $sheet->setCellValue($celdaTipoDep.$count,$total);
@@ -546,7 +553,104 @@ class ReporteConsolidado extends BaseController
     }
 
     public function c_reportes_consolidado_footer($sheet) {
+        if($sheet){
 
+            $styleFooterObser = [
+                'font' => [
+                    'name' => $this->styleFontName,
+                    'size' => 10,
+                    'bold' => true
+                ],
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => Border::BORDER_THIN
+                    ],
+                    'bottom' => [
+                        'borderStyle' => Border::BORDER_THIN
+                    ],
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_LEFT,
+                    'vertical'   => Alignment::VERTICAL_CENTER
+                ],
+            ];
+
+            $styleFooterBorders = [
+                'borders' => [
+                    'top' => [
+                        'borderStyle' => Border::BORDER_THIN
+                    ],
+                    'bottom' => [
+                        'borderStyle' => Border::BORDER_THIN
+                    ],
+                ],
+            ];
+
+            $styleBordetBotton = [
+                'borders' => [
+                    'bottom' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['argb' => Color::COLOR_BLACK],
+                    ],
+                ],
+            ];
+
+            $styleBorderTableBorderWhite = [
+                'borders' => [
+                    'inside' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['argb' => Color::COLOR_WHITE],
+                    ],
+                ],
+            ];
+
+            $row39 = 39;
+            $row40 = 40;
+            $row41 = 41;
+            $row42 = 42;
+
+            $sheet->mergeCells("A$row39:"."S$row39");
+            $sheet->mergeCells("A$row40:"."S$row41");
+            $sheet->mergeCells("Z45:"."AD45");
+            $sheet->mergeCells("Z47:"."AD47");
+
+            $sheet->setCellValue("A$row39", "Observaciones");
+            $sheet->getStyle("A$row39:S".$row39)->applyFromArray($styleFooterObser);
+            $sheet->getStyle("V43:AW49")->applyFromArray($styleBorderTableBorderWhite);
+            $sheet->getStyle("Z45:"."AD45")->applyFromArray($styleBordetBotton);
+            $sheet->getStyle("Z47:"."AD47")->applyFromArray($styleBordetBotton);
+
+            $count = 42;
+            for ($i=0; $i < 8; $i++) { 
+                $sheet->mergeCells("A$count:"."S$count");
+                $sheet->getStyle("A$count:S".$count)->applyFromArray($styleFooterBorders);
+                $count++;
+            }
+
+            $sheet->mergeCells("V$row39:"."AW$row39");
+            $sheet->mergeCells("V$row40:"."AW$row42");
+
+            $sheet->setCellValue("V$row39", "Abreviaturas");
+            $sheet->getStyle("V$row39:"."AW".$row39)->applyFromArray($styleFooterObser);
+
+            $sheet->setCellValue("V$row40", "Depósitos: en la columna: I(inspeccionado), P(positivo), TQ(tratamiento químico), TF(tratamiento fisico) o D(destruido), colocar el número de recipientes segun corresponda.");
+            $sheet->getStyle("V$row40")->getAlignment()->setWrapText(true);
+            $sheet->getStyle("V$row40")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+            $sheet->getStyle("V$row41:AW".$row42)->applyFromArray($styleFooterBorders);
+
+            $sheet->setCellValue("V45", "Hora de ingreso");
+            $sheet->setCellValue("V47", "Hora de salida");
+
+            $sheet->mergeCells("V$row40:"."AW$row42");
+            $sheet->mergeCells("AK48:AT48");
+            $sheet->mergeCells("AK49:AT49");
+
+            $sheet->getStyle("AK48:AT48")->applyFromArray($styleBordetBotton);
+            $sheet->setCellValue("AK49", "FIRMA DEL SUPERVISOR O JEFE DE BRIGADA");
+            $sheet->getStyle("AK49")->getFont()->setBold(true);
+            $sheet->getStyle("AK49")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+        }   
     }
 
 

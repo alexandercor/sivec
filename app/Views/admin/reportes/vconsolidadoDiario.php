@@ -35,7 +35,7 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tabloc">
-                                    <div class="row">
+                                    <div class="row d-flex align-items-end">
                                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                             <div class="form-group">
                                                 <label for="dte_con_view_fechaini">Fecha Inicia</label>
@@ -52,7 +52,7 @@
 
                                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                             <div class="form-group">
-                                                <botton type="botton" id="btn_consolidado_buscar" class="btn btn-primary btn-lg btn-block mt-4"> <i class="fas fa-search" aria-hidden="true"></i> Buscar</botton>
+                                                <botton type="botton" id="btn_consolidado_buscar" class="btn btn-primary btn-lg btn-block mt-4"> <i class="fas fa-undo-alt"></i> Generar</botton>
                                             </div>                    
                                         </div>
 
@@ -94,8 +94,6 @@
 
         $btn_consolidado_buscar.click(function (e) { 
             e.preventDefault();
-            // $dte_con_view_fechaini.val('');
-            // $dte_con_view_fechafin.val('');
 
             const fini = $dte_con_view_fechaini.val();
             const ffin = $dte_con_view_fechafin.val();
@@ -106,10 +104,21 @@
                 $lnk_consolidado_generar.prop('href', newUrl);
 
             }else{
-                alert('no hay')
+                Toast.fire({
+                    icon: 'warning',
+                    title: `Debes seleccionar fecha de inicio y fin!!`
+                })
             }
 
         });
+
+        $dte_con_view_fechaini.click(function(){
+            $lnk_consolidado_generar.css({'visibility': 'hidden'});
+        })
+
+        $dte_con_view_fechafin.click(function(){
+            $lnk_consolidado_generar.css({'visibility': 'hidden'});
+        })
 
     </script>
 
