@@ -15,6 +15,7 @@
         <?= link_tag("$miUrlBase/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css")?>
         <?= link_tag("$miUrlBase/plugins/leaflet/css/leaflet.css")?>
         <?= link_tag("$miUrlBase/plugins/loader/css/jquery.loading.css")?>
+        <?= link_tag("$miUrlBase/plugins/chart/Chart.min.css")?>
         <?= link_tag("resources/bandel/web/css/assets.css")?>
 
     </head>
@@ -43,6 +44,7 @@
         <?= script_tag("$miUrlBase/plugins/leaflet/js/leaflet.js") ?>
         <?= script_tag("$miUrlBase/plugins/leaflet/js/leaflet-heat.js") ?>
         <?= script_tag("$miUrlBase/plugins/loader/js/jquery.loading.min.js") ?>
+        <?= script_tag("$miUrlBase/plugins/chart/Chart.min.js") ?>
         <?= script_tag("resources/bandel/web/js/fn.js") ?>
 
         <script type="text/javascript">

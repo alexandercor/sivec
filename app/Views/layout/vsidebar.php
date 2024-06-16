@@ -34,7 +34,7 @@
                     </p>
                     </a>
                 </li>
-                <li class="nav-item menu-is-opening menu-open">
+                <li class="nav-item menu-is-opening">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cog"></i>
                         <p>
@@ -148,6 +148,23 @@
                             </a>
                         </li>
                     </ul> -->
+                </li>
+
+                <li class="nav-item menu-is-opening menu-open">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-signal"></i>
+                        <p>
+                            Graficos
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="<?= base_url('graficos-sector');?> " class="nav-link">
+                            <i class="fas fa-list nav-icon"></i>
+                            <p>Por sector</p>
+                            </a>
+                        </li>
                 </li>
             <?php endif ?>
 
