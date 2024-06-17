@@ -87,7 +87,7 @@
                                         </div>
                                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                             <div class="form-group">
-                                                <label for="sle_grasecview_sec">Localidad</label>
+                                                <label for="sle_grasecview_sec">Sector</label>
                                                 <select id="sle_grasecview_sec" class="form-control" data-send="view">
                                                     <option value="">Selecciona un sector</option>
                                                 </select>
@@ -120,6 +120,10 @@
                                             <!-- <div id="myBarChartRecSec"></div> -->
                                             <canvas id="myBarChartRecSec" width="200" height="100"></canvas>
                                         </div>
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div id="myBarChartResponse"></div>
+                                        </div>
+
                                     </div>
                                     
                                 </div>
@@ -277,21 +281,25 @@
             }
         });
         
-        let codSec;
-        $sle_grasecview_sec.change(function (e) {
-            e.preventDefault();
-            codSec = $(this).val();
-        });
+        // let codSec;
+        // $sle_grasecview_sec.change(function (e) {
+        //     e.preventDefault();
+        //     codSec = $(this).val();
+        // });
 
         $btn_grafsec_generar.click(function (e) { 
             e.preventDefault();
             const fini = $dte_grasecview_fechaini.val();
             const ffin = $dte_grasecview_fechafin.val();
+            const codSec = $sle_grasecview_sec.val();
 
-            if(codSec, fini, ffin){
+            if(codSec && fini && ffin){
                 fn_getTotalActividades(codSec, fini, ffin);
 
             }else{
+                if (myBarChart) {
+                    myBarChart.destroy();
+                }
                 Toast.fire({
                     icon: 'warning',
                     title: `Debes seleccionar los campos!!`
@@ -299,64 +307,84 @@
             }
         });
 
+        let myBarChart;
+        const fn_genera_grafico = (totalActiSec) => {
+
+            const ctx = document.getElementById('myBarChartRecSec').getContext('2d');
+
+            if (myBarChart) {
+                myBarChart.destroy();
+            }
+
+            const backgroundColors = [
+                'rgba(0, 123, 255, 0.7)',   
+                'rgba(40, 167, 69, 0.7)',  
+                'rgba(255, 193, 7, 0.7)',  
+                'rgba(220, 53, 69, 0.7)',  
+                'rgba(108, 117, 125, 0.7)'
+            ];
+
+            const borderColors = [
+                'rgba(0, 123, 255, 1)',    
+                'rgba(40, 167, 69, 1)',    
+                'rgba(255, 193, 7, 1)',    
+                'rgba(220, 53, 69, 1)',  
+                'rgba(108, 117, 125, 1)' 
+            ];
+
+            myBarChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Control Focal', 'Vigilancia Aédica', 'Recuperación', 'Barrido  Focal', 'Otros'],
+                    datasets: [{
+                        label: 'Actividades por Sector',
+                        data: totalActiSec,
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColors,
+                        borderWidth: 1,
+                        maxBarThickness: 40
+                    }]
+                },
+                options: {
+                    responsive: true,
+                }
+            });
+        }
+
         const fn_getTotalActividades = (codSec, fini, ffin) => {
+            $('#myBarChartResponse').html('');
+            
             $.ajax({
                 url: `${base_url}graficos/sector/actividades`,
                 type: "POST",
                 data: {codSec: codSec, fini: fini, ffin: ffin},
                 dataType: "JSON",
                 beforeSend: (()=> {
-                    // $('#div_overlay_con').html("<div class='loading'></div>");
+                    $('#div_overlay').loading({message: 'Cargando...'});
                 }),
             })
             .done((data) => {
-                // $('.loading').remove();
-                const { status, totalesAct } = data;
+                $('#div_overlay').loading('stop');
+                const { status, msg, totalesAct } = data;
                 if(status){
-                    console.log(totalesAct)
+
+                    let totalActiSec = Object.values(totalesAct);
+                    fn_genera_grafico(totalActiSec);
+
+                }else{
+                    if (myBarChart) {
+                        myBarChart.destroy();
+                    }
+                    $('#myBarChartResponse').html(`<div class="alert alert-warning" role="alert">
+                        <i class="fas fa-exclamation-triangle"></i> ${msg}
+                    </div>`);
                 }
             })
             .fail((jqXHR, statusText) => {
                 fn_errorJqXHR(jqXHR, statusText);
             });
         }
-
-        const ctx = document.getElementById('myBarChartRecSec').getContext('2d');
-
-        const backgroundColors = [
-            'rgba(0, 123, 255, 0.7)',   
-            'rgba(40, 167, 69, 0.7)',  
-            'rgba(255, 193, 7, 0.7)',  
-            'rgba(220, 53, 69, 0.7)',  
-            'rgba(108, 117, 125, 0.7)'
-        ];
-
-        const borderColors = [
-            'rgba(0, 123, 255, 1)',    
-            'rgba(40, 167, 69, 1)',    
-            'rgba(255, 193, 7, 1)',    
-            'rgba(220, 53, 69, 1)',  
-            'rgba(108, 117, 125, 1)' 
-        ];
-
-        const myBarChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Control Focal', 'Vigilancia Aédica', 'Recuperación', 'Barrido  Focal', 'Otros'],
-                datasets: [{
-                    label: 'Actividades por Sector',
-                    data: [12, 19, 3, 5, 6],
-                    backgroundColor: backgroundColors,
-                    borderColor: borderColors,
-                    borderWidth: 1,
-                    maxBarThickness: 40
-                }]
-            },
-            options: {
-                responsive: true,
-            }
-        });
-
+       
     </script>
 
 <?= $this->endSection() ?>

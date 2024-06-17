@@ -165,6 +165,13 @@
                             <p>Por sector</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('graficos-localidad');?> " class="nav-link">
+                            <i class="fas fa-list nav-icon"></i>
+                            <p>Por Localidad</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             <?php endif ?>
 
