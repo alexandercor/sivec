@@ -162,13 +162,13 @@
                         <li class="nav-item">
                             <a href="<?= base_url('graficos-sector');?> " class="nav-link">
                             <i class="fas fa-list nav-icon"></i>
-                            <p>Por sector</p>
+                            <p>Recipientes por Sector</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="<?= base_url('graficos-localidad');?> " class="nav-link">
                             <i class="fas fa-list nav-icon"></i>
-                            <p>Por Localidad</p>
+                            <p>Recipientes por Localidad</p>
                             </a>
                         </li>
                     </ul>

@@ -1,6 +1,6 @@
 <?= $this->extend('layout/vlayout') ?>
 <!--  -->
-<?= $this->section('page_title') ?> Gráficos - Sector | <?= SYS_TITLE; ?> 
+<?= $this->section('page_title') ?> Gráficos - Recipientes por Sector | <?= SYS_TITLE; ?> 
 <?= $this->endSection() ?>
 
 <?= $this->section('contenido') ?>
@@ -9,12 +9,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1><i class="fas fa-sliders-h"></i> Gráficos - Sector</h1>
+            <h1><i class="fas fa-sliders-h"></i> Gráficos - Recipientes por Sector</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?= base_url('home')?>">Inicio</a></li>
-              <li class="breadcrumb-item active">Gráficos - Sector</li>
+              <li class="breadcrumb-item active">Gráficos - Recipientes por Sector</li>
             </ol>
           </div>
         </div>
@@ -308,7 +308,7 @@
         });
 
         let myBarChart;
-        const fn_genera_grafico = (totalActiSec) => {
+        const fn_genera_grafico = (totalRecSec) => {
 
             const ctx = document.getElementById('myBarChartRecSec').getContext('2d');
 
@@ -316,31 +316,17 @@
                 myBarChart.destroy();
             }
 
-            const backgroundColors = [
-                'rgba(0, 123, 255, 0.7)',   
-                'rgba(40, 167, 69, 0.7)',  
-                'rgba(255, 193, 7, 0.7)',  
-                'rgba(220, 53, 69, 0.7)',  
-                'rgba(108, 117, 125, 0.7)'
-            ];
-
-            const borderColors = [
-                'rgba(0, 123, 255, 1)',    
-                'rgba(40, 167, 69, 1)',    
-                'rgba(255, 193, 7, 1)',    
-                'rgba(220, 53, 69, 1)',  
-                'rgba(108, 117, 125, 1)' 
-            ];
+            const recipientes = ['TANQUE ELEVADO', 'TANQUE BAJO', 'CILINDROS', 'SANSON', 'TINAJAS ', 'FLOREROS', 'BALDES', 'BIDONES GALONERAS', 'OTROS', 'INSERVIBLES', 'OLLAS'];
 
             myBarChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['Control Focal', 'Vigilancia Aédica', 'Recuperación', 'Barrido  Focal', 'Otros'],
+                    labels: recipientes,
                     datasets: [{
-                        label: 'Actividades por Sector',
-                        data: totalActiSec,
-                        backgroundColor: backgroundColors,
-                        borderColor: borderColors,
+                        label: 'Recipientes por Sector',
+                        data: totalRecSec,
+                        backgroundColor: 'rgba(0, 123, 255, 0.7)',
+                        borderColor: 'rgba(0, 123, 255, 1)',
                         borderWidth: 1,
                         maxBarThickness: 40
                     }]
@@ -355,7 +341,7 @@
             $('#myBarChartResponse').html('');
             
             $.ajax({
-                url: `${base_url}graficos/sector/actividades`,
+                url: `${base_url}graficos/sector/recixsec`,
                 type: "POST",
                 data: {codSec: codSec, fini: fini, ffin: ffin},
                 dataType: "JSON",
@@ -368,8 +354,8 @@
                 const { status, msg, totalesAct } = data;
                 if(status){
 
-                    let totalActiSec = Object.values(totalesAct);
-                    fn_genera_grafico(totalActiSec);
+                    let totalRecSec = Object.values(totalesAct);
+                    fn_genera_grafico(totalRecSec);
 
                 }else{
                     if (myBarChart) {

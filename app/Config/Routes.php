@@ -66,6 +66,6 @@ $routes->get('reportes-indices', 'Reportes\CoreReport::c_reporte_indices_index')
 $routes->get('reportes/indices/xls/(:any)/(:any)/(:any)', 'Reportes\ReporteIndices::c_reportes_indices_xls/$1/$2/$3');
 
 $routes->get('graficos-sector', 'Graficos\Graficos::cgraficos_sector_index');
-$routes->post('graficos/sector/actividades', 'Graficos\Graficos::cgraficos_sector_act_totales');
+$routes->post('graficos/sector/recixsec', 'Graficos\Graficos::cgraficos_sector_act_totales');
 $routes->get('graficos-localidad', 'Graficos\Graficos::cgraficos_localidad_index');
-$routes->post('graficos/localidad/actividades', 'Graficos\Graficos::cgraficos_localidad_act_totales');
+$routes->post('graficos/localidad/recixloc', 'Graficos\Graficos::cgraficos_localidad_act_totales');

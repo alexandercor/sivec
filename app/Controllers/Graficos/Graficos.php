@@ -47,6 +47,8 @@ class Graficos extends BaseController
                     $data['msg']    = 'No se encontraron resultados!!!';
                 }
 
+            }else{
+                $data['msg']    = 'No se encontraron resultados!!!';
             }
         }
         return $this->response->setJSON($data);
@@ -82,6 +84,8 @@ class Graficos extends BaseController
                     $data['msg']    = 'No se encontraron resultados!!!';
                 }
 
+            }else{
+                $data['msg']    = 'No se encontraron resultados!!!';
             }
         }
         return $this->response->setJSON($data);

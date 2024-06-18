@@ -477,24 +477,24 @@ class ReporteConsolidado extends BaseController
 
                 $resTotalesViviInp = $this->mreportes->m_reporte_consolidado_viviendas_totales([$fechaIni, $fechaFin, $keyPer]);
 
-                $resTotalesTipoDep = $this->mreportes->m_reporte_consolidado_tipodep_totales([$fechaIni, $fechaFin, $keyPer]);
+                // $resTotalesTipoDep = $this->mreportes->m_reporte_consolidado_tipodep_totales([$fechaIni, $fechaFin, $keyPer]);
 
-                if(!empty($resTotalesViviInp) && !empty($resTotalesTipoDep)){
+                if(!empty($resTotalesViviInp)){
                     $vivInsp = $resTotalesViviInp->inspeccionada;
                     $vivCerr = $resTotalesViviInp->cerrada;
                     $vivRen  = $resTotalesViviInp->renuente;
                     $vivDes  = $resTotalesViviInp->deshabitada;
                     
-                    $tdePos = $resTotalesTipoDep->positivos;
-                    $tdeTra = $resTotalesTipoDep->tratados;
+                    // $tdePos = $resTotalesTipoDep->positivos;
+                    // $tdeTra = $resTotalesTipoDep->tratados;
 
                     $sheet->setCellValue("D$count", $vivInsp);
                     $sheet->setCellValue("E$count", $vivCerr);
                     $sheet->setCellValue("F$count", $vivRen);
                     $sheet->setCellValue("G$count", $vivDes);
 
-                    $sheet->setCellValue("H$count", $tdeTra);
-                    $sheet->setCellValue("I$count", $tdePos);
+                    // $sheet->setCellValue("H$count", $tdeTra);
+                    // $sheet->setCellValue("I$count", $tdePos);
                 }
 
                 $letterDepositoTipDetalle = [
@@ -526,6 +526,29 @@ class ReporteConsolidado extends BaseController
                     }
                     $countTipoDep++;
                 }
+
+                $arrColCalcularTotalRecTra = ['L', 'P', 'T', 'X', 'AB', 'AF', 'AJ', 'AN', 'AS'];
+                $arrColCalcularTotalRecPos = ['K', 'O', 'S', 'W', 'AA', 'AE', 'AI', 'AM', 'AR'];
+                $rangoTra = '';
+                $rangoPos = '';
+
+                foreach ($arrColCalcularTotalRecTra as $key => $col) {
+                    $spacet = ($key < 8)? ',' : '';
+                    $rangoTra .= $col. $count. $spacet;
+                }
+
+                foreach ($arrColCalcularTotalRecPos as $key => $col) {
+                    $space = ($key < 8)? ',' : '';
+                    $rangoPos .= $col. $count. $space;
+                }
+
+                $sheet->setCellValue("H$count", "=SUM($rangoTra)");
+                $sheet->getCell("H$count")->getCalculatedValue();
+
+                $sheet->setCellValue("I$count", "=SUM($rangoPos)");
+                $sheet->getCell("I$count")->getCalculatedValue();
+
+
                 $count++;
             }
 

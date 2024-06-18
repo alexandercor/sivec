@@ -53,8 +53,8 @@ class MreportesConsolidadoModel extends Model{
     public function m_reporte_consolidado_tipodep_totales($params): object {
         $sql =
         'SELECT 
-            SUM(CASE WHEN `tb_depositos_tipos`.`id_depositotipo` = 2 THEN 1 ELSE 0 END) AS `positivos`,
-            SUM(CASE WHEN `tb_depositos_tipos`.`id_depositotipo` = 3 THEN 1 ELSE 0 END) AS `tratados`
+            SUM(CASE WHEN `tb_depositos_tipos`.`id_depositotipo` = 2 THEN `tb_det_control_depositos`.`det_cantidad` ELSE 0 END) AS `positivos`,
+            SUM(CASE WHEN `tb_depositos_tipos`.`id_depositotipo` = 3 THEN `tb_det_control_depositos`.`det_cantidad` ELSE 0 END) AS `tratados`
         FROM
             `tb_control`
             INNER JOIN `tb_det_control` ON (`tb_control`.`id_control` = `tb_det_control`.`id_control`)
