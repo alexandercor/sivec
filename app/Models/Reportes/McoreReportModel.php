@@ -23,15 +23,16 @@ class McoreReportModel extends Model{
         return $response->getResult();
     }
 
-    public function m_inspeccion_inspeccionados_list($codIns): array {
-        $sql = "
-            SELECT 
-                `tb_control`.`id_control` key_control,
-                `tb_persona`.`apellidos_nombres` super,
-                `tb_control`.`fecha_control` fech_reg,
-                `tb_actividadtipo`.`nombre_actividadtipo` acti,
-                `tb_eess`.`nombre_eess` eess,
-                `tb_sector`.`nombre_sector` sector
+    public function m_inspeccion_inspeccionados_list(array $params): array {
+        $sql = 
+            "SELECT 
+                `tb_control`.`id_control` AS `key_control`,
+                `tb_persona`.`apellidos_nombres` AS `super`,
+                `tb_control`.`fecha_control` AS `fech_reg`,
+                `tb_actividadtipo`.`nombre_actividadtipo` AS `acti`,
+                `tb_eess`.`nombre_eess` AS `eess`,
+                `tb_sector`.`nombre_sector` AS `sector`,
+                `tb_localidad`.`nombre_localidad` localidad
             FROM
                 `tb_colaborador`
                 INNER JOIN `tb_control` ON (`tb_colaborador`.`id_colaborador` = `tb_control`.`id_colaborador`)
@@ -39,10 +40,13 @@ class McoreReportModel extends Model{
                 INNER JOIN `tb_actividadtipo` ON (`tb_control`.`id_actividadtipo` = `tb_actividadtipo`.`id_actividadtipo`)
                 INNER JOIN `tb_sector` ON (`tb_control`.`id_sector` = `tb_sector`.`id_sector`)
                 INNER JOIN `tb_eess` ON (`tb_control`.`id_eess` = `tb_eess`.`id_eess`)
+                INNER JOIN `tb_localidad` ON (`tb_sector`.`id_localidad` = `tb_localidad`.`id_localidad`) 
             WHERE
-                `tb_persona`.`id_persona` LIKE ?
+                `tb_localidad`.`id_localidad` LIKE ? AND
+                `tb_persona`.`apellidos_nombres` LIKE ? AND
+                DATE(`tb_control`.`fecha_control`) LIKE ?
         ";
-        $response = $this->db->query($sql, $codIns);
+        $response = $this->db->query($sql, $params);
         return $response->getResult();
     }
 

@@ -19,6 +19,7 @@ class CoreReport extends BaseController
 
     public function c_inspeccion_inspeccion_index() {
         $data['inspectores'] = $this->mcorereport->m_inspeccion_inspectores();
+        $data['dataRegiones'] = $this->minfocore->m_regiones();
         return view('admin/reportes/vinspeccion', $data);
     }
 
@@ -27,11 +28,16 @@ class CoreReport extends BaseController
         $data['msg']    = $this->msg;
 
         if($this->request->isAJAX()){
-            $codIns = $this->request->getPost('codIns');
-            $codIns = (!empty($codIns))? bs64url_dec($codIns): "%";
+            $codLoc = $this->request->getPost('codLoc');
+            $fecCon = $this->request->getPost('fechControl');
+            $inspec = $this->request->getPost('inspe');
 
-            if(isset($codIns) && !empty($codIns)){
-                $dataInspecciones = $this->mcorereport->m_inspeccion_inspeccionados_list($codIns);
+            $codLoc = (!empty($codLoc))? bs64url_dec($codLoc): "%";
+            $fecCon = (!empty($fecCon))? $fecCon: "%";
+            $inspec = (!empty($inspec))? $inspec."%": "%";
+
+            if( (isset($codLoc) && !empty($codLoc)) && (isset($inspec) && !empty($inspec)) && (isset($fecCon) && !empty($fecCon)) ){
+                $dataInspecciones = $this->mcorereport->m_inspeccion_inspeccionados_list([$codLoc, $inspec, $fecCon]);
 
                 $tabla = "";
                 if(is_array($dataInspecciones) && !empty($dataInspecciones)){

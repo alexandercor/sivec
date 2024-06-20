@@ -36,7 +36,6 @@
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tabloc">
 
-                                    
                                     <div class="row d-flex align-items-end">
                                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                             <div class="form-group">
