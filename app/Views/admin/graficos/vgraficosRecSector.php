@@ -27,10 +27,9 @@
                 <div class="col-12">
                     <div class="card card-navy card-outline">
                         <div class="card-header p-0">
-                            <ul id="tab_loc" class="nav nav-pills ml-auto p-2">
+                            <!-- <ul id="tab_loc" class="nav nav-pills ml-auto p-2">
                                 <li class="nav-item"><a class="nav-link active" href="#tabloc" data-toggle="tab"><i class="fas fa-file-excel"></i> Gráficos</a></li>
-                                <!-- <li class="nav-item"><a class="nav-link" href="#tabadd" data-toggle="tab">Agregar</a></li> -->
-                            </ul>
+                            </ul> -->
                         </div>
                         <div class="card-body">
                             <div class="tab-content">

@@ -138,6 +138,16 @@ class CoreReport extends BaseController
         return view('admin/reportes/vreporteIndice', $data);
     }
 
+    public function c_consolidado_mes_index() {
+        $data['dataRegiones'] = $this->minfocore->m_regiones();
+        return view('admin/reportes/vconsolidadomes', $data);
+    }
+
+    public function c_consolidado_mes_larvario_index() {
+        $data['dataRegiones'] = $this->minfocore->m_regiones();
+        return view('admin/reportes/vconsolidadomeslarvario', $data);
+    }
+
 // ***
 }
 ?>

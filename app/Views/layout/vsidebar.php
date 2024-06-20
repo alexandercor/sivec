@@ -118,13 +118,25 @@
                         <li class="nav-item">
                             <a href="<?= base_url('reportes-inspeccion');?> " class="nav-link">
                             <i class="fas fa-list nav-icon"></i>
-                            <p>Inspección y Control</p>
+                            <p>Formato 03</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="<?= base_url('reportes-consolidado-diario');?> " class="nav-link">
                             <i class="fas fa-list nav-icon"></i>
-                            <p>Consolidado Diario</p>
+                            <p>Formato 04</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('reportes-consolidado-mes');?> " class="nav-link">
+                            <i class="fas fa-list nav-icon"></i>
+                            <p>Formato 05</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="<?= base_url('reportes-consolidado-mes-larvario');?> " class="nav-link">
+                            <i class="fas fa-list nav-icon"></i>
+                            <p>Formato 09</p>
                             </a>
                         </li>
                         <li class="nav-item">

@@ -31,7 +31,7 @@ class ReporteSector extends BaseController
         $this->mreportes = new MreportesSectorModel();
         $this->styleFontName      = 'calibri';
         $this->configLetterInicia = 'A';
-        $this->configLetterFin    = 'AW';
+        $this->configLetterFin    = 'AT';
         helper('fn_helper');
     }
 
@@ -43,7 +43,7 @@ class ReporteSector extends BaseController
         
             $resDataSecLocHeader = $this->mreportes->mreporte_sector_localidad_head($codLoc);
 
-            if(!empty($resDataSecLocHeader)){
+            if(isset($resDataSecLocHeader)){
 
                 // $resDataSectores = $this->mreportes->mreporte_sector_lista_sectores($codLoc);
 
@@ -87,8 +87,8 @@ class ReporteSector extends BaseController
             $LF = $this->configLetterFin;
             
             $localidad = $resDataSecLocHeader->localidad ?? '';
-
-            // $cellTipoAct = match($tipoActi){
+            $eess = $resDataSecLocHeader->eess ?? '';
+            // $cellTipoAct = match($tipoActi){ 
             //     1 => 'AD',
             //     2 => 'Y',
             //     3 => 'AJ',
@@ -132,17 +132,24 @@ class ReporteSector extends BaseController
             $sheet->mergeCells("C$row4:"."M".$row4);
             $sheet->mergeCells("O$row4:"."S".$row4);
             $sheet->mergeCells("U$row4:"."AA".$row4);
+            $sheet->mergeCells("AC$row4:"."AD".$row4);
+            $sheet->mergeCells("AE$row4:"."AI".$row4);
+            $sheet->mergeCells("AJ$row4:".$LF.$row4);
 
-            $sheet->setCellValue("A$row4", 'Responsable');
-            $sheet->setCellValue("O$row4", 'Localidad');
+            $sheet->setCellValue("A$row4", 'Responsable:');
+            $sheet->setCellValue("O$row4", 'Localidad:');
+            $sheet->setCellValue("AC$row4", 'E.S:');
 
             $sheet->getStyle("A$row4")->getFont()->setBold(true);
             $sheet->getStyle("O$row4")->getFont()->setBold(true);
+            $sheet->getStyle("AC$row4")->getFont()->setBold(true);
 
             $sheet->getStyle("C".$row4.":M".$row4)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
             $sheet->getStyle("U".$row4.":AA".$row4)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
+            $sheet->getStyle("AE".$row4.":AI".$row4)->getBorders()->getBottom()->setBorderStyle(Border::BORDER_THIN);
 
             $sheet->setCellValue("U".$row4, $localidad);
+            $sheet->setCellValue("AE".$row4, $eess);
             $row5 = 5;
             $sheet->mergeCells($LI.$row5.":".$LF.$row5);
 
@@ -212,7 +219,7 @@ class ReporteSector extends BaseController
                     'wrapText'    => true,    
                 ]
             ];
-            $sheet->getStyle("A6:AW9")->applyFromArray($styleHeadTableTexHorizontal);
+            $sheet->getStyle("A6:AT9")->applyFromArray($styleHeadTableTexHorizontal);
 
             $row6 = 6;
             $row7 = 7;
@@ -228,8 +235,8 @@ class ReporteSector extends BaseController
             $sheet->mergeCells("G".$row7.":"."G".$row9);
             $sheet->mergeCells("H".$row7.":"."H".$row9);
             $sheet->mergeCells("I".$row7.":"."I".$row9);
-            $sheet->mergeCells("AT".$row6.":"."AV".$row8);
-            $sheet->mergeCells("AW".$row6.":"."AW".$row8);
+            $sheet->mergeCells("AQ".$row6.":"."AS".$row8);
+            $sheet->mergeCells("AT".$row6.":"."AT".$row8);
 
             $sheet->setCellValue($LI.$row6,'N°');
             $sheet->setCellValue("B".$row6,'Sector');
@@ -240,10 +247,10 @@ class ReporteSector extends BaseController
             $sheet->setCellValue("G".$row7,'Renuentes');
             $sheet->setCellValue("H".$row7,'Positivos');
             $sheet->setCellValue("I".$row7,'Tratadas');
-            $sheet->setCellValue("AT".$row6,'Totales');
-            $sheet->setCellValue("AW".$row6,'Total Gasto IGR');
+            $sheet->setCellValue("AQ".$row6,'Totales');
+            $sheet->setCellValue("AT".$row6,'Total Gasto IGR');
 
-            $arrColTextVert = ['C','D','E','F','G','H','I','AT','AW'];
+            $arrColTextVert = ['C','D','E','F','G','H','I','AQ','AT'];
             foreach ($arrColTextVert as $key => $cel) {
                 $sheet->getStyle($cel.$row7)->applyFromArray($styleHeadTableTexVertical);
             }
@@ -261,21 +268,21 @@ class ReporteSector extends BaseController
             $sheet->getColumnDimension("G")->setWidth(4);
             $sheet->getColumnDimension("H")->setWidth(4);
             $sheet->getColumnDimension("I")->setWidth(4);
+            $sheet->getColumnDimension("AQ")->setWidth(6);
+            $sheet->getColumnDimension("AR")->setWidth(6);
+            $sheet->getColumnDimension("AS")->setWidth(6);
             $sheet->getColumnDimension("AT")->setWidth(6);
-            $sheet->getColumnDimension("AU")->setWidth(6);
-            $sheet->getColumnDimension("AV")->setWidth(6);
-            $sheet->getColumnDimension("AW")->setWidth(6);
 
             /** */
             $row6= 6;
             $sheet->mergeCells("C$row6:I$row6");
             $sheet->setCellValue("C$row6",'Viviendas');
-            $sheet->mergeCells("J$row6:AS$row6");
+            $sheet->mergeCells("J$row6:AP$row6");
             $sheet->setCellValue("J$row6",'Depósitos');
 
             // ***
             $row7 = 7;
-            $arrDepositosCol = ['J,L', 'M,O', 'P,R', 'S,U', 'V,X', 'Y,AA', 'AB,AD', 'AE,AG', 'AH,AJ', 'AK,AM', 'AN,AP', 'AQ,AS'];
+            $arrDepositosCol = ['J,L', 'M,O', 'P,R', 'S,U', 'V,X', 'Y,AA', 'AB,AD', 'AE,AG', 'AH,AJ', 'AK,AM', 'AN,AP'];
             foreach ($arrDepositosCol as $key => $dep) {
                 $arrLetter = explode(',', $dep);
                 [$colIni, $colFin] = $arrLetter;
@@ -284,18 +291,17 @@ class ReporteSector extends BaseController
 
             $sheet->getRowDimension($row7)->setRowHeight(40);
 
-            $sheet->setCellValue("J".$row7, "Tanque alto");
+            $sheet->setCellValue("J".$row7, "Tanque elevado");
             $sheet->setCellValue("M".$row7, "Tanque bajo");
-            $sheet->setCellValue("P".$row7, "Cilindro");
+            $sheet->setCellValue("P".$row7, "Cilindros");
             $sheet->setCellValue("S".$row7, "Sansón");
             $sheet->setCellValue("V".$row7, "Tinajas");
             $sheet->setCellValue("Y".$row7, "Llantas");
             $sheet->setCellValue("AB".$row7, "Floreros");
             $sheet->setCellValue("AE".$row7, "Baldes");
-            $sheet->setCellValue("AH".$row7, "Baldes");
-            $sheet->setCellValue("AK".$row7, "Bidones Galoneras");
-            $sheet->setCellValue("AN".$row7, "Otros");
-            $sheet->setCellValue("AQ".$row7, "Inservibles");
+            $sheet->setCellValue("AH".$row7, "Bidones Galoneras");
+            $sheet->setCellValue("AK".$row7, "Otros");
+            $sheet->setCellValue("AN".$row7, "Inservibles");
 
             //** Row 8*/
             $row8 = 8;
@@ -312,7 +318,6 @@ class ReporteSector extends BaseController
                 ['AH','AI','AJ'],
                 ['AK','AL','AM'],
                 ['AN','AO','AP'],
-                ['AQ','AR','AS'],
             ];
             $arrDepositoTipo = ['I','+','T'];
 
@@ -324,10 +329,10 @@ class ReporteSector extends BaseController
                 }
             }
 
-            $sheet->setCellValue("AT".$row9,"I");
-            $sheet->setCellValue("AU".$row9,"(+)");
-            $sheet->setCellValue("AV".$row9,"T");
-            $sheet->setCellValue("AW".$row9,"gr");
+            $sheet->setCellValue("Aq".$row9,"I");
+            $sheet->setCellValue("AR".$row9,"(+)");
+            $sheet->setCellValue("AS".$row9,"T");
+            $sheet->setCellValue("AT".$row9,"(gr)");
 
             $styleSectoresLista = [
                 'font' => [
@@ -358,17 +363,11 @@ class ReporteSector extends BaseController
                 $vivRen = $totalesXSector->renuente;
                 $vivDes = $totalesXSector->deshabitada;
                 $vivCerr = $totalesXSector->cerrada;
-                $vivTra = $totalesXSector->tratada;
-                $vivPos = $totalesXSector->positivos;
-                $vivOtr = $totalesXSector->otros;
 
-                $sheet->setCellValue("C".$count, $vivIns);
-                $sheet->setCellValue("D".$count, $vivRen);
-                $sheet->setCellValue("E".$count, $vivDes);
-                $sheet->setCellValue("F".$count, $vivCerr);
-                $sheet->setCellValue("G".$count, $vivTra);
-                $sheet->setCellValue("H".$count, $vivPos);
-                $sheet->setCellValue("I".$count, $vivOtr);
+                $sheet->setCellValue("D".$count, $vivIns);
+                $sheet->setCellValue("E".$count, $vivCerr);
+                $sheet->setCellValue("F".$count, $vivDes);
+                $sheet->setCellValue("G".$count, $vivRen);
 
 
                 $arrColDepositoTip = [
@@ -379,35 +378,58 @@ class ReporteSector extends BaseController
                     5 => [1 => 'V',2 => 'W',3 => 'X'],
                     6 => [1 => 'Y',2 => 'Z',3 => 'AA'],
                     7 => [1 => 'AB',2 => 'AC',3 => 'AD'],
-                    8 => [1 => 'AE',2 => 'AF',3 => 'AG'],
-                    10 => [1 => 'AH',2 => 'AI',3 => 'AJ'],
-                    11 => [1 => 'AK',2 => 'AL',3 => 'AM'],
+                    16 => [1 => 'AE',2 => 'AF',3 => 'AG'],
+                    11 => [1 => 'AH',2 => 'AI',3 => 'AJ'],
+                    9 => [1 => 'AK',2 => 'AL',3 => 'AM'],
                     12 => [1 => 'AN',2 => 'AO',3 => 'AP'],
-                    13 => [1 => 'AQ',2 => 'AR',3 => 'AS'],
                 ];
 
-                $countDepo = 1;
-                $countTipDepo = 1;
-                foreach ($arrColDepositoTip as $key => $rowDepo) {
+                foreach ($arrColDepositoTip as $keyDep => $rowDepo) {
                     
-                    foreach ($rowDepo as $key => $colLetter) {
-                        $resTotalDepo = $this->mreportes->m_reporte_sector_totales_tipodeposito_x_sector([$countDepo, $countTipDepo, $keySec]);
+                    foreach ($rowDepo as $keyTipoDep => $colLetter) {
+                        $resTotalDepo = $this->mreportes->m_reporte_sector_totales_tipodeposito_x_sector([$keyDep, $keyTipoDep, $keySec]);
 
                         if(!empty($resTotalDepo)){
-                            $total = $resTotalDepo->total;
+                            $totalBd = $resTotalDepo->total;
+                            $total = !empty($totalBd)? $totalBd: '';
                             $sheet->setCellValue($colLetter.$count, $total);
                         }
-                        $countTipDepo++;
                     }
-                    $countDepo++;
                 }
 
-                $sheet->setCellValue("AT".$count,"=SUM(J$count:AS$count)");
-                $sheet->getCell("AT".$count)->getCalculatedValue();
-                $sheet->setCellValue("AU".$count,"=SUM(J$count:AS$count)");
-                $sheet->getCell("AU".$count)->getCalculatedValue();
-                $sheet->setCellValue("AV".$count,"=SUM(J$count:AS$count)");
-                $sheet->getCell("AV".$count)->getCalculatedValue();
+                $arrColCalcularTotalRecIns = ['J', 'M', 'P', 'S', 'V', 'Y', 'AB', 'AE', 'AH', 'AK', 'AN'];
+                $arrColCalcularTotalRecPos = ['K', 'N', 'Q', 'T', 'W', 'Z', 'AC', 'AF', 'AI', 'AL', 'AO'];
+                $arrColCalcularTotalRecTra = ['L', 'O', 'R', 'U', 'X', 'AA', 'AD', 'AG', 'AJ', 'AM', 'AP'];
+                $rangoIns = '';
+                $rangoPos = '';
+                $rangoTra = '';
+
+                foreach ($arrColCalcularTotalRecIns as $key => $col) {
+                    $spacet = ($key < 10)? ',' : '';
+                    $rangoIns .= $col. $count. $spacet;
+                }
+
+                foreach ($arrColCalcularTotalRecPos as $key => $col) {
+                    $space = ($key < 10)? ',' : '';
+                    $rangoPos .= $col. $count. $space;
+                }
+
+                foreach ($arrColCalcularTotalRecTra as $key => $col) {
+                    $spacet = ($key < 10)? ',' : '';
+                    $rangoTra .= $col. $count. $spacet;
+                }
+
+                $sheet->setCellValue("AQ".$count,"=SUM($rangoIns)");
+                $sheet->getCell("AQ".$count)->getCalculatedValue();
+                $sheet->setCellValue("AR".$count,"=SUM($rangoPos)");
+                $sheet->getCell("AR".$count)->getCalculatedValue();
+                $sheet->setCellValue("AS".$count,"=SUM($rangoTra)");
+                $sheet->getCell("AS".$count)->getCalculatedValue();
+
+                $sheet->setCellValue("H".$count,"=SUM($rangoPos)");
+                $sheet->getCell("H".$count)->getCalculatedValue();
+                $sheet->setCellValue("I".$count,"=SUM($rangoTra)");
+                $sheet->getCell("I".$count)->getCalculatedValue();
 
                 $sheet->getStyle($LI.$count.":".$LF.$count)->applyFromArray($styleSectoresLista);
                 $count++;

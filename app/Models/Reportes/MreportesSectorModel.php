@@ -9,12 +9,14 @@ class MreportesSectorModel extends Model{
     public function mreporte_sector_localidad_head($codLoc) {
         $sql = 
         'SELECT 
-            `tb_localidad`.`id_localidad` key_loca,
-            `tb_localidad`.`nombre_localidad` localidad
+            `tb_localidad`.`id_localidad` AS `key_loca`,
+            `tb_localidad`.`nombre_localidad` AS `localidad`,
+            `tb_eess`.`nombre_eess` AS eess
         FROM
             `tb_sector`
             INNER JOIN `tb_control` ON (`tb_sector`.`id_sector` = `tb_control`.`id_sector`)
             INNER JOIN `tb_localidad` ON (`tb_sector`.`id_localidad` = `tb_localidad`.`id_localidad`)
+            INNER JOIN `tb_eess` ON (`tb_sector`.`id_eess` = `tb_eess`.`id_eess`)
         WHERE
             `tb_localidad`.`id_localidad` = ?
         GROUP BY
@@ -55,10 +57,7 @@ class MreportesSectorModel extends Model{
             SUM(CASE WHEN `tb_situacion_viv`.`id_situacion_vivienda` = 1 THEN 1 ELSE 0 END) AS `inspeccionada`,
             SUM(CASE WHEN `tb_situacion_viv`.`id_situacion_vivienda` = 2 THEN 1 ELSE 0 END) AS `renuente`,
             SUM(CASE WHEN `tb_situacion_viv`.`id_situacion_vivienda` = 3 THEN 1 ELSE 0 END) AS `deshabitada`,
-            SUM(CASE WHEN `tb_situacion_viv`.`id_situacion_vivienda` = 4 THEN 1 ELSE 0 END) AS `cerrada`,
-            SUM(CASE WHEN `tb_situacion_viv`.`id_situacion_vivienda` = 5 THEN 1 ELSE 0 END) AS `tratada`,
-            SUM(CASE WHEN `tb_situacion_viv`.`id_situacion_vivienda` = 6 THEN 1 ELSE 0 END) AS `positivos`,
-            SUM(CASE WHEN `tb_situacion_viv`.`id_situacion_vivienda` = 7 THEN 1 ELSE 0 END) AS `otros`
+            SUM(CASE WHEN `tb_situacion_viv`.`id_situacion_vivienda` = 4 THEN 1 ELSE 0 END) AS `cerrada`
         FROM
             `tb_control`
             INNER JOIN `tb_det_control` ON (`tb_control`.`id_control` = `tb_det_control`.`id_control`)
@@ -75,7 +74,7 @@ class MreportesSectorModel extends Model{
     public function m_reporte_sector_totales_tipodeposito_x_sector($params): object {
         $sql =
         'SELECT 
-            SUM(CASE WHEN `tb_depositos`.`id_deposito` = ? AND `tb_depositos_tipos`.`id_depositotipo` = ? THEN 1 ELSE 0 END ) total
+            SUM(CASE WHEN `tb_depositos`.`id_deposito` = ? AND `tb_depositos_tipos`.`id_depositotipo` = ? THEN `tb_det_control_depositos`.`det_cantidad` ELSE 0 END ) total
 
         FROM
             `tb_control`

@@ -1,6 +1,6 @@
 <?= $this->extend('layout/vlayout') ?>
 <!--  -->
-<?= $this->section('page_title') ?> Reportes - Inspección | <?= SYS_TITLE; ?> 
+<?= $this->section('page_title') ?> Formato 03 : Inspección de viviendas para la vigilancia y control del Aedes Aegypti | <?= SYS_TITLE; ?> 
 <?= $this->endSection() ?>
 
 <?= $this->section('contenido') ?>
@@ -9,12 +9,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1><i class="fas fa-sliders-h"></i> Reportes - Inspección para la Vigilancia y Control</h1>
+            <h1><i class="fas fa-sliders-h"></i> Formato 03 : Inspección de viviendas para la vigilancia y control del Aedes Aegypti</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?= base_url('home')?>">Inicio</a></li>
-              <li class="breadcrumb-item active">Reportes - Inspección</li>
+              <li class="breadcrumb-item active">Formato 03 : Inspección de viviendas para la vigilancia y control del Aedes Aegypti</li>
             </ol>
           </div>
         </div>
@@ -27,10 +27,9 @@
                 <div class="col-12">
                     <div class="card card-navy card-outline">
                         <div class="card-header p-0">
-                            <ul id="tab_loc" class="nav nav-pills ml-auto p-2">
+                            <!-- <ul id="tab_loc" class="nav nav-pills ml-auto p-2">
                                 <li class="nav-item"><a class="nav-link active" href="#tabloc" data-toggle="tab"><i class="fas fa-user-tie"></i> Inspector</a></li>
-                                <!-- <li class="nav-item"><a class="nav-link" href="#tabadd" data-toggle="tab">Agregar</a></li> -->
-                            </ul>
+                            </ul> -->
                         </div>
                         <div class="card-body">
                             <div class="tab-content">
@@ -64,7 +63,7 @@
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Fecha Control</th>
-                                                        <th>Supervisor</th> 
+                                                        <th>Inspector</th> 
                                                         <th>Actividad</th>
                                                         <th>EESS</th>
                                                         <th>Sector</th>
